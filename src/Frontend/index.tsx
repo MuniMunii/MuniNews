@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import NewsCard from "./cardComp";
-export interface NewsItem {
-  id:string;
-  title:string;
-  description:string;
-  url:string;
-  author:string;
-  published:string;
-  notAnimated:boolean;
-}
+import "./style/App.css";
+import NewsCard from "./component/cardComp";
 function App() {
   interface DataParam {
     news: NewsItem[];
@@ -58,10 +49,7 @@ function App() {
       })
       .then((dataAPI) => {
         setData(({
-          news: dataAPI.news.map((newsItem:NewsItem)=>({
-            ...newsItem,
-            notAnimated:!newsItem.notAnimated?true:false
-          })),
+          news: dataAPI.news,
           page: dataAPI.page,
         }));
         setIsLoading(false);
@@ -81,7 +69,7 @@ function App() {
         return {
           ...prev,
           news: prev.news.map((item) =>
-            item.notAnimated ? { ...item, notAnimated: false } : item
+            item.notAnimated===undefined ? { ...item, notAnimated: false } : item
           ),
         };
       });

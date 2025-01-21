@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from "react";
-import { NewsItem } from "./App";
 interface dataParameter {
   data: {
     news: NewsItem[];
