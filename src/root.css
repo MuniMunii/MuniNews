@@ -22,7 +22,7 @@
         justify-content: center;
     }
     .App{
-        width: 100%;
+        width: 100vw;
         /* height: 100vh; tester */
         flex-grow: 1;
         display: flex;

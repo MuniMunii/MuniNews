@@ -1,27 +1,16 @@
+const dotenv=require('dotenv')
+dotenv.config({path:__dirname+'/./../../.env'});
 const express=require('express')
 const cors=require('cors')
 const app=express()
-const mysql=require('mysql')
-app.use(cors())
-const connection=mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'muninews'
-})
+const apiRoute=require('./routes/route')
+const newsRoute=require('./routes/news')
 const port=5000
-app.get('/hello', (req, res) => {
-    const query='SELECT * FROM user'
-    connection.query(query,(error,data)=>{
-        if(error){
-            console.log(error)
-            return
-        }
-        console.log('Query Result:', data);
-        res.json(data)
-    })
-  })
-  
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use(`/`,apiRoute)
+app.use(`/news`,newsRoute)
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
