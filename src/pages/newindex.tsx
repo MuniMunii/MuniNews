@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import NewsCurrentComp from "../Frontend/component/index/newscurrentAPI";
 import Navbar from "../Frontend/component/navbar";
 import { useTheme } from "../Frontend/context/theme";
+import IndexScreen from "../Frontend/component/index/indexscreen";
 function NewIndex() {
   const [newsSize, setNewsSize] = useState({
     page_size: 5,
@@ -17,8 +18,10 @@ function NewIndex() {
   console.log(userData);
   return (
     <>
-      <div className={`w-full h-screen bg-slate-950  ${theme==='light'?'bg-white text-black':' text-white'}`}>
+      <div className={`w-full h-full ${theme==='light'?'bg-white text-black':' bg-darkTheme text-white'}`}>
         <Navbar/>
+        <IndexScreen/>
+        <h1 id="news" className="text-center">News</h1>
         <div className={`w-[90%] mx-auto flex phone:flex-col tablet:flex-row tablet:justify-between`}>
         {/* <h1 className={`uppercase text-5xl h-fit`}>title</h1> */}
         <NewsCurrentComp newsSize={newsSize.page_size}/>
