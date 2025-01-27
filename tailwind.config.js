@@ -8,9 +8,12 @@ module.exports = {
         dark300:'#1C2541',
         dark400:'#3A506B',
         pastelTosca:'#5BC0BE',
+        darkIndigo:'#4F517D',
+        lightIndigo:'#A997DF',
         hotOrange:'#F95738',
         mediumOrange:'#EE964B',
         lightOrange:'#F4D35E',
+        oceanBlue:'#0D3B66'
       },
       screens:{
         phone:'320px',

@@ -1,59 +1,53 @@
 import React, { ReactNode } from "react";
 import { useTheme } from "../context/theme";
 import { useState, useEffect } from "react";
+import { animate, AnimatePresence, motion } from "framer-motion";
+import ToggleThemeButton from "./toggleTheme";
 function Navbar() {
-  const { theme} = useTheme();
-  const [openNav, setopenNav] = useState<boolean>(false);
-  const [animation, setAnimation] = useState<boolean>(true);
+  const { theme, toggleTheme } = useTheme();
+  const [openNav, setOpenNav] = useState<boolean>(false);
+  const isLight = theme === "light";
   useEffect(() => {
-    let timer = setTimeout(() => {
-      console.log("time nyala", openNav);
-      setAnimation(!animation);
-    }, 200);
-    return () => clearTimeout(timer);
+    if (openNav) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
   }, [openNav]);
-  const AnimationNav =({className,children}:{className:string,children:ReactNode})=>{
-    let duration=50
-    return (
-        <>
-        {React.Children.map(children,(child)=>{
-            if(React.isValidElement<{className:string}>(child)){
-                duration+=50
-                const classIsExist=child.props.className||''
-                return React.cloneElement(child,{className:`${classIsExist}${className} duration-${duration}`.trim()})
-            }
-            return child
-        })}
-        </>
-    )
-  }
+
   return (
     <div
       className={`w-full h-20 p-4 flex justify-between items-center ${
-        theme === "light" ? "text-blue-300" : "text-pink-300 bg-darkTheme"
+        isLight ? "text-blue-300" : "text-pink-300 bg-darkTheme"
       }`}
     >
       <h1 className="text-5xl">Title</h1>
-      {/* <button className="" onClick={toggleTheme}>change theme</button> */}
-      <button onClick={() => setopenNav(true)}>Menu</button>
-      {openNav && (
-        <div
-          className={`fixed top-0 left-0 w-full h-full bg-white/40 backdrop-blur-sm z-50 overflow-hidden transition ease-linear duration-100 ${
-            animation ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <button onClick={() => setopenNav(false)}>Menu</button>
-          <div className="flex flex-col">
-          <AnimationNav className={`text-black transition ${animation ? "translate-x-0" : "translate-x-full"}`}>
-          <a>test</a>
-          <a>test</a>
-          <a>test</a>
-          <a>test</a>
-          <a>test</a>
-          </AnimationNav>
-          </div>
-        </div>
-      )}
+      <ToggleThemeButton/>
+      <motion.button onClick={() => setOpenNav(true)}>Menu</motion.button>
+      <AnimatePresence initial={false}>
+        {openNav && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0,}}
+            transition={{ duration: 0.5 }}
+            key="navbar"
+            className={`bg-black/60 backdrop-blur-sm fixed top-0 left-0 w-screen h-full z-50 flex flex-col justify-center items-center`}
+          >
+            <motion.button onClick={() => setOpenNav(false)}>
+              close
+            </motion.button>
+            <div className="flex flex-col text-5xl">
+              <a>test</a>
+              <a>test</a>
+              <a>test</a>
+              <a>test</a>
+              <a>test</a>
+              <ToggleThemeButton/>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

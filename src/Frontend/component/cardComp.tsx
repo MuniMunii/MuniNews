@@ -10,7 +10,7 @@ const NewsCard: React.FC<dataParameter> = ({ data,animation,dataLength }) => {
   if (!data?.news) return null;
 
   return (
-    <div className="flex w-[80%] flex-wrap justify-center gap-4">
+    <div className="flex w-4/5 flex-wrap justify-center gap-4">
       {data.news.map((data, index) => (
         <div
           key={data.id}

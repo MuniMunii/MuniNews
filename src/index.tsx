@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter basename={"/"}>
     <ThemeProvider>
-      <div className="App">
+      <div className="App ">
         <Routes>
           <Route path={"/"} element={<NewIndex />} />
         </Routes>
