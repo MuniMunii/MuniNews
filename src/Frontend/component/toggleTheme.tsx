@@ -1,5 +1,5 @@
 import {motion} from "framer-motion";
-import { useTheme } from "../context/theme";
+import { useTheme } from "../context/context";
 import { MdOutlineNightlight,MdOutlineLightMode } from "react-icons/md";
 function ToggleThemeButton() {
     const {theme,toggleTheme}=useTheme();

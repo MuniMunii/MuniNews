@@ -1,6 +1,6 @@
 import React from "react";
 import useFetch from "../../hook/useFetch";
-import { useTheme } from "../../context/theme";
+import { useTheme } from "../../context/context";
 import '../../../../src/root.css'
 function NewsCurrentComp({ newsSize }: { newsSize: number }) {
   const { theme } = useTheme();

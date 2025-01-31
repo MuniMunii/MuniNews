@@ -3,6 +3,10 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      boxShadow:{
+        cornerStampLight:'5px 5px 0px 0px rgba(109,40,217)',
+        cornerStampDark:'5px 5px 0px 0px #5BC0BE',
+      },
       colors:{
         darkTheme:'#0B132B',
         dark300:'#1C2541',
