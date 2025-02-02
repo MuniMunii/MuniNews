@@ -5,7 +5,7 @@ import { animate, AnimatePresence, motion } from "framer-motion";
 import ToggleThemeButton from "./toggleTheme";
 import { Link } from "react-router-dom";
 function Navbar() {
-  const { theme, isWideScreen } = useTheme();
+  const { theme, isWideScreen,user,assignUser } = useTheme();
   const [openNav, setOpenNav] = useState<boolean>(false);
   const isLight = theme === "light";
   useEffect(() => {
@@ -15,7 +15,11 @@ function Navbar() {
       document.body.style.overflowY = "auto";
     }
   }, [openNav]);
-
+  function handleLogout(){
+    localStorage.removeItem('token');
+    assignUser('')
+    console.log('logout successfull User:'+user)
+  }
   return (
     <div
       className={`w-full h-20 p-4 flex justify-between items-center ${
@@ -25,8 +29,8 @@ function Navbar() {
       <h1 className="text-5xl">Title</h1>
       {isWideScreen ? (
         <>
-          <p>user</p>
-          <button>Logout</button>
+          <p>{user}</p>
+          {localStorage.getItem('token')?<button onClick={()=>{handleLogout()}}>Logout</button>:<Link to={'/login'}>Login</Link>}
           <ToggleThemeButton />
         </>
       ) : (

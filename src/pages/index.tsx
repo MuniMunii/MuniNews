@@ -16,7 +16,7 @@ function Index() {
   const isLight = theme === "light";
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const { value: userData, isLoading: isLoadingUser } = useFetch(
-    `${baseURL}/user`,
+    `${baseURL}/auth/user`,
     (data) => ({
       user: data,
     })
