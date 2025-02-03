@@ -6,8 +6,10 @@ const app = express();
 const authRoute = require("./routes/auth");
 const newsRoute = require("./routes/news");
 const {sequelize} = require("./config/index");
+const cookieparser=require('cookie-parser')
 const port = 5000;
-app.use(cors());
+app.use(cors({origin:'http://localhost:3000',credentials:true}));
+app.use(cookieparser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 sequelize

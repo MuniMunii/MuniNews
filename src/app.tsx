@@ -12,7 +12,7 @@ function App() {
   const isLight = theme === "light";
   return (
     <div
-      className={`App ${
+      className={`App transition duration-150 ${
         isLight ? "bg-white text-black" : " bg-darkTheme text-white"
       }`}
     >
