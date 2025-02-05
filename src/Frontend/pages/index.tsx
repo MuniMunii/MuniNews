@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../root.css";
-import useFetch from "../Frontend/hook/useFetch";
-import Navbar from "../Frontend/component/navbar";
-import { useTheme } from "../Frontend/context/context";
-import IndexScreen from "../Frontend/component/index/indexscreen";
+import useFetch from "../hook/useFetch";
+import Navbar from "../component/navbar";
+import { useTheme } from "../context/context";
+import IndexScreen from "../component/index/indexscreen";
 import "../Frontend/style/animation.css";
 import { MdEmail,MdVerified } from "react-icons/md";
 import { Link } from "react-router-dom";

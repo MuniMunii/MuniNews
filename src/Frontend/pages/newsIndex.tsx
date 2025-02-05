@@ -1,4 +1,4 @@
-import Navbar from "../Frontend/component/navbar";
+import Navbar from "../component/navbar";
 
 function NewsIndex(){
     return (
