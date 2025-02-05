@@ -21,7 +21,7 @@ function IndexScreen(){
     //   };
     // }, []);
     return (
-        <div className={`w-screen text-black min-h-screen  relative flex items-center justify-between p-8 ${isLight?' border-y border-b-black/50 border-t-black/50 bg-white':'border-y border-b-white border-t-white bg-darkTheme'}`}>
+        <div className={`w-screen text-black min-h-screen  relative flex items-center justify-between p-8 ${isLight?' border-y border-b-black/50 border-t-black/50 bg-white':'bg-darkTheme border-b border-b-slate-100/40'}`}>
         <div className={`flex flex-col ${isLight?'text-black':'text-white'} laptop:w-[40%] tablet:w-[60%] phone:w-4/5 max-w-[600px]`}>
         <h1 className={`tablet:text-8xl phone:text-7xl font-testTitle font-bold my-4 select-none`}><span className={`${isLight?'text-hotOrange':'text-[#4597e4]'}`}>Read</span> & <span className={`${isLight?'text-mediumOrange':'text-[#e65e80]'}`}>Write</span> News</h1>
         {/* <p className="my-2">Fast, Accurate and Trusted</p> */}

@@ -21,7 +21,6 @@ function Index() {
       user: data,
     })
   );
-  console.log(userData);
   function ButtonMailTo({label,mailTo}:{label:string,mailTo:string}){
     return (
       <Link to={'#'}

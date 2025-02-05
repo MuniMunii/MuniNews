@@ -5,7 +5,6 @@ const ThemeContext = createContext({
   toggleTheme: () => {},
   user:'',
   assignUser:(user:string)=>{},
-  logout:()=>{},
 });
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(() => {
@@ -14,6 +13,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isWideScreen,setIsWideScreen]=useState<boolean>(false)
   const [user,setUser]=useState<string>(()=>localStorage.getItem('user')||"")
   const baseURL=process.env.REACT_APP_BACKEND_URL
+  useEffect(()=>{console.log('user context:',user)},[user])
   // useEffect buat breakpoint devices < 768
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px) and (min-height: 500px)');
@@ -28,13 +28,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       mediaQuery.removeEventListener('change', handleMediaQueryChange);
     };
   }, []);
-  // useEffect buat ganti theme
+  // useEffect buat ganti theme dan keep theme
   useEffect(() => {
     localStorage.setItem("theme", theme);
   }, [theme]);
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
+  // function assignuser
+  const assignUser=(user:string)=>{
+    console.log("Assigning user:", user);
+    setUser((prev)=>prev=user)
+  }
   // function fetch profile user
   const fetchUser= async ()=>{
     try{
@@ -45,6 +50,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       if(response.ok){
         const data=await response.json()
         setUser(data.name)
+        console.log('fetch login',data.name)
         localStorage.setItem('user',data.name)
       }else{
         setUser('')
@@ -56,7 +62,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('user')
     }
   }
-  // useEffect login
+  // useEffect jika user menghapus item di localstorage item akan tetap ada selama token valid dengan function fetchUser
   useEffect(()=>{
     fetchUser()
     const handleChange=(event:StorageEvent)=>{
@@ -67,37 +73,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     window.addEventListener('storage',handleChange)
     return ()=> window.removeEventListener('storage',handleChange)
   },[])
-  // useEffect logout
-  useEffect(()=>{
-    const syncLogout=(event:StorageEvent)=>{
-      if(event.key==='logout'){
-        setUser('');
-      }
-    }
-    window.addEventListener('storage',syncLogout)
-    return ()=>window.addEventListener('storage',syncLogout)
-  },[])
-  const assignUser=(user:string)=>{
-    console.log("Assigning user:", user);
-    setUser(user)
-  }
   // nanti di setting
-  const logout = async () => {
-    try{
-    await fetch(`${baseURL}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-    setUser("");
-    localStorage.removeItem("user");
-    localStorage.setItem('logout',Date.now().toString())
-      setTimeout(()=>{localStorage.removeItem('logout')},1000)
-  }
-  catch(error){
-    console.log('logout error di context',error)
-  }
-  };
-  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser,logout}}>{children}</ThemeContext.Provider>;
+  
+  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser}}>{children}</ThemeContext.Provider>;
 }
 export function useTheme() {
     return useContext(ThemeContext);
