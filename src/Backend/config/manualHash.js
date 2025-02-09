@@ -9,7 +9,7 @@ const { User, sequelize } = require("./index");
     const users = await User.findAll();
     for (const user of users) {
       if (!user.password.startsWith("$2b$")) {
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        const hashedPassword = await bcrypt.hash(user.password, 12);
         await user.update({ password: hashedPassword });
         console.log(`Updated password for: ${user.email}`);
       }

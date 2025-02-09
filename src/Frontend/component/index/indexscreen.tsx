@@ -7,19 +7,6 @@ import '../../style/animation.css'
 function IndexScreen(){
     const {theme,isWideScreen}=useTheme()
     const isLight=theme==='light'
-    // const [isWideScreen, setIsWideScreen] = useState(window.matchMedia('(min-width: 768px)').matches);
-    // useEffect(() => {
-    //   const mediaQuery = window.matchMedia('(min-width: 768px) and (min-height: 500px)');
-    //   const handleMediaQueryChange = (event:MediaQueryListEvent) => {
-    //     setIsWideScreen(event.matches);
-    //   };
-  
-    //   mediaQuery.addEventListener('change', handleMediaQueryChange);
-  
-    //   return () => {
-    //     mediaQuery.removeEventListener('change', handleMediaQueryChange);
-    //   };
-    // }, []);
     return (
         <div className={`w-screen text-black min-h-screen  relative flex items-center justify-between p-8 ${isLight?' border-y border-b-black/50 border-t-black/50 bg-white':'bg-darkTheme border-b border-b-slate-100/40'}`}>
         <div className={`flex flex-col ${isLight?'text-black':'text-white'} laptop:w-[40%] tablet:w-[60%] phone:w-4/5 max-w-[600px]`}>

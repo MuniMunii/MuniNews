@@ -25,7 +25,6 @@ function LoginForm() {
   useEffect(() => {
     if (loginAs) {
       assignUser(loginAs);
-      console.log(loginAs);
     } else {
       assignUser("");
     }
@@ -43,12 +42,10 @@ function LoginForm() {
     setPasswordUser(password);
   }
   function handleShowPassword() {
-    console.log("test");
     setShowPassword((prev) => !prev);
   }
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("submit is delivered");
     if (isEmailValid && isPasswordValid) {
       try {
         const response = await fetch(`${baseURL}/auth/login`, {
@@ -57,7 +54,6 @@ function LoginForm() {
           body: JSON.stringify({ email: emailUser, password: passwordUser }),
           credentials: "include",
         });
-        console.log(response);
         const data = await response.json();
         if (response.ok) {
           // debug
@@ -68,7 +64,6 @@ function LoginForm() {
           setError((prev)=>prev=data.messages);
         }
       } catch {
-        console.log("login failed");
         setError("Login failed try again");
       }
     } else {
@@ -81,7 +76,6 @@ function LoginForm() {
       }
     }
   };
-  console.log(`email: ${emailUser} password:${passwordUser}`);
   const testFetchWithLogin=async ()=>{
     try{
       const response=await fetch(`${baseURL}/auth/user-token`,{
@@ -157,11 +151,11 @@ function LoginForm() {
                 </button>
               </div>
             </div>
-            <div className="mt-auto w-full flex flex-col gap-3 font-mono font-semibold tracking-wide">
+            <div className="mt-4 w-full flex flex-col gap-3 font-mono font-semibold tracking-wide">
             <button type="submit" className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-mediumOrange':'bg-blue-300'}`}>Login</button>
-            <Link to={'/forgot-password'} className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-hotOrange':'bg-blue-400'}`}>Register</Link>
+            <Link to={'/register'} className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-hotOrange':'bg-blue-400'}`}>Register</Link>
             <Link to={'/forgot-password'} className={`w-full h-fit py-1 px-4  text-center transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-hotOrange':'bg-blue-500'}`}>Forgot Password</Link>
-            <button type="button" onClick={()=>testFetchWithLogin()} className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-mediumOrange':'bg-blue-300'}`}>Test Fetch With Login</button>
+            {/* <button type="button" onClick={()=>testFetchWithLogin()} className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-mediumOrange':'bg-blue-300'}`}>Test Fetch With Login</button> */}
             </div>
             </div>
           </form>

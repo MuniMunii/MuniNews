@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import "../root.css";
+import React, { useState,useRef } from "react";
+import "../../root.css";
 import useFetch from "../hook/useFetch";
 import Navbar from "../component/navbar";
 import { useTheme } from "../context/context";
 import IndexScreen from "../component/index/indexscreen";
-import "../Frontend/style/animation.css";
+import "../style/animation.css";
 import { MdEmail,MdVerified } from "react-icons/md";
 import { Link } from "react-router-dom";
-import '../Frontend/style/animation.css'
+import FooterComp from "../component/footer";
+import {motion} from "framer-motion";
 function Index() {
   const [newsSize, setNewsSize] = useState({
     page_size: 5,
@@ -21,6 +22,7 @@ function Index() {
       user: data,
     })
   );
+  const containerRef=useRef(null)
   function ButtonMailTo({label,mailTo}:{label:string,mailTo:string}){
     return (
       <Link to={'#'}
@@ -38,8 +40,8 @@ function Index() {
       >
         {/* <Navbar /> */}
         <IndexScreen />
-        <h1 id="news" className="text-center">
-          News
+        <h1 id="about" className="text-center">
+          About
         </h1>
         {/* <div className="card h-5 w-7"></div> */}
         <div
@@ -71,11 +73,12 @@ function Index() {
             </div>
             </div>
           </div>
+          <motion.div ref={containerRef} onViewportEnter={() => console.log('is entering')} onViewportLeave={() => console.log('is Leaving')} >intersecting</motion.div>
           <div className="bg-slate-900 w-32 h-24 mt-3">
-
           </div>
         </div>
       </div>
+      <FooterComp/>
     </>
   );
 }

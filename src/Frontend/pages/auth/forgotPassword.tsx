@@ -21,7 +21,6 @@ function ForgotPassword() {
     })
     if(response.ok){
     const data=await response.json()
-    console.log('fething')
     setError((prev)=>prev=data.messages)
     }
 }
@@ -30,7 +29,6 @@ function ForgotPassword() {
     }
   }
   function handleEmail(value: string) {
-    console.log(emailUser)
     setEmailUser(value);
   }
   return (

@@ -30,7 +30,7 @@ function ResetPassword() {
     setTimeout(()=>navigate('/login'),3000)
     }
   }catch(error){
-      console.log('error set up new password')
+      setError('error set up new password')
     }
   }
   function handlePassword(value: string) {

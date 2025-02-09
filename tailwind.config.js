@@ -26,7 +26,8 @@ module.exports = {
       },
       fontFamily:{
         'testTitle':["Playfair Display, serif"],
-        'roboto':['Roboto, serif']
+        'roboto':['Roboto, serif'],
+        'testLogo':['Rowdies, serif']
       }
     },
   },

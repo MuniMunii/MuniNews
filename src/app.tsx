@@ -4,7 +4,7 @@ import { useTheme } from "./Frontend/context/context";
 import Navbar from "./Frontend/component/navbar";
 import Index from "./Frontend/pages";
 import NewsIndex from "./Frontend/pages/newsIndex";
-import "./root.css";
+import "../src/root.css";
 import RegisterForm from "./Frontend/pages/auth/register";
 import LoginForm from "./Frontend/pages/auth/login";
 import ResetPassword from "./Frontend/pages/auth/resetPassword";

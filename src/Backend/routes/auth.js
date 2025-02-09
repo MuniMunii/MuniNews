@@ -6,7 +6,9 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const verifyToken = require("../middleware/token");
 const router = express.Router();
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
+const uuid=require('uuid')
+
 router.get("/user", async (req, res) => {
   try {
     const getUser = await User.findAll();
@@ -71,6 +73,43 @@ router.post("/login", async (req, res) => {
     }
   }
 });
+// endpoint register
+router.post('/register',async (req,res)=>{
+  try{
+  let {email,nama_user,password,verifyPassword}=req.body
+  const {v4:uuidv4}=uuid
+  // sanitize dan validation
+  email = email?.trim();
+  nama_user = nama_user?.trim();
+  password = password?.trim();
+  verifyPassword = verifyPassword?.trim();
+  const regexEmail =
+  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const regexPassword = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{5,16}$/;
+  const isExist=await User.findOne({where:{email}})
+  const isExistUsername=await User.findOne({where:{nama_user}})
+  if(!email||!nama_user||!password){return res.status(400).json({messages:'all field required'})}
+  if(password!==verifyPassword){return res.status(400).json({messages:'Password must match'})}
+  if(!regexEmail.test(email)){return res.status(400).json({messages:'Email invalid'})}
+  if(!regexPassword.test(password)){return res.status(400).json({messages:'Password invalid'})}
+  if(nama_user.length<3){return res.status(400).json({messages:'Username invalid'})}
+  if(isExist){
+    return res.json({messages:'Email already registered'})
+  }
+  if(isExistUsername){
+    return res.json({messages:'Username already exist'})
+  }
+  // insert
+  const hashedPassword=await bcrypt.hash(password,12)
+  await User.create({
+    id:`user-${uuidv4()}`,
+    email:email,
+    nama_user:nama_user,
+    role:'journalist',
+    password:hashedPassword
+  })
+  res.status(200).json({messages:'User successfull registered'})
+}catch(error){return res.status(500).json({messages:'Server Error, try again'})}})
 //   route test endpoint user
 router.get("/me", async (req, res) => {
   try {
