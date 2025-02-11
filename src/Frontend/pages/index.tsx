@@ -73,6 +73,7 @@ function Index() {
             </div>
             </div>
           </div>
+          {/* task besok */}
           <motion.div ref={containerRef} onViewportEnter={() => console.log('is entering')} onViewportLeave={() => console.log('is Leaving')} >intersecting</motion.div>
           <div className="bg-slate-900 w-32 h-24 mt-3">
           </div>

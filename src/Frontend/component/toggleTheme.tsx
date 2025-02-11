@@ -6,7 +6,7 @@ function ToggleThemeButton() {
     const isLight=theme==='light'
     return (
       <button
-        className={`toggle-container w-24 h-10 ${isLight?'bg-white/50':'bg-pink-500/50'}  rounded-[50px] cursor-pointer flex p-2 items-center`}
+        className={`toggle-container w-24 h-10 text-sm ${isLight?'bg-white/50':'bg-pink-500/50'}  rounded-[50px] cursor-pointer flex p-2 items-center`}
         style={{
           justifyContent: isLight ? "flex-start" : "flex-end",
         }}

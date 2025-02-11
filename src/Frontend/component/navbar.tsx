@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import ToggleThemeButton from "./toggleTheme";
 import { Link } from "react-router-dom";
-function Navbar() {
+function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   const { theme, isWideScreen, assignUser, user } = useTheme();
   const [openNav, setOpenNav] = useState<boolean>(false);
   const isLight = theme === "light";
@@ -23,6 +23,7 @@ function Navbar() {
         credentials: "include",
       });
       assignUser("");
+      window.location.reload()
       localStorage.removeItem("user");
       localStorage.setItem("logout", Date.now().toString());
       setTimeout(() => {
@@ -73,7 +74,7 @@ function Navbar() {
       {/* Logo */}
       <Link
         to={"/"}
-        className="cursor-pointer text-4xl h-fit  py-1 px-3 font-testLogo flex gap-2 select-none uppercase text-[#fffcf9]"
+        className="cursor-pointer tablet:text-4xl text-3xl h-fit  py-1 px-3 font-testLogo flex gap-2 select-none uppercase text-[#fffcf9]"
       >
         Muni<span className="bg-[#dd395f] px-2">News</span>
       </Link>
@@ -105,6 +106,18 @@ function Navbar() {
             >
               News
             </Link>
+            {isAuthenticated && (
+              <Link
+                to={`${user}/dashboard`}
+                className={`transition ${
+                  isLight
+                    ? "hover:border-b-pink-300"
+                    : "hover:border-b-blue-300"
+                } border-b border-b-transparent`}
+              >
+                Dashboard
+              </Link>
+            )}
             <LoginOrLogout />
             <ToggleThemeButton />
           </div>
@@ -152,7 +165,6 @@ function Navbar() {
                   <LoginOrLogout />
                   <Link
                     to={"/#about"}
-                    
                     onClick={() => setOpenNav(false)}
                     className={`transition ${
                       isLight
@@ -173,6 +185,18 @@ function Navbar() {
                   >
                     News
                   </Link>
+                  {isAuthenticated && (
+                    <Link
+                      to={`${user}/dashboard`}
+                      className={`transition ${
+                        isLight
+                          ? "hover:border-b-pink-300"
+                          : "hover:border-b-blue-300"
+                      } border-b border-b-transparent`}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                   <ToggleThemeButton />
                 </div>
               </motion.div>

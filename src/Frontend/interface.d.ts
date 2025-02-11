@@ -14,5 +14,10 @@ const {theme}=useTheme()
       published:string;
       notAnimated:boolean;
     }
+    interface UserStatus{
+      name:string,
+      isAuth:boolean,
+      role:string
+    }
   }
   window.isLight=theme==='light'

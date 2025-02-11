@@ -7,7 +7,8 @@ const bcrypt = require("bcrypt");
 const verifyToken = require("../middleware/token");
 const router = express.Router();
 const { Op, where } = require("sequelize");
-const uuid=require('uuid')
+const uuid=require('uuid');
+const { decode } = require("punycode");
 
 router.get("/user", async (req, res) => {
   try {
@@ -66,7 +67,10 @@ router.post("/login", async (req, res) => {
         // 1hari nanti diganti pas deket deploy
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.json({ name: user.nama_user });
+      await user.update(
+        {isAuth:1}
+      )
+      res.json({ name: user.nama_user,isAuth:user.isAuth });
     } catch (error) {
       console.log("login Error");
       return res.status(500).json({ message: "Server error" });
@@ -119,14 +123,24 @@ router.get("/me", async (req, res) => {
     if (!user) {
       return res.status(401).json({ messages: "unauthorized" });
     }
-    res.json({ name: user.nama_user });
+    res.json({ name: user.nama_user,isAuth:user.isAuth,role:user.role});
   } catch (error) {
     return res.status(401).json({ messages: "invalid token" });
   }
 });
-router.post("/logout", (req, res) => {
+router.post("/logout",verifyToken,async (req, res) => {
+  try{
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_KEY);
+  const user=await User.findOne({where:{id:decoded.id}})
+  await user.update({
+    isAuth:0
+  })
   res.clearCookie("token");
-  res.json({ messages: "logout successfull" });
+  res.json({ messages: "logout successfull" });}
+  catch(error){
+    res.json({messages:'Error try again'})
+  }
 });
 //   route forgotpassword
 router.post("/forgot-password", async (req, res) => {

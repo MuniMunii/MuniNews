@@ -5,6 +5,8 @@ const ThemeContext = createContext({
   toggleTheme: () => {},
   user:'',
   assignUser:(user:string)=>{},
+  isAuthenticated:false,
+  assignIsAuthentication:(isAuth:boolean)=>{}
 });
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(() => {
@@ -12,6 +14,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   });
   const [isWideScreen,setIsWideScreen]=useState<boolean>(false)
   const [user,setUser]=useState<string>(()=>localStorage.getItem('user')||"")
+  const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
   const baseURL=process.env.REACT_APP_BACKEND_URL
   useEffect(()=>{console.log('user context:',user)},[user])
   // useEffect buat breakpoint devices < 768
@@ -35,6 +38,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
+  // function isAuthentication
+  const assignIsAuthentication=(isAuth:boolean)=>{
+    setIsAuthenticated((prev)=>prev=isAuth)
+  }
   // function assignuser
   const assignUser=(user:string)=>{
     console.log("Assigning user:", user);
@@ -74,8 +81,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return ()=> window.removeEventListener('storage',handleChange)
   },[])
   // nanti di setting
-  
-  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser}}>{children}</ThemeContext.Provider>;
+  useEffect(()=>{},[isAuthenticated])
+  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser,assignIsAuthentication,isAuthenticated}}>{children}</ThemeContext.Provider>;
 }
 export function useTheme() {
     return useContext(ThemeContext);
