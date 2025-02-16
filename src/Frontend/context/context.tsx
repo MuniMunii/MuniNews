@@ -4,6 +4,8 @@ const ThemeContext = createContext({
   isWideScreen:false,
   toggleTheme: () => {},
   user:'',
+  role:'',
+  assignRole:(user:string)=>{},
   assignUser:(user:string)=>{},
   isAuthenticated:false,
   assignIsAuthentication:(isAuth:boolean)=>{}
@@ -12,11 +14,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "dark";
   });
+  const [role,setRole]=useState<string>('')
   const [isWideScreen,setIsWideScreen]=useState<boolean>(false)
-  const [user,setUser]=useState<string>(()=>localStorage.getItem('user')||"")
+  const [user,setUser]=useState<string>((()=>localStorage.getItem('user')||""))
   const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
   const baseURL=process.env.REACT_APP_BACKEND_URL
-  useEffect(()=>{console.log('user context:',user)},[user])
+  useEffect(()=>{console.log('user context:',user);console.log('auth context:',isAuthenticated);console.log('role context:',role)},[user])
   // useEffect buat breakpoint devices < 768
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px) and (min-height: 500px)');
@@ -47,6 +50,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     console.log("Assigning user:", user);
     setUser((prev)=>prev=user)
   }
+  // function assign role
+  const assignRole=(role:string)=>{
+    setRole((prev)=>prev=role)
+  }
   // function fetch profile user
   const fetchUser= async ()=>{
     try{
@@ -55,9 +62,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         credentials:'include'
       })
       if(response.ok){
-        const data=await response.json()
+        const data:UserStatus=await response.json()
+        setIsAuthenticated(data.isAuth)
+        setRole(data.role)
         setUser(data.name)
+        console.log('user id',data.id)
         console.log('fetch login',data.name)
+        console.log('fetch login',data.isAuth)
+        console.log('fetch login',data.role)
         localStorage.setItem('user',data.name)
       }else{
         setUser('')
@@ -65,6 +77,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
     }
     catch{
+      setIsAuthenticated(false)
       setUser('')
       localStorage.removeItem('user')
     }
@@ -82,7 +95,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   },[])
   // nanti di setting
   useEffect(()=>{},[isAuthenticated])
-  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser,assignIsAuthentication,isAuthenticated}}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser,assignIsAuthentication,isAuthenticated,role,assignRole}}>{children}</ThemeContext.Provider>;
 }
 export function useTheme() {
     return useContext(ThemeContext);

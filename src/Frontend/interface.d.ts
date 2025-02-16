@@ -15,9 +15,11 @@ const {theme}=useTheme()
       notAnimated:boolean;
     }
     interface UserStatus{
+      id:string
       name:string,
       isAuth:boolean,
-      role:string
+      role:string,
+      messages:string
     }
   }
   window.isLight=theme==='light'

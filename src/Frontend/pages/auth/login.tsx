@@ -5,7 +5,9 @@ import { redirect, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 type errorParam = "Email Invalid";
 function LoginForm() {
-  const { theme, assignUser, user } = useTheme();
+  const { theme, assignUser, user,assignIsAuthentication,assignRole } = useTheme();
+  const [role,setRole]=useState<string>('')
+  const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
   const [errorEmail, setErrorEmail] = useState<boolean>(false);
@@ -22,13 +24,18 @@ function LoginForm() {
     }
   }, [showPassword]);
   // useEffect untuk assign user ke context
+  useEffect(()=>{console.log('user Role',role)},[role])
   useEffect(() => {
-    if (loginAs) {
+    if (isAuthenticated) {
       assignUser(loginAs);
+      assignIsAuthentication(isAuthenticated)
+      assignRole(role)
     } else {
       assignUser("");
+      assignIsAuthentication(false)
+      assignRole("")
     }
-  }, [loginAs]);
+  }, [isAuthenticated]);
   const regexEmail =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   const isEmailValid = regexEmail.test(emailUser);
@@ -54,12 +61,14 @@ function LoginForm() {
           body: JSON.stringify({ email: emailUser, password: passwordUser }),
           credentials: "include",
         });
-        const data = await response.json();
+        const data:UserStatus = await response.json();
         if (response.ok) {
-          // debug
           setLoginAs(data.name);
+          setIsAuthenticated(data.isAuth)
+          setRole(data.role)
+          console.log(data)
           localStorage.setItem("user", data.name);
-           navigate('/')
+          navigate('/')
         } else {
           setError((prev)=>prev=data.messages);
         }

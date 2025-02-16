@@ -63,6 +63,7 @@ router.post("/login", async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
+        // ganti ke strict untuk prevent csrf
         sameSite: "lax",
         // 1hari nanti diganti pas deket deploy
         maxAge: 24 * 60 * 60 * 1000,
@@ -70,7 +71,7 @@ router.post("/login", async (req, res) => {
       await user.update(
         {isAuth:1}
       )
-      res.json({ name: user.nama_user,isAuth:user.isAuth });
+      res.json({ name: user.nama_user,isAuth:user.isAuth,role:user.role,id:user.id });
     } catch (error) {
       console.log("login Error");
       return res.status(500).json({ message: "Server error" });
@@ -118,14 +119,14 @@ router.post('/register',async (req,res)=>{
 router.get("/me", async (req, res) => {
   try {
     const token = req.cookies.token;
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    let decoded =jwt.verify(token, process.env.JWT_KEY);;
     const user = await User.findOne({ where: { id: decoded.id } });
     if (!user) {
       return res.status(401).json({ messages: "unauthorized" });
     }
     res.json({ name: user.nama_user,isAuth:user.isAuth,role:user.role});
   } catch (error) {
-    return res.status(401).json({ messages: "invalid token" });
+    return res.status(401).json({ messages: "invalid token endpoint me" });
   }
 });
 router.post("/logout",verifyToken,async (req, res) => {

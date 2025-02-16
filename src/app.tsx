@@ -12,48 +12,49 @@ import ForgotPassword from "./Frontend/pages/auth/forgotPassword";
 import PageNotFound from "./Frontend/component/404Page";
 import DashboardUser from "./Frontend/pages/user/dashboard";
 function App() {
-  const [userRole, setUserRole] = useState<string>("");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setIsLoading] = useState<boolean>(true);
+  // const [userRole, setUserRole] = useState<string>("");
+  // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
+  // const [loading, setIsLoading] = useState<boolean>(true);
+  const { theme, user,isAuthenticated } = useTheme();
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(`${baseURL}/auth/me`, {
-          method: "get",
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data: UserStatus = await response.json();
-          setIsAuthenticated(data.isAuth);
-          setUserRole(data.role);
-        } else {
-          setIsAuthenticated(false);
-          setUserRole("");
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
-  const { theme, user } = useTheme();
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await fetch(`${baseURL}/auth/me`, {
+  //         method: "get",
+  //         credentials: "include",
+  //       });
+  //       if (response.ok) {
+  //         const data: UserStatus = await response.json();
+  //         setIsAuthenticatedState(data.isAuth);
+  //         setUserRole(data.role);
+  //       } else {
+  //         setIsAuthenticatedState(false);
+  //         setUserRole("");
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
   const isLight = theme === "light";
-  const ProtectedRoute=({isAuthenticated}:{isAuthenticated:boolean})=>{
+  const ProtectedRoute=({isAuthenticated}:{isAuthenticated:string})=>{
     if(!isAuthenticated){
       return <Navigate to={'/login'} replace/>
     }
     return <Outlet/>
   }
-  if(loading){
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-      <p className="text-xl font-semibold">Loading...</p>
-    </div>
-    )
-  }
+  // if(loading){
+  //   return (
+  //     <div className="flex justify-center items-center h-screen w-full">
+  //     <p className="text-xl font-semibold">Loading...</p>
+  //   </div>
+  //   )
+  // }
+  // bug no 1 tidak bisa fetch pas reload kemungkinan ada di useEffect context
   return (
     <div
       className={`App transition duration-150 ${
@@ -68,7 +69,7 @@ function App() {
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
-        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
+        <Route element={<ProtectedRoute isAuthenticated={user}/>}>
         <Route path={`/${user}/dashboard`} element={<DashboardUser/>}></Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

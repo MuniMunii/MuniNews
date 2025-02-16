@@ -4,7 +4,9 @@ function useFetch<T>(url: string,processData:(data:any)=>T){
   const [isLoading, setIsLoading] = useState<boolean | null>(true);
   useEffect(()=>{
     setIsLoading(true);
-    fetch(url)
+    fetch(url,
+      {method:'get',credentials:'include',headers:{ "Content-Type": "application/json" }}
+    )
     .then((response) => response.json())
     .then((data) => {
       setValue(processData(data));
