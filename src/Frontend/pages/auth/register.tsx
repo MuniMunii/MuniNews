@@ -143,7 +143,7 @@ function RegisterForm() {
                   autoComplete="email-off"
                   type="text"
                   id="username"
-                  placeholder="input email"
+                  placeholder="Input username"
                   onInput={(value) => {
                     handleUsername(value.currentTarget.value);
                   }}
@@ -168,6 +168,7 @@ function RegisterForm() {
                   className={`h-8 w-full border rounded px-2 focus:outline-none ${
                     !isPasswordValid ? "border-red-500" : "border-green-500"
                   }`}
+                  maxLength={16}
                   type="password"
                   autoComplete="new-password"
                   id="password"
@@ -198,6 +199,7 @@ function RegisterForm() {
                       : "border-green-500"
                   }`}
                   type="password"
+                  maxLength={16}
                   autoComplete="new-password"
                   id="verify-password"
                   placeholder="Input password"

@@ -6,6 +6,8 @@ const sequelize=new Sequelize('muninews','root','',{
     logging:console.log,
 })
 const UserModel = require("../model/user");
-const User = UserModel(sequelize, DataTypes);
+const User = UserModel(sequelize, DataTypes)
+const NewsModel = require("../model/news");
+const News = NewsModel(sequelize, DataTypes);;
 
-module.exports={sequelize,User}
+module.exports={sequelize,User,News}

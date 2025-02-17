@@ -80,7 +80,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
           >
             <motion.div
               initial={{ opacity: 0.3, rotateY:5,rotateX:50,filter:'blur(4px)'}}
-              animate={{ opacity: 1, rotateY:0,rotateX:0,filter:'blur(0)' }}
+              animate={{ opacity: 1, rotateY:0,rotateX:0,filter:'blur(0)', }}
               exit={{ opacity: 0,  rotateY:10,rotateX:50,filter:'blur(4px)' }}
               transition={{
                 duration: 0.25,

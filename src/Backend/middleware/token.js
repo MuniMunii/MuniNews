@@ -9,6 +9,15 @@ const verifyToken = (req, res, next) => {
     req.user = decode;
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+    })
+    // connected di context fetchUser
+    return res.status(403).json({messages:'invalid Token please Login Again'})
+  }
     return res.status(403).json({ messages: "Invalid Token" });
   }
 };

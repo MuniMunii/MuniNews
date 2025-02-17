@@ -58,11 +58,13 @@ router.post("/login", async (req, res) => {
         email: user.email,
       };
       const token = jwt.sign(payload, process.env.JWT_KEY, {
-        expiresIn: process.env.JWT_DUR,
+        // nanti di ganti pas deket deploy di env file
+        expiresIn: '1d',
       });
       res.cookie("token", token, {
         httpOnly: true,
-        secure: true,
+        // nanti di ganti jadi true
+        secure: process.env.NODE_ENV === "production",
         // ganti ke strict untuk prevent csrf
         sameSite: "lax",
         // 1hari nanti diganti pas deket deploy
@@ -116,11 +118,9 @@ router.post('/register',async (req,res)=>{
   res.status(200).json({messages:'User successfull registered'})
 }catch(error){return res.status(500).json({messages:'Server Error, try again'})}})
 //   route test endpoint user
-router.get("/me", async (req, res) => {
+router.get("/me",verifyToken, async (req, res) => {
   try {
-    const token = req.cookies.token;
-    let decoded =jwt.verify(token, process.env.JWT_KEY);;
-    const user = await User.findOne({ where: { id: decoded.id } });
+    const user = await User.findOne({ where: { id: req.user.id } });
     if (!user) {
       return res.status(401).json({ messages: "unauthorized" });
     }

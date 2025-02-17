@@ -11,6 +11,7 @@ import ResetPassword from "./Frontend/pages/auth/resetPassword";
 import ForgotPassword from "./Frontend/pages/auth/forgotPassword";
 import PageNotFound from "./Frontend/component/404Page";
 import DashboardUser from "./Frontend/pages/user/dashboard";
+import EditNews from "./Frontend/pages/user/editNews";
 function App() {
   // const [userRole, setUserRole] = useState<string>("");
   // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
@@ -70,7 +71,9 @@ function App() {
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
         <Route element={<ProtectedRoute isAuthenticated={user}/>}>
-        <Route path={`/${user}/dashboard`} element={<DashboardUser/>}></Route>
+        <Route path={`/${user}/dashboard`} element={<DashboardUser/>}/>
+        <Route path={`/${user}/editnews/:newsId`} element={<EditNews/>}/>
+        {}
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -16,7 +16,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   });
   const [role,setRole]=useState<string>('')
   const [isWideScreen,setIsWideScreen]=useState<boolean>(false)
-  const [user,setUser]=useState<string>((()=>localStorage.getItem('user')||""))
+  const [user,setUser]=useState<string>('')
   const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
   const baseURL=process.env.REACT_APP_BACKEND_URL
   useEffect(()=>{console.log('user context:',user);console.log('auth context:',isAuthenticated);console.log('role context:',role)},[user])
@@ -61,8 +61,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         method:'get',
         credentials:'include'
       })
+      const data:UserStatus=await response.json()
+      if(!response.ok){
+        console.warn("Fetch error:", data.messages);
+      if (data.messages === "invalid Token please Login Again") {
+        setIsAuthenticated(false);
+        setUser("");
+        localStorage.removeItem("user");
+      }
+      return;
+      }
       if(response.ok){
-        const data:UserStatus=await response.json()
         setIsAuthenticated(data.isAuth)
         setRole(data.role)
         setUser(data.name)
@@ -70,16 +79,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         console.log('fetch login',data.name)
         console.log('fetch login',data.isAuth)
         console.log('fetch login',data.role)
-        localStorage.setItem('user',data.name)
+        // localStorage.setItem('user',data.name)
       }else{
         setUser('')
-        localStorage.removeItem('user')
+        // localStorage.removeItem('user')
       }
     }
     catch{
       setIsAuthenticated(false)
       setUser('')
-      localStorage.removeItem('user')
+      // localStorage.removeItem('user')
     }
   }
   // useEffect jika user menghapus item di localstorage item akan tetap ada selama token valid dengan function fetchUser

@@ -21,5 +21,9 @@ const {theme}=useTheme()
       role:string,
       messages:string
     }
+    interface NewsStatus{
+      id:string
+      messages:string,
+    }
   }
   window.isLight=theme==='light'
