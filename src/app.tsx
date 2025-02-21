@@ -55,14 +55,14 @@ function App() {
   //   </div>
   //   )
   // }
-  // bug no 1 tidak bisa fetch pas reload kemungkinan ada di useEffect context
+  // Note 1: styling dashboard sama reconstruct dashboard component biar Lebih rapih
   return (
     <div
       className={`App transition duration-150 ${
         isLight ? "bg-white text-black" : " bg-darkTheme text-white"
       }`}
     >
-      <Navbar isAuthenticated={isAuthenticated}/>
+      <Navbar/>
       <Routes>
       <Route path={"/"} element={<Index />} />
         <Route path={"/newslist"} element={<NewsIndex />} />
@@ -72,7 +72,7 @@ function App() {
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
         <Route element={<ProtectedRoute isAuthenticated={user}/>}>
         <Route path={`/${user}/dashboard`} element={<DashboardUser/>}/>
-        <Route path={`/${user}/editnews/:newsId`} element={<EditNews/>}/>
+        <Route path={`/${user}/edit-news/:news_id`} element={<EditNews/>}/>
         {}
         </Route>
         <Route path="*" element={<PageNotFound />} />

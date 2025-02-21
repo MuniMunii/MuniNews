@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/context";
 import { animate, AnimatePresence, motion } from "framer-motion";
 function AddNewsForm({
@@ -18,6 +18,8 @@ function AddNewsForm({
   const [description, setDescription] = useState<string>("");
   const { theme } = useTheme();
   const isLight = theme === "light";
+  const baseURL=process.env.REACT_APP_BACKEND_URL
+  const navigate=useNavigate()
   function handleTitle(value: string) {
     setTitle(value);
   }
@@ -46,8 +48,8 @@ function AddNewsForm({
     }
     try {
       console.log("try fetch add news");
-      const response = await fetch("news/make-news", {
-        method: "post",
+      const response = await fetch(`${baseURL}/news/make-news`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
@@ -66,7 +68,7 @@ function AddNewsForm({
       if (response.ok) {
         setError(data.messages);
         setModalPopUp(true);
-        setTimeout(() => redirect(`${user}/edit-news/${data.id}`), 3000);
+        setTimeout(() => navigate(`/${user}/edit-news/${data.news_id}`), 3000);
       }
     } catch (error) {
       setModalPopUp(true);

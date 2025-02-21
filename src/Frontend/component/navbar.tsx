@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import ToggleThemeButton from "./toggleTheme";
 import { Link, Navigate, redirect } from "react-router-dom";
-function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
-  const { theme, isWideScreen, assignUser, user } = useTheme();
+function Navbar() {
+  const { theme, isWideScreen, assignUser, user,isAuthenticated} = useTheme();
   const [openNav, setOpenNav] = useState<boolean>(false);
   const [modalLogout, setModalLogout] = useState<boolean>(false);
   const isLight = theme === "light";
@@ -37,7 +37,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
       console.log("logout error di context", error);
     }
   };
-  function LoginOrLogout() {
+  function LoginOrLogout({isAuthenticated}:{isAuthenticated:boolean}) {
     return (
       <>
         {isAuthenticated ? (
@@ -171,7 +171,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
                   Dashboard
                 </Link>
               )}
-              <LoginOrLogout />
+              <LoginOrLogout isAuthenticated={isAuthenticated}/>
               <ToggleThemeButton />
             </div>
           </>
@@ -215,7 +215,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
                     >
                       Home
                     </Link>
-                    <LoginOrLogout />
+                    <LoginOrLogout isAuthenticated={isAuthenticated}/>
                     <Link
                       to={"/#about"}
                       onClick={() => setOpenNav(false)}

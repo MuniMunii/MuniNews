@@ -22,7 +22,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(()=>{console.log('user context:',user);console.log('auth context:',isAuthenticated);console.log('role context:',role)},[user])
   // useEffect buat breakpoint devices < 768
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px) and (min-height: 500px)');
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
     const handleMediaQueryChange = (event:MediaQueryListEvent) => {
       setIsWideScreen(event.matches);
     };

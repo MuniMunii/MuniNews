@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("user", {
+    return sequelize.define("news", {
         news_id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
@@ -48,6 +48,6 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
             allowNull:true
           }
-    },{freezeTableName:true,tableName:'user',timestamps:false});
+    },{freezeTableName:true,tableName:'news',timestamps:false});
   };
   
