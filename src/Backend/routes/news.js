@@ -6,6 +6,7 @@ const { where, UUIDV4 } = require("sequelize");
 const router = express.Router();
 const uuid=require('uuid');
 const verifyToken = require("../middleware/token.js");
+// router external API CurrentNews
 router.get("/currentnews", async (req, res) => {
   const { page_size } = req.query;
   try {
@@ -23,12 +24,16 @@ router.get("/currentnews", async (req, res) => {
     console.log("error:", error);
   }
 });
+// router make news
 router.post("/make-news", async (req, res) => {
-  const { user, isAuth, title, category, description } = req.body;
+  let { user, isAuth, title, category, description } = req.body;
+  title=title.trim()
+  description=description.trim().replace(/\s+/g," ")
+  if(title.length===0){return res.status(403).json({messages:'Title cannot be empty'})}
+  if(description.length===0){return res.status(403).json({messages:'Description cannot be empty'})}
   try {
     const date = new Date();
     const DATE_FORMAT = date.toISOString().slice(0, 19).replace("T", " ");
-    const {v4:uuidv4}=uuid
     const userQuery=await User.findOne({where:{nama_user:user}})
     if (!userQuery) {
       return res.status(403).json({ messages: "User not found" });
@@ -37,14 +42,14 @@ router.post("/make-news", async (req, res) => {
       return res.status(403).json({ messages: "Not Authenticated" });
     }
     const newNews=News.build({
-      name_news: title.trim(),
+      name_news: title,
       createdBy: userQuery.id,
       createdAt: DATE_FORMAT,
       updatedAt: DATE_FORMAT,
       category:category,
       verified: false,
       status:'archived',
-      description: description.trim().replace(/\s+/g," "),
+      description: description,
       content: "empty",
     });
     await newNews.save()
@@ -53,6 +58,7 @@ router.post("/make-news", async (req, res) => {
     return res.status(403).json({ messages: `Server error try again: ${error}`});
   }
 });
+// router get semua news di user
 router.get("/my-news",verifyToken,async (req,res)=>{
   try{
     const userQuery=await User.findOne({where:{id:req.user.id}})
@@ -66,9 +72,9 @@ router.get("/my-news",verifyToken,async (req,res)=>{
     res.status(200).json({messages:'News found',news})
   }catch(error){return res.status(403).json({messages:'server error try again',error})}
 })
+// router get news value sesuai param/idnews
 router.get("/edit-news/:news_id",async(req,res)=>{
   const {news_id}=req.params
-  const {title}=req.body
   const news=await News.findOne({where:{news_id:news_id}})
   if(!news){
     return res.status(403).json({messages:'News not found'})
@@ -76,5 +82,15 @@ router.get("/edit-news/:news_id",async(req,res)=>{
   try{
     res.status(200).json({messages:'News found',news})
   }catch(error){return res.status(403).json({messages:'server error try again',error})}
+})
+router.post("/edit-news/save-value/:news_id",async(req,res)=>{
+  const {news_id}=req.params
+  const {title,description,content,cover}=req.body
+  try{
+  const news=await News.findOne({where:{news_id:news_id}})
+  if(!news)return res.status(403).json({messages:'News not found'})
+  await news.update({name_news:title,description:description,content:content,cover:cover})
+  res.status(200).json({messages:'News Saved'})
+  }catch(error){return res.status(403).json({messages:'server error try again: ',error})}
 })
 module.exports = router;

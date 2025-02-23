@@ -31,7 +31,8 @@ module.exports = {
       fontFamily:{
         'testTitle':["Playfair Display, serif"],
         'roboto':['Roboto, serif'],
-        'testLogo':['Rowdies, serif']
+        'testLogo':['Rowdies, serif'],
+        'Garramond':["EB Garamond, serif"]
       }
     },
   },

@@ -83,6 +83,7 @@ function AddNewsForm({
       >
         <div className="flex flex-col w-full justify-center items-center">
           <label htmlFor="title">Title</label>
+          <p className="text-left text-sm font-thin">Text Left:{50-title.length}</p>
           <input
             onInput={(e) => setTitle(e.currentTarget.value)}
             autoComplete="off"
@@ -93,7 +94,9 @@ function AddNewsForm({
             className="outline-none w-9/12 px-3 text-black rounded py-1"
           />
           <label htmlFor="description">description</label>
+          <p className="text-left text-sm font-thin">Text Left:{150-description.length}</p>
           <textarea
+          maxLength={150}
             onInput={(e) => setDescription(e.currentTarget.value)}
             autoComplete="off"
             placeholder="Input Description"
