@@ -8,11 +8,12 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import '../../style/quillCss.css'
 import useDebounce from "../../hook/useDebounce";
+import LoadingComp from "../../component/loadingComp";
 function EditNews() {
   const { news_id } = useParams();
   const {theme}=useTheme()
   const [loading, setIsLoading] = useState<boolean>(true);
-  const [isError,setIsError]=useState<boolean>(false)
+  const [isError,setIsError]=useState<boolean|string>(false)
   const [isSaving, setIsSaving] = useState<boolean>(true);
   const [newsValue, setNewsValue] = useState<NewsKey | null>();
   const [titleValue, setTitleValue] = useState<string>("");
@@ -32,12 +33,14 @@ function EditNews() {
     console.log("descriptionValue: ", descriptionValue);
     console.log("contentValue: ", contentValue);
     console.log("isSaving: ", isSaving)
-  }, [titleValue, descriptionValue,contentValue,isSaving]);
+    console.log("cover Path: ", coverValue)
+  }, [titleValue, descriptionValue,contentValue,isSaving,coverValue]);
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await fetch(`${baseURL}/news/edit-news/${news_id}`, {
           credentials: "include",
+          headers:{'Content-Type':'application/json'},
           method: "Get",
         });
         const data = await response.json();
@@ -55,14 +58,23 @@ function EditNews() {
     };
     fetchNews();
   }, [news_id]);
-  
+  // fetch gambar
+  const uploadCover=async(formData:FormData)=>{
+    try{
+      const response=await fetch(`${baseURL}/news/edit-news/save-cover/${news_id}/cover`,{method:'post',credentials:'include',body:formData})
+      const data=await response.json()
+      setCoverValue(data.filePath)
+      setIsError(data.messages?'Upload cover success':data.messages)
+    }catch(error){setIsError('Error try again')}
+  }
+  // fetch text
   const autoSave=async ()=>{
     try{
         const response=await fetch(`${baseURL}/news/edit-news/save-value/${news_id}`,{
             method:'post',
             credentials:'include',
             headers: { "Content-Type": "application/json" },
-            body:JSON.stringify({title:titleValue,description:descriptionValue,content:contentValue,cover:coverValue})
+            body:JSON.stringify({title:titleValue,description:descriptionValue,content:contentValue})
         })
         const data=await response.json()
         setIsError(data.messages)
@@ -71,9 +83,16 @@ function EditNews() {
   const debounceAutoSave=useDebounce(autoSave,3000)
     useEffect(()=>{
             debounceAutoSave()
-    },[titleValue,descriptionValue,contentValue,coverValue])
+    },[titleValue,descriptionValue,contentValue])
   if (loading) {
-    return <p>isLoading Wait</p>;
+    return <LoadingComp error={isError} />;
+  }
+  function handleSaveCover(event:React.ChangeEvent<HTMLInputElement>){
+    if(event.target.files){
+      const formData=new FormData()
+      formData.append('cover',event.target.files[0])
+      uploadCover(formData)
+    }
   }
   return (
     <>
@@ -100,11 +119,12 @@ function EditNews() {
             onBlur={autoSave}
             onChange={(e) =>{setTitleValue(e.currentTarget.value);e.currentTarget.style.height='auto';e.currentTarget.style.height=`${e.currentTarget.scrollHeight}px`;setIsSaving(true)}}
             style={{height:inputTitleRef.current?.scrollHeight}}
-            className={`w-full outline-none bg-gray-600/40 rounded-lg px-7 py-3 text-5xl resize-none text-center ${isLight?'bg-[#FFE9CE]':'bg-gray-600/40'}`}
+            className={`w-full outline-none rounded-lg px-7 py-3 text-5xl resize-none text-center ${isLight?'bg-[#FFE9CE]':'bg-gray-600/40'}`}
           />
-          <div className={`bg-black flex-col text-white w-11/12 h-80 mx-auto rounded-lg my-4 flex justify-center items-center text-7xl min-h-12`}>
+          <div className={`bg-black flex-col text-white w-3/4 h-96 mx-auto rounded-lg my-4 flex justify-center items-center text-7xl min-h-12`}>
+          {coverValue?<img src={`${baseURL}${coverValue}`} className="w-full h-full bg-cover"/>:<>
             <FaRegNewspaper />
-            <button className={`${isLight?'bg-oceanBlue':'bg-oceanBlue'} py-1 px-3 rounded-md text-xl`}>Add Cover</button>
+            <input type="file" accept="image/*" onChange={handleSaveCover} className={`${isLight?'bg-oceanBlue':'bg-oceanBlue'} py-1 px-3 rounded-md text-xl`}/></>}
           </div>
           <label htmlFor="desc">Description</label>
           <textarea
@@ -114,7 +134,7 @@ function EditNews() {
             onBlur={autoSave}
             onChange={(e) =>{setDescriptionValue(e.currentTarget.value);e.currentTarget.style.height='auto';e.currentTarget.style.height=`${e.currentTarget.scrollHeight}px`;setIsSaving(true)}}
             style={{height:inputTitleRef.current?.scrollHeight}}
-            className={`w-full text-center resize-none outline-none bg-gray-600/40 rounded-lg px-7 py-3 italic ${isLight?'bg-[#FFE9CE]':'bg-gray-600/40'}`}
+            className={`w-full text-center resize-none outline-none rounded-lg px-7 py-3 italic ${isLight?'bg-[#FFE9CE]':'bg-gray-600/40'}`}
           />
           <label htmlFor="Content">Content</label>
           {contentValue.length===0?<p className="text-center text-red-500">Content Cannot be empty</p>:null}

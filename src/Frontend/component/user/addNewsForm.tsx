@@ -116,10 +116,10 @@ function AddNewsForm({
             <option value={"Sciences"}>Sciences</option>
           </select>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap font-poppins">
           <button
             type="submit"
-            className="mt-auto bg-green-500 px-3 rounded text-black uppercase"
+            className="mt-auto bg-green-500 px-3 rounded text-black uppercase font-poppins"
           >
             Add News
           </button>
@@ -127,7 +127,7 @@ function AddNewsForm({
             type="button"
             onClick={() => setModalMakeNews(false)}
             className={`border ${
-              isLight ? "border-black/50" : "border-white/50"
+              isLight ? "border-black/50" : "border-white/50 font-poppins"
             } rounded px-2`}
           >
             Cancel

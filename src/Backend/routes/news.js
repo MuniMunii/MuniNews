@@ -6,6 +6,21 @@ const { where, UUIDV4 } = require("sequelize");
 const router = express.Router();
 const uuid=require('uuid');
 const verifyToken = require("../middleware/token.js");
+const multer=require("multer")
+const path=require("path")
+// const ss=require('../assets/cover')
+const storage=multer.diskStorage({
+  destination:(req,file,cb)=>{
+    let folder;
+    folder=req.params.folder
+    if(!folder){cb(new Error('folder not found'))}
+    cb(null,path.join(__dirname,`../assets/${folder}`))
+  },
+  filename:(req,file,cb)=>{
+    cb(null,Date.now()+path.extname(file.originalname))
+  }
+})
+const upload =multer({storage:storage})
 // router external API CurrentNews
 router.get("/currentnews", async (req, res) => {
   const { page_size } = req.query;
@@ -85,12 +100,29 @@ router.get("/edit-news/:news_id",async(req,res)=>{
 })
 router.post("/edit-news/save-value/:news_id",async(req,res)=>{
   const {news_id}=req.params
-  const {title,description,content,cover}=req.body
+  const {title,description,content}=req.body
   try{
   const news=await News.findOne({where:{news_id:news_id}})
   if(!news)return res.status(403).json({messages:'News not found'})
-  await news.update({name_news:title,description:description,content:content,cover:cover})
+  await news.update({name_news:title,description:description,content:content})
   res.status(200).json({messages:'News Saved'})
   }catch(error){return res.status(403).json({messages:'server error try again: ',error})}
+})
+router.post("/edit-news/save-cover/:news_id/:folder",upload.single('cover'),async (req,res)=>{
+  const {news_id}=req.params
+  const folder=req.params.folder
+  try{
+  const news=await News.findOne({where:{news_id:news_id}})
+  if(!news){
+    return res.status(403).json({messages:'news not found'})
+  }
+  if(!req.file){
+    return res.status(403).json({messages:'no file uploaded'})
+  }
+  const filePath=`/assets/${folder}/${req.file.filename}`
+  news.cover=filePath
+  await news.save()
+  res.status(200).json({messages:'file uploaded',filePath})
+}catch(error){return res.status(403).json({messages:'server error try again: ',error})}
 })
 module.exports = router;

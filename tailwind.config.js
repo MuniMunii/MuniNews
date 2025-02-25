@@ -32,7 +32,8 @@ module.exports = {
         'testTitle':["Playfair Display, serif"],
         'roboto':['Roboto, serif'],
         'testLogo':['Rowdies, serif'],
-        'Garramond':["EB Garamond, serif"]
+        'Garramond':["EB Garamond, serif"],
+        'Poppins':["Poppins, serif"]
       }
     },
   },

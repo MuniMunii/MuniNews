@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/context";
-import useFetch from "../../hook/useFetch";
-import { IoReload } from "react-icons/io5";
-import { redirect } from "react-router-dom";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import AddNewsForm from "../../component/user/addNewsForm";
-import { Link } from "react-router-dom";
-import { FaRegNewspaper } from "react-icons/fa";
 import CardComponent from "../../component/user/CardComponent";
 import "../../style/animation.css"
+type activeState="about"|"mynews"|"archived"|"cancelled"
 function DashboardUser() {
-  const [isActive, setIsActive] = useState<string>("about");
-  const [isActiveTag, setIsActiveTag] = useState<string>("about");
+  const [isActive, setIsActive] = useState<activeState>('mynews');
   const [modalPopUp, setModalPopUp] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [reload, setIsReload] = useState<boolean>(false);
@@ -27,11 +22,12 @@ function DashboardUser() {
   }, [modalMakeNews]);
   useEffect(() => {
     const getNews = async () => {
+      try{
       const response = await fetch(`${baseURL}/news/my-news`, {
         credentials: "include",
       });
       const data = await response.json();
-      setMyNews(data.news);
+      setMyNews(data.news);}catch(error){console.log(error)}
     };
     getNews();
   }, [reload]);
@@ -51,35 +47,27 @@ function DashboardUser() {
   // console.log(userInfo?.me);
   const NavDashboard = () => {
     return (
-      <div className="w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2">
+      <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b ${isLight?'border-b-black':'border-b-bwhite'}`}>
         <div className="flex flex-wrap gap-2">
           <button
-            className={`px-3 pb-3 transition duration-100 ${isLight?'bg-mediumOrange text-black':'bg-oceanBlue'} rounded-md flex items-center justify-center hover:scale-105 ${
-              isActive === "about" ? "scale-105" : ""
-            }`}
-            onClick={() => setIsActive("about")}
-          >
-            About
-          </button>
-          <button
-            className={`px-3 pb-3 transition duration-100 ${isLight?'bg-mediumOrange text-black':'bg-oceanBlue'} rounded-md flex items-center justify-center hover:scale-105 ${
-              isActive === "mynews" ? "scale-105" : ""
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300   ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
+              isActive === "mynews" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
             }`}
             onClick={() => setIsActive("mynews")}
           >
             MyNews
           </button>
           <button
-            className={`px-3 pb-3 transition duration-100 ${isLight?'bg-mediumOrange text-black':'bg-oceanBlue'} rounded-md flex items-center justify-center hover:scale-105 ${
-              isActive === "archived" ? "scale-105" : ""
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
+              isActive === "archived" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
             }`}
             onClick={() => setIsActive("archived")}
           >
             Archived
           </button>
           <button
-            className={`px-3 pb-3 transition duration-100 ${isLight?'bg-mediumOrange text-black':'bg-oceanBlue'} rounded-md flex items-center justify-center hover:scale-105 ${
-              isActive === "cancelled" ? "scale-105" : ""
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
+              isActive === "cancelled" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
             }`}
             onClick={() => setIsActive("cancelled")}
           >
@@ -101,6 +89,7 @@ function DashboardUser() {
 
   return (
     <>
+    <div className="diagonal-pattern">
       <div className="mx-auto w-[90%] max-w-[800px] h-screen flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div
           className={`laptop:block laptop:w-1/3 flex bg-white items-center gap-3 p-4`}
@@ -108,10 +97,10 @@ function DashboardUser() {
           <div className="bg-black size-32 rounded-full"></div>
           <p className="text-black">{user}</p>
         </div>
-        <div className="laptop:h-[90%] phone:h-[67%] w-full laptop:w-3/4 laptop:max-w-[750px] laptop:mx-auto">
+        <div className={`h-full border ${isLight?'bg-white border-slate-500':'bg-oceanBlue border-slate-500'} w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
+        <div className={`laptop:h-[90%] phone:h-[67%] `}>
           <NavDashboard />
-          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin ${isLight?'scrollbar-thumb-violet-950' :'scrollbar-thumb-white'} scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
-          {isActive==='about'?<p className="text-center">testing</p>:null}
+          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] ${isLight?'scrollbar-thumb-violet-950' :'scrollbar-thumb-white'} scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
             {isActive === "mynews"
               ?<CardComponent Tag='mynews' myNews={myNews}/>
               : null}
@@ -123,6 +112,8 @@ function DashboardUser() {
               : null}
           </div>
         </div>
+        </div>
+      </div>
       </div>
       {/* modal PopUp */}
       <AnimatePresence initial={false}>

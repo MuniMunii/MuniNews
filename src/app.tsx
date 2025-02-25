@@ -12,6 +12,7 @@ import ForgotPassword from "./Frontend/pages/auth/forgotPassword";
 import PageNotFound from "./Frontend/component/404Page";
 import DashboardUser from "./Frontend/pages/user/dashboard";
 import EditNews from "./Frontend/pages/user/editNews";
+import LoadingComp from "./Frontend/component/loadingComp";
 function App() {
   // const [userRole, setUserRole] = useState<string>("");
   // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
@@ -70,6 +71,7 @@ function App() {
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
+        <Route path={"/test-comp"} element={<LoadingComp error={null}/>} />
         <Route element={<ProtectedRoute isAuthenticated={user}/>}>
         <Route path={`/${user}/dashboard`} element={<DashboardUser/>}/>
         <Route path={`/${user}/edit-news/:news_id`} element={<EditNews/>}/>

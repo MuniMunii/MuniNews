@@ -47,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
           content:{
             type:DataTypes.STRING,
             allowNull:true
+          },
+          cover:{
+            type:DataTypes.STRING,
+            allowNull:true
           }
     },{freezeTableName:true,tableName:'news',timestamps:false});
   };
