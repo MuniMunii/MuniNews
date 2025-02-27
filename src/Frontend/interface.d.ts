@@ -28,5 +28,12 @@ declare global {
     content:string;
     cover:string;
   }
+  interface Userkey{
+    id:string;
+    nama_user:string;
+    isAuth:boolean;
+    role:string;
+    image:string;
+  }
 }
 window.isLight = theme === "light";

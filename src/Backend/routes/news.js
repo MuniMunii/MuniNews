@@ -1,26 +1,28 @@
 const express = require("express");
 const axios = require("axios");
-const { News,User } = require("../config/index.js");
+const { News, User } = require("../config/index.js");
 const connection = require("../config/database.db");
-const { where, UUIDV4 } = require("sequelize");
+const { where, UUIDV4, Model } = require("sequelize");
 const router = express.Router();
-const uuid=require('uuid');
+const uuid = require("uuid");
 const verifyToken = require("../middleware/token.js");
-const multer=require("multer")
-const path=require("path")
+const multer = require("multer");
+const path = require("path");
 // const ss=require('../assets/cover')
-const storage=multer.diskStorage({
-  destination:(req,file,cb)=>{
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
     let folder;
-    folder=req.params.folder
-    if(!folder){cb(new Error('folder not found'))}
-    cb(null,path.join(__dirname,`../assets/${folder}`))
+    folder = req.params.folder;
+    if (!folder) {
+      cb(new Error("folder not found"));
+    }
+    cb(null, path.join(__dirname, `../assets/${folder}`));
   },
-  filename:(req,file,cb)=>{
-    cb(null,Date.now()+path.extname(file.originalname))
-  }
-})
-const upload =multer({storage:storage})
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 // router external API CurrentNews
 router.get("/currentnews", async (req, res) => {
   const { page_size } = req.query;
@@ -39,90 +41,146 @@ router.get("/currentnews", async (req, res) => {
     console.log("error:", error);
   }
 });
+router.get("/get-news", async (req, res) => {
+  try {
+    const getAllNews = await News.findAll({
+      include: [{ model: User, as: "nama_user", attributes: ["nama_user"] }],
+    });
+    const sterilizeNews = getAllNews.map((news) => {
+      return {
+        news_id: news.news_id,
+        name_news: news.name_news,
+        createdBy: news.nama_user.nama_user,
+        createdAt: news.createdAt,
+        updatedAt: news.updatedAt,
+        category: news.category,
+        verified: news.verified,
+        status: news.status,
+        description: news.description,
+        content: news.content,
+        cover: news.cover,
+      };
+    });
+    res.status(200).json({ news: sterilizeNews });
+  } catch (error) {
+    return res.status(403).json({ messages: "server error try again", error });
+  }
+});
 // router make news
 router.post("/make-news", async (req, res) => {
   let { user, isAuth, title, category, description } = req.body;
-  title=title.trim()
-  description=description.trim().replace(/\s+/g," ")
-  if(title.length===0){return res.status(403).json({messages:'Title cannot be empty'})}
-  if(description.length===0){return res.status(403).json({messages:'Description cannot be empty'})}
+  title = title.trim();
+  description = description.trim().replace(/\s+/g, " ");
+  if (title.length === 0) {
+    return res.status(403).json({ messages: "Title cannot be empty" });
+  }
+  if (description.length === 0) {
+    return res.status(403).json({ messages: "Description cannot be empty" });
+  }
   try {
     const date = new Date();
     const DATE_FORMAT = date.toISOString().slice(0, 19).replace("T", " ");
-    const userQuery=await User.findOne({where:{nama_user:user}})
+    const userQuery = await User.findOne({ where: { nama_user: user } });
     if (!userQuery) {
       return res.status(403).json({ messages: "User not found" });
     }
     if (!isAuth) {
       return res.status(403).json({ messages: "Not Authenticated" });
     }
-    const newNews=News.build({
+    const newNews = News.build({
       name_news: title,
       createdBy: userQuery.id,
       createdAt: DATE_FORMAT,
       updatedAt: DATE_FORMAT,
-      category:category,
+      category: category,
       verified: false,
-      status:'archived',
+      status: "archived",
       description: description,
       content: "empty",
     });
-    await newNews.save()
-     res.status(200).json({messages:'News Added redirected to edit news',news_id:newNews.news_id})
+    await newNews.save();
+    res
+      .status(200)
+      .json({
+        messages: "News Added redirected to edit news",
+        news_id: newNews.news_id,
+      });
   } catch (error) {
-    return res.status(403).json({ messages: `Server error try again: ${error}`});
+    return res
+      .status(403)
+      .json({ messages: `Server error try again: ${error}` });
   }
 });
 // router get semua news di user
-router.get("/my-news",verifyToken,async (req,res)=>{
-  try{
-    const userQuery=await User.findOne({where:{id:req.user.id}})
-    if(!userQuery){
-      return res.status(403).json({messages:'User not found'})
+router.get("/my-news", verifyToken, async (req, res) => {
+  try {
+    const userQuery = await User.findOne({ where: { id: req.user.id } });
+    if (!userQuery) {
+      return res.status(403).json({ messages: "User not found" });
     }
-    const news=await News.findAll({where:{createdBy:userQuery.id}})
-    if(!news){
-      return res.status(403).json({messages:'News not found'})
+    const news = await News.findAll({ where: { createdBy: userQuery.id } });
+    if (!news) {
+      return res.status(403).json({ messages: "News not found" });
     }
-    res.status(200).json({messages:'News found',news})
-  }catch(error){return res.status(403).json({messages:'server error try again',error})}
-})
+    res.status(200).json({ messages: "News found", news });
+  } catch (error) {
+    return res.status(403).json({ messages: "server error try again", error });
+  }
+});
 // router get news value sesuai param/idnews
-router.get("/edit-news/:news_id",async(req,res)=>{
-  const {news_id}=req.params
-  const news=await News.findOne({where:{news_id:news_id}})
-  if(!news){
-    return res.status(403).json({messages:'News not found'})
+router.get("/edit-news/:news_id", async (req, res) => {
+  const { news_id } = req.params;
+  const news = await News.findOne({ where: { news_id: news_id } });
+  if (!news) {
+    return res.status(403).json({ messages: "News not found" });
   }
-  try{
-    res.status(200).json({messages:'News found',news})
-  }catch(error){return res.status(403).json({messages:'server error try again',error})}
-})
-router.post("/edit-news/save-value/:news_id",async(req,res)=>{
-  const {news_id}=req.params
-  const {title,description,content}=req.body
-  try{
-  const news=await News.findOne({where:{news_id:news_id}})
-  if(!news)return res.status(403).json({messages:'News not found'})
-  await news.update({name_news:title,description:description,content:content})
-  res.status(200).json({messages:'News Saved'})
-  }catch(error){return res.status(403).json({messages:'server error try again: ',error})}
-})
-router.post("/edit-news/save-cover/:news_id/:folder",upload.single('cover'),async (req,res)=>{
-  const {news_id}=req.params
-  const folder=req.params.folder
-  try{
-  const news=await News.findOne({where:{news_id:news_id}})
-  if(!news){
-    return res.status(403).json({messages:'news not found'})
+  try {
+    res.status(200).json({ messages: "News found", news });
+  } catch (error) {
+    return res.status(403).json({ messages: "server error try again", error });
   }
-  if(!req.file){
-    return res.status(403).json({messages:'no file uploaded'})
+});
+router.post("/edit-news/save-value/:news_id", async (req, res) => {
+  const { news_id } = req.params;
+  const { title, description, content } = req.body;
+  try {
+    const news = await News.findOne({ where: { news_id: news_id } });
+    if (!news) return res.status(403).json({ messages: "News not found" });
+    await news.update({
+      name_news: title,
+      description: description,
+      content: content,
+    });
+    res.status(200).json({ messages: "News Saved" });
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ messages: "server error try again: ", error });
   }
-  const filePath=`/assets/${folder}/${req.file.filename}`
-  news.cover=filePath
-  await news.save()
-  res.status(200).json({messages:'file uploaded',filePath})
-}catch(error){return res.status(403).json({messages:'server error try again: ',error})}
-})
+});
+router.post(
+  "/edit-news/save-cover/:news_id/:folder",
+  upload.single("cover"),
+  async (req, res) => {
+    const { news_id } = req.params;
+    const folder = req.params.folder;
+    try {
+      const news = await News.findOne({ where: { news_id: news_id } });
+      if (!news) {
+        return res.status(403).json({ messages: "news not found" });
+      }
+      if (!req.file) {
+        return res.status(403).json({ messages: "no file uploaded" });
+      }
+      const filePath = `/assets/${folder}/${req.file.filename}`;
+      news.cover = filePath;
+      await news.save();
+      res.status(200).json({ messages: "file uploaded", filePath });
+    } catch (error) {
+      return res
+        .status(403)
+        .json({ messages: "server error try again: ", error });
+    }
+  }
+);
 module.exports = router;

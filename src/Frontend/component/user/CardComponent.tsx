@@ -38,7 +38,7 @@ function CardComponent({ Tag, myNews }: { Tag: any; myNews: NewsKey[]|null }) {
         <p className="text-center break-words">{news.name_news}</p>
         <p className="text-justify text-base">{news.description}</p>
         <div className="flex">
-          <p className="text-center text-sm">Last Updated: {news.updatedAt}</p>
+          <p className="text-center text-sm">Last Updated: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
           <div className="flex gap-2 justify-around">
             <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-red-400">
               {news.category}
@@ -81,7 +81,7 @@ function CardComponent({ Tag, myNews }: { Tag: any; myNews: NewsKey[]|null }) {
         <p className="text-center break-words">{news.name_news}</p>
         <p className="text-justify text-base">{news.description}</p>
         <div className="flex">
-          <p className="text-center text-sm">Last Updated: {news.updatedAt}</p>
+          <p className="text-center text-sm">Last Updated: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
           <div className="flex gap-2 justify-around">
             <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-red-400">
               {news.category}

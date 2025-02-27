@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes, useParams,Outlet, Navigate } from "react-router-dom";
+import { Route, Routes, useParams, Outlet, Navigate } from "react-router-dom";
 import { useTheme } from "./Frontend/context/context";
 import Navbar from "./Frontend/component/navbar";
 import Index from "./Frontend/pages";
@@ -13,11 +13,12 @@ import PageNotFound from "./Frontend/component/404Page";
 import DashboardUser from "./Frontend/pages/user/dashboard";
 import EditNews from "./Frontend/pages/user/editNews";
 import LoadingComp from "./Frontend/component/loadingComp";
+import DashboardAdmin from "./Frontend/pages/admin/dashboard";
 function App() {
   // const [userRole, setUserRole] = useState<string>("");
   // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
   // const [loading, setIsLoading] = useState<boolean>(true);
-  const { theme, user,isAuthenticated } = useTheme();
+  const { theme, user, isAuthenticated, role } = useTheme();
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -43,12 +44,12 @@ function App() {
   //   fetchUser();
   // }, []);
   const isLight = theme === "light";
-  const ProtectedRoute=({isAuthenticated}:{isAuthenticated:string})=>{
-    if(!isAuthenticated){
-      return <Navigate to={'/login'} replace/>
+  const ProtectedRoute = ({ isAuthenticated }: { isAuthenticated: string }) => {
+    if (!isAuthenticated) {
+      return <Navigate to={"/login"} replace />;
     }
-    return <Outlet/>
-  }
+    return <Outlet />;
+  };
   // if(loading){
   //   return (
   //     <div className="flex justify-center items-center h-screen w-full">
@@ -63,19 +64,28 @@ function App() {
         isLight ? "bg-white text-black" : " bg-darkTheme text-white"
       }`}
     >
-      <Navbar/>
+      <Navbar />
       <Routes>
-      <Route path={"/"} element={<Index />} />
+        <Route path={"/"} element={<Index />} />
         <Route path={"/newslist"} element={<NewsIndex />} />
         <Route path={"/login"} element={<LoginForm />} />
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
-        <Route path={"/test-comp"} element={<LoadingComp error={null}/>} />
-        <Route element={<ProtectedRoute isAuthenticated={user}/>}>
-        <Route path={`/${user}/dashboard`} element={<DashboardUser/>}/>
-        <Route path={`/${user}/edit-news/:news_id`} element={<EditNews/>}/>
-        {}
+        <Route path={"/test-comp"} element={<LoadingComp error={null} />} />
+        <Route element={<ProtectedRoute isAuthenticated={user} />}>
+          {role === "journalist" ? (
+            <>
+              <Route path={`/${user}/dashboard`} element={<DashboardUser />} />
+              <Route
+                path={`/${user}/edit-news/:news_id`}
+                element={<EditNews />}
+              />
+            </>
+          ) : null}
+          {role === "admin" ? (
+            <Route path={`/${user}/dashboard`} element={<DashboardAdmin />} />
+          ) : null}
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

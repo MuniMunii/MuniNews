@@ -10,13 +10,12 @@ const { Op, where } = require("sequelize");
 const uuid=require('uuid');
 const { decode } = require("punycode");
 
-router.get("/user", async (req, res) => {
+router.get("/get-user", async (req, res) => {
   try {
     const getUser = await User.findAll();
-    console.log(getUser);
-    res.json(getUser);
+    res.json({getUser});
   } catch {
-    console.log("error");
+    return res.status(403).json({messages:'Error fething user'})
   }
 });
 // test get with token

@@ -9,6 +9,9 @@ module.exports = {
       },
       boxShadow:{
         cornerStampLight:'5px 5px 0px 0px rgba(109,40,217)',
+        cornerStampGreen:'5px 5px 0px 0px rgba(21,128,61)',
+        cornerStampBlue:'5px 5px 0px 0px rgba(29,78,216)',
+        cornerStampRed:'5px 5px 0px 0px rgba(185,28,28)',
         cornerStampDark:'5px 5px 0px 0px #5BC0BE',
       },
       colors:{
@@ -39,4 +42,5 @@ module.exports = {
   },
   plugins: [require('tailwind-scrollbar')],
 }
+
 
