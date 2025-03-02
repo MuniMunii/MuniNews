@@ -240,6 +240,7 @@ function Navbar() {
                     </Link>
                     {isAuthenticated && (
                       <Link
+                      onClick={() => setOpenNav(false)}
                         to={`${user}/dashboard`}
                         className={`transition ${
                           isLight

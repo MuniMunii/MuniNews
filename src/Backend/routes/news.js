@@ -128,7 +128,7 @@ router.get("/my-news", verifyToken, async (req, res) => {
   }
 });
 // router get news value sesuai param/idnews
-router.get("/edit-news/:news_id", async (req, res) => {
+router.get("/get-news/:news_id", async (req, res) => {
   const { news_id } = req.params;
   const news = await News.findOne({ where: { news_id: news_id } });
   if (!news) {
@@ -140,9 +140,12 @@ router.get("/edit-news/:news_id", async (req, res) => {
     return res.status(403).json({ messages: "server error try again", error });
   }
 });
+// router auto save
 router.post("/edit-news/save-value/:news_id", async (req, res) => {
   const { news_id } = req.params;
   const { title, description, content } = req.body;
+  const date = new Date();
+  const DATE_FORMAT = date.toISOString().slice(0, 19).replace("T", " ");
   try {
     const news = await News.findOne({ where: { news_id: news_id } });
     if (!news) return res.status(403).json({ messages: "News not found" });
@@ -150,6 +153,7 @@ router.post("/edit-news/save-value/:news_id", async (req, res) => {
       name_news: title,
       description: description,
       content: content,
+      updatedAt:DATE_FORMAT
     });
     res.status(200).json({ messages: "News Saved" });
   } catch (error) {
@@ -158,6 +162,7 @@ router.post("/edit-news/save-value/:news_id", async (req, res) => {
       .json({ messages: "server error try again: ", error });
   }
 });
+// router add cover
 router.post(
   "/edit-news/save-cover/:news_id/:folder",
   upload.single("cover"),
@@ -183,4 +188,56 @@ router.post(
     }
   }
 );
+// router user ingin meng publish
+router.post('/edit-news/publish/:news_id',async (req,res)=>{
+  const {news_id}=req.params
+  try{
+    const news=await News.findOne({where:{news_id:news_id}})
+    if(!news){
+      return res.status(403).json({messages:'News not found'})
+    }
+    if(news.status==='inreview'){return res.status(403).json({messages:'News In review Wait for validation'})}
+    await news.update({
+      status:'inreview'
+    })
+    res.status(200).json({messages:'News in review wait for validation'})
+  }catch(error){return res.status(403).json({messages:'Server error try again'})}
+})
+router.post('/edit-news/delete-news/:news_id',async (req,res)=>{
+  const {news_id}=req.params
+  try{
+    const news=await News.findOne({where:{news_id:news_id}})
+    if(!news){
+      return res.status(403).json({messages:'News not found'})
+    }
+    await news.destroy()
+    res.status(200).json({messages:'News successfully deleted'})
+  }catch(error){return res.status(403).json({messages:'Server error try again'})}
+})
+// router news admin untuk memverified news
+router.post(`/publish-news/:news_id`,async(req,res)=>{
+  const {news_id}=req.params
+  try{
+    const news=await News.findOne({where:{news_id:news_id}})
+    if(!news){
+      return res.status(403).json({messages:'News not found'})
+    }
+    await news.update({
+      verified:true
+    })
+    res.statusMessage(200).json({messages:'News Published'})
+  }catch(error){return res.status(403).json({messages:'Server Error'})}
+})
+// router untuk menggagalkan news yang di tolak
+router.post(`/cancel-news/:news_id`,async(req,res)=>{
+  const {news_id}=req.params
+  try{
+    const news=await News.findOne({where:{news_id:news_id}})
+    if(!news){return res.status(403).json({messages:'News not found'})}
+    await news.update({
+      status:'cancelled'
+    })
+    res.status(200).json({messages:'Successfully change status'})
+  }catch(error){return res.status(403).json({messages:'Server Error'})}
+})
 module.exports = router;

@@ -23,7 +23,7 @@ declare global {
     updatedAt: string;
     category: string;
     verified: boolean;
-    status: string;
+    status: statusNews;
     description: string;
     content:string;
     cover:string;
@@ -35,5 +35,6 @@ declare global {
     role:string;
     image:string;
   }
+  type statusNews="inreview"|"mynews"|"archived"|"cancelled"|"published"
 }
 window.isLight = theme === "light";

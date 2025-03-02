@@ -14,6 +14,7 @@ import DashboardUser from "./Frontend/pages/user/dashboard";
 import EditNews from "./Frontend/pages/user/editNews";
 import LoadingComp from "./Frontend/component/loadingComp";
 import DashboardAdmin from "./Frontend/pages/admin/dashboard";
+import ReviewNews from "./Frontend/pages/admin/reviewNews";
 function App() {
   // const [userRole, setUserRole] = useState<string>("");
   // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
@@ -84,7 +85,10 @@ function App() {
             </>
           ) : null}
           {role === "admin" ? (
+            <>
             <Route path={`/${user}/dashboard`} element={<DashboardAdmin />} />
+            <Route path={`/review-news/:news_id`} element={<ReviewNews />} />
+            </>
           ) : null}
         </Route>
         <Route path="*" element={<PageNotFound />} />

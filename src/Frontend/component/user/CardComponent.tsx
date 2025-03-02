@@ -2,96 +2,142 @@ import React from "react";
 import { useTheme } from "../../context/context";
 import { Link } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
-function CardComponent({ Tag, myNews }: { Tag: any; myNews: NewsKey[]|null }) {
+function CardComponent({
+  Tag,
+  myNews,
+}: {
+  Tag: any;
+  myNews: NewsKey[] | null;
+}) {
   const { user, theme } = useTheme();
   const isLight = theme === "light";
-  const baseURL=process.env.REACT_APP_BACKEND_URL
-  const ImgCover=({cover}:{cover:string})=>{
-    return <img src={`${baseURL}${cover}`} className="cover rounded-md w-full h-28" alt="cover-news"/>
-  }
+  const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const ImgCover = ({ cover }: { cover: string }) => {
+    return (
+      <img
+        src={`${baseURL}${cover}`}
+        className="cover rounded-md w-full h-28 border border-gray-600"
+        alt="cover-news"
+      />
+    );
+  };
   if (Tag === "mynews") {
-    return myNews?.map((news, index) => (
+    return myNews?.length!==0?myNews?.map((news, index) => (
       <Link
         key={news.news_id}
         to={`/${user}/edit-news/${news.news_id}`}
-        className={`bg-gradient-to-br ${
-          index % 2 === 0
-            ? `${
-                isLight
-                  ? "from-[#2178DD] to-[#F8CF6A] "
-                  : "from-[#45A0EA] to-[#ECA9BB]"
-              }`
-            : `${
-                isLight
-                  ? "from-[#FA9372] to-[#B2EF91]"
-                  : "from-[#95ECB0] to-[#F3F98A]"
-              }`
-        } w-80 h-96 rounded-lg p-2 overflow-auto flex flex-col justify-evenly`}
+        className={`bg-gradient-to-br border border-gray-600 ${
+          isLight ? "bg-[#fff]" : "bg-[#0f1936]"
+        } w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
       >
         {!news.cover ? (
-          <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl">
+          <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl border border-gray-600 text-black">
             <FaRegNewspaper />
           </div>
         ) : (
-          <ImgCover cover={news.cover}/>
+          <ImgCover cover={news.cover} />
         )}
-        <p className="text-center break-words">{news.name_news}</p>
-        <p className="text-justify text-base">{news.description}</p>
-        <div className="flex">
-          <p className="text-center text-sm">Last Updated: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
-          <div className="flex gap-2 justify-around">
+        <p
+          className={`text-center break-words border border-gray-600 rounded-sm ${
+            isLight ? "" : "bg-[#121e41]"
+          }`}
+        >
+          {news.name_news}
+        </p>
+        <p
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 ${
+            isLight ? "" : "bg-[#121e41]"
+          }`}
+        >
+          {news.description}
+        </p>
+        <div className="flex gap-3">
+          <p
+            className={`text-center text-sm border border-gray-600 rounded-sm py-1 ${
+              isLight ? "" : "bg-[#121e41]"
+            }`}
+          >
+            Last Updated:{" "}
+            {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
+          </p>
+          <div className="flex gap-2 justify-around text-black">
             <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-red-400">
               {news.category}
             </p>
-            <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-green-400">
+            <p
+              className={`text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-green-400 ${
+                news.status === "archived" ? "bg-sky-600" : ""
+              } ${
+                news.status === "published" ? "bg-green-600" : ""
+              } ${news.status === "inreview" ? "bg-lightOrange" : ""} ${
+                news.status === "cancelled" ? "bg-red-600" : ""
+              }`}
+            >
               {news.status}
             </p>
           </div>
         </div>
       </Link>
-    ));
+    )):<p className={`text-center ${isLight?'text-black':'text-white'}`}>Lets create your news</p>
   }
-  return myNews
+  return myNews?.filter(news=>news.status===Tag).length !== 0?myNews
     ?.filter((news) => news.status === Tag)
     ?.map((news, index) => (
       <Link
         key={news.news_id}
         to={`/${user}/edit-news/${news.news_id}`}
-        className={`bg-gradient-to-br ${
-          index % 2 === 0
-            ? `${
-                isLight
-                  ? "from-[#2178DD] to-[#F8CF6A] "
-                  : "from-[#45A0EA] to-[#ECA9BB]"
-              }`
-            : `${
-                isLight
-                  ? "from-[#FA9372] to-[#B2EF91]"
-                  : "from-[#95ECB0] to-[#F3F98A]"
-              }`
-        } w-80 h-96 rounded-lg p-2 overflow-auto flex flex-col justify-evenly`}
+        className={`bg-gradient-to-br border border-gray-600 ${
+          isLight ? "bg-[#fff]" : "bg-[#0f1936]"
+        } w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
       >
         {!news.cover ? (
-          <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl">
+          <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl border border-gray-600 text-black">
             <FaRegNewspaper />
           </div>
         ) : (
-          <ImgCover cover={news.cover}/>
+          <ImgCover cover={news.cover} />
         )}
-        <p className="text-center break-words">{news.name_news}</p>
-        <p className="text-justify text-base">{news.description}</p>
-        <div className="flex">
-          <p className="text-center text-sm">Last Updated: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
-          <div className="flex gap-2 justify-around">
+        <p
+          className={`text-center break-words border border-gray-600 rounded-sm ${
+            isLight ? "" : "bg-[#121e41]"
+          }`}
+        >
+          {news.name_news}
+        </p>
+        <p
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 ${
+            isLight ? "" : "bg-[#121e41]"
+          }`}
+        >
+          {news.description}
+        </p>
+        <div className="flex gap-3">
+          <p
+            className={`text-center text-sm border border-gray-600 rounded-sm py-1 ${
+              isLight ? "" : "bg-[#121e41]"
+            }`}
+          >
+            Last Updated:{" "}
+            {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
+          </p>
+          <div className="flex gap-2 justify-around text-black">
             <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-red-400">
               {news.category}
             </p>
-            <p className="text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-green-400">
+            <p
+              className={`text-center py-[2px] px-3 rounded uppercase text-sm font-semibold flex justify-center items-center bg-green-400 ${
+                news.status === "archived" ? "bg-sky-600" : ""
+              } ${
+                news.status === "published" ? "bg-green-600" : ""
+              } ${news.status === "inreview" ? "bg-lightOrange" : ""} ${
+                news.status === "cancelled" ? "bg-red-600" : ""
+              }`}
+            >
               {news.status}
             </p>
           </div>
         </div>
       </Link>
-    ));
+    )):<p className={`text-center ${isLight?'text-black':'text-white'}`}>There are no <span className="uppercase">{Tag}</span> News</p>
 }
 export default CardComponent;

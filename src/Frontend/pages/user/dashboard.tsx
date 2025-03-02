@@ -4,13 +4,15 @@ import { animate, AnimatePresence, motion } from "framer-motion";
 import AddNewsForm from "../../component/user/addNewsForm";
 import CardComponent from "../../component/user/CardComponent";
 import "../../style/animation.css"
-type activeState="about"|"mynews"|"archived"|"cancelled"
+import LoadingComp from "../../component/loadingComp";
+
 function DashboardUser() {
-  const [isActive, setIsActive] = useState<activeState>('mynews');
+  const [isActive, setIsActive] = useState<statusNews>('mynews');
   const [modalPopUp, setModalPopUp] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string|boolean|null>(null);
   const [reload, setIsReload] = useState<boolean>(false);
   const [modalMakeNews, setModalMakeNews] = useState<boolean>(false);
+  const [isLoading,setIsLoading]=useState<Boolean>(true)
   const [myNews, setMyNews] = useState<NewsKey[] | null>(null);
   useEffect(() => {
     console.log(modalMakeNews);
@@ -27,7 +29,7 @@ function DashboardUser() {
         credentials: "include",
       });
       const data = await response.json();
-      setMyNews(data.news);}catch(error){console.log(error)}
+      setMyNews(data.news);}catch(error){console.log(error)}finally{setIsLoading(false)}
     };
     getNews();
   }, [reload]);
@@ -67,6 +69,22 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
+              isActive === "published" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            }`}
+            onClick={() => setIsActive("published")}
+          >
+            Published
+          </button>
+          <button
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
+              isActive === "inreview" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            }`}
+            onClick={() => setIsActive("inreview")}
+          >
+            In Review
+          </button>
+          <button
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
               isActive === "cancelled" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
             }`}
             onClick={() => setIsActive("cancelled")}
@@ -92,23 +110,30 @@ function DashboardUser() {
     <div className="diagonal-pattern">
       <div className="mx-auto w-[90%] max-w-[800px] h-screen flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div
-          className={`laptop:block laptop:w-1/3 flex bg-white items-center gap-3 p-4`}
+          className={`laptop:block laptop:w-1/3 flex bg-white items-center gap-3 p-4 border border-gray-600`}
         >
           <div className="bg-black size-32 rounded-full"></div>
           <p className="text-black">{user}</p>
         </div>
-        <div className={`h-full border ${isLight?'bg-white border-slate-500':'bg-oceanBlue border-slate-500'} w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
-        <div className={`laptop:h-[90%] phone:h-[67%] `}>
+        <div className={`h-full border ${isLight?'bg-white border-slate-500':'bg-darkTheme border-slate-500'} w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
+        <div className={`laptop:h-[90%] phone:h-[67%]`}>
           <NavDashboard />
-          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] ${isLight?'scrollbar-thumb-violet-950' :'scrollbar-thumb-white'} scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
+          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] ${isLight?'scrollbar-thumb-violet-950' :'scrollbar-thumb-white text-white'} scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
+          {isLoading&&<LoadingComp error={error}/>}
             {isActive === "mynews"
               ?<CardComponent Tag='mynews' myNews={myNews}/>
               : null}
             {isActive === "archived"
               ? <CardComponent Tag="archived" myNews={myNews}/>
               : null}
-            {isActive === "archived"
+            {isActive === "cancelled"
               ? <CardComponent Tag="cancelled" myNews={myNews}/>
+              : null}
+              {isActive === "inreview"
+              ? <CardComponent Tag="inreview" myNews={myNews}/>
+              : null}
+              {isActive === "published"
+              ? <CardComponent Tag="published" myNews={myNews}/>
               : null}
           </div>
         </div>

@@ -45,14 +45,14 @@ function DashboardAdmin(){
             </div>
             <div className={`w-full h-full p-5 flex flex-col rounded-bl-3xl rounded-tl-3xl border border-gray-600 ${isLight?'bg-white':'bg-darkTheme '}`}>
                 <div className="w-full h-fit flex gap-3 justify-center mb-3">
-                    <div className={`w-1/3 h-32 rounded-lg p-6 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?' text-green-700 shadow-cornerStampGreen':' from-violet-950 to-darkTheme'}`}>
-                    <p>Total Published News<HiOutlineClipboardCheck className={`${isLight?'text-black':''} mx-auto text-3xl`}/></p>
+                    <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?' text-green-700 shadow-cornerStampGreen':' from-violet-950 to-darkTheme'}`}>
+                    <p>Published News<HiOutlineClipboardCheck className={`${isLight?'text-black':''} mx-auto text-3xl`}/></p>
                     <p>{newsDataState.filter(news=>news.verified).length}</p>
                     </div>
-                    <div className={`w-1/3 h-32 rounded-lg p-6 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?'text-blue-700 shadow-cornerStampBlue':' from-amber-800 to-darkTheme'}`}>
+                    <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?'text-blue-700 shadow-cornerStampBlue':' from-amber-800 to-darkTheme'}`}>
                     <p>Total News<HiOutlineClipboardList className={`${isLight?'text-black':''} mx-auto text-3xl`}/></p>
                     <p>{newsDataState.filter(news=>news.news_id).length}</p></div>
-                    <div className={`w-1/3 h-32 rounded-lg p-6 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?'text-red-700 shadow-cornerStampRed':' from-pink-950 to-darkTheme'}`}>
+                    <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t border-gray-600 ${isLight?'text-red-700 shadow-cornerStampRed':' from-pink-950 to-darkTheme'}`}>
                     <p>News In Review<HiOutlineClipboardCopy className={`${isLight?'text-black':''} mx-auto text-3xl`}/></p>
                     {/* nanti di ganti jadi inreview */}
                     <p>{newsDataState.filter(news=>news.status==='archived').length}</p></div>
@@ -65,7 +65,7 @@ function DashboardAdmin(){
                     </div>
                     </div>
                     <div className={`w-1/4 h-full bg-gradient-to-t border border-gray-600 ${isLight?'':'from-indigo-950 to-darkTheme '}  rounded-lg flex flex-col p-2 gap-3`}>
-                    <div className={`w-full h-9 rounded-md border border-gray-600 ${isLight?'':'bg-[#121e41] '} p-2 flex items-center`}>Journalist List</div>
+                    <div className={`w-full h-fit rounded-md border border-gray-600 ${isLight?'':'bg-[#121e41] '} p-2 flex items-center`}>Journalist List</div>
                     <UserList/>
                     </div>
                 </div>

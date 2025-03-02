@@ -1,11 +1,11 @@
 import { useTheme } from "../../context/context"
-
+import { Link } from "react-router-dom"
 function NewsRecentList({news}:{news:NewsKey[]|null}){
     const {theme}=useTheme()
     const isLight=theme==='light'
-    return news?.map((news,index)=>(
-        <div key={news.news_id} className={`w-full h-fit py-2 px-3 border border-gray-600 ${isLight?'':'bg-[#182858] '} flex rounded-md items-center justify-between`}>
-            <div className="flex-col flex">
+    return news?.filter(news=>news.status==='inreview'||news.verified).map((news,index)=>(
+        <Link to={`/review-news/${news.news_id}`} key={news.news_id} className={`w-full h-fit py-2 px-3 border border-gray-600 ${isLight?'':'bg-[#182858]'} flex rounded-md items-center justify-between flex-wrap gap-1`}>
+            <div className="flex-col flex w-2/5 break-all">
             <p>{news.name_news}</p>
             </div>
             <div className="flex-col flex">
@@ -13,7 +13,7 @@ function NewsRecentList({news}:{news:NewsKey[]|null}){
             <p className={`text-xs ${isLight?'text-blue-700':''}`}>Updated At: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
             </div>
             <div>{news.verified?<p className="bg-green-500 py-1 px-3 rounded-md">Published</p>:<p className="bg-red-500 py-1 px-3 rounded-md cursor-pointer">Need Review</p>}</div>
-        </div>
+        </Link>
     ))
 }
 export default NewsRecentList
