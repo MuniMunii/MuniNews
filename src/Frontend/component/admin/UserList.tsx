@@ -5,8 +5,6 @@ function UserList (){
     const [userList,setUserList]=useState<Userkey[]|null>();
     const [error,setError]=useState<string|boolean|null>(null);
     const [isLoading,setIsLoading]=useState<boolean>(true);
-    const {theme}=useTheme()
-    const isLight=theme==="light"
     const baseURL=process.env.REACT_APP_BACKEND_URL;
     useEffect(()=>{
         const fetchUser=async()=>{
@@ -22,7 +20,7 @@ function UserList (){
         fetchUser()
     },[])
     return isLoading?<LoadingComp error={error}/>:userList?.map((user,index)=>(
-        <div key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all ${isLight?'':'from-violet-950 to-sky-950'} flex justify-between items-center rounded-md`}>
+        <div key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
             <p>{user.nama_user}</p>
             {user.isAuth?<div className="size-2 rounded-full bg-green-600"></div>:<div className="size-2 rounded-full bg-red-600"></div>}
         </div>

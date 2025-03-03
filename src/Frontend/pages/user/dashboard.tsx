@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "../../context/context";
+import { useScreen, useTheme, useUser } from "../../context/context";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import AddNewsForm from "../../component/user/addNewsForm";
 import CardComponent from "../../component/user/CardComponent";
@@ -36,7 +36,9 @@ function DashboardUser() {
   useEffect(() => {
     console.log(isActive);
   }, [isActive]);
-  const { user, role, theme,isWideScreen } = useTheme();
+  const {theme } = useTheme();
+  const {user,role}=useUser()
+  const {isWideScreen}=useScreen()
   const isLight = theme === "light";
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   // const { value: userInfo, isLoading: isLoadingUserInfo } = useFetch(

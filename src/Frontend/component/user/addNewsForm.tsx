@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import { redirect, useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/context";
+import { useTheme, useUser } from "../../context/context";
 import { animate, AnimatePresence, motion } from "framer-motion";
 function AddNewsForm({
   setModalMakeNews,
@@ -12,20 +12,12 @@ function AddNewsForm({
   setError: React.Dispatch<React.SetStateAction<any>>
 }) {
 
-  const { user, isAuthenticated } = useTheme();
+  const { user, isAuthenticated } = useUser();
   const [title, setTitle] = useState<String>("");
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const { theme } = useTheme();
-  const isLight = theme === "light";
   const baseURL=process.env.REACT_APP_BACKEND_URL
   const navigate=useNavigate()
-  function handleTitle(value: string) {
-    setTitle(value);
-  }
-  function handleCategory(value: string) {
-    setDescription(value);
-  }
   useEffect(() => {
     console.log(category);
   }, [category]);
@@ -126,9 +118,7 @@ function AddNewsForm({
           <button
             type="button"
             onClick={() => setModalMakeNews(false)}
-            className={`border ${
-              isLight ? "border-black/50" : "border-white/50 font-poppins"
-            } rounded px-2`}
+            className={`border border-black/50 dark:border-gray-600 font-Poppins rounded px-2`}
           >
             Cancel
           </button>

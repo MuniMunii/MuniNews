@@ -4,14 +4,12 @@ import useFetch from "../../hook/useFetch";
 import { redirect, useNavigate, Link } from "react-router-dom";
 import { verify } from "crypto";
 function RegisterForm() {
-  const { theme } = useTheme();
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
   const [verifyPassword, setVerifyPasswordUser] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [error, setError] = useState<string>("");
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  const isLight = theme === "light";
   const isPasswordSame = passwordUser === verifyPassword;
   const regexEmail =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -72,16 +70,10 @@ function RegisterForm() {
   return (
     <>
       <div
-        className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t ${
-          isLight ? "border-t-darkTheme" : "border-t-white"
-        }`}
+        className={`dotted-without-mask w-full h-full flex justify-center items-center border-t-darkTheme dark:border-gray-600 text-black border-t`}
       >
         <div
-          className={`w-[70%] max-w-96 h-fit min-h-[450px] p-6 flex flex-col items-center justify-around rounded-md z-10 ${
-            isLight
-              ? "bg-lightOrange shadow-cornerStampLight"
-              : "bg-dark400 shadow-cornerStampDark"
-          }`}
+          className={`w-[70%] max-w-96 h-fit min-h-[450px] p-6 flex flex-col items-center justify-around rounded-md z-10 bg-oceanBlue shadow-cornerStampLight dark:bg-dark400 dark:shadow-cornerStampDark `}
         >
           <form onSubmit={handleSubmit} className="w-full" autoComplete="off">
             <h2 className="font-mono text-3xl text-center uppercase font-semibold">
@@ -96,9 +88,7 @@ function RegisterForm() {
               <div className="flex flex-col gap-2">
                 {emailUser !== "" && !isEmailValid && (
                   <p
-                    className={`font-mono ${
-                      isLight ? "text-red-800" : "text-red-500"
-                    } text-center`}
+                    className={`font-mono text-red-800 dark:text-red-500 text-center`}
                   >
                     Email not valid
                   </p>
@@ -123,9 +113,7 @@ function RegisterForm() {
                 ></input>
                 {username !== "" && username.length < 3 && (
                   <p
-                    className={`font-mono ${
-                      isLight ? "text-red-800" : "text-red-500"
-                    } text-center`}
+                    className={`font-mono text-red-800 dark:text-red-500 text-center`}
                   >
                     Username must have atleast 3 letter
                   </p>
@@ -150,9 +138,7 @@ function RegisterForm() {
                 ></input>
                 {passwordUser !== "" && !isPasswordValid && (
                   <p
-                    className={`font-mono ${
-                      isLight ? "text-red-800" : "text-red-500"
-                    } text-center`}
+                    className={`font-mono text-red-800 dark:text-red-500 text-center`}
                   >
                     Password must have atleast 5-16 letter, contain Number and
                     Uppercase
@@ -179,9 +165,7 @@ function RegisterForm() {
                 />
                 {verifyPassword !== "" && !isPasswordSame && (
                   <p
-                    className={`font-mono ${
-                      isLight ? "text-red-800" : "text-red-500"
-                    } text-center`}
+                    className={`font-mono text-red-800 dark:text-red-500 text-center`}
                   >
                     Password is not same
                   </p>
@@ -194,7 +178,7 @@ function RegisterForm() {
                 </label>
                 <input
                   className={`h-8 w-full border rounded px-2 focus:outline-none ${
-                    !isPasswordSame
+                    !isPasswordSame||verifyPassword.length===0
                       ? "focus:border-red-500"
                       : "border-green-500"
                   }`}
@@ -211,17 +195,13 @@ function RegisterForm() {
               <div className="mt-4 w-full flex flex-col gap-3 font-mono font-semibold tracking-wide">
                 <button
                   type="submit"
-                  className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${
-                    isLight ? "bg-mediumOrange" : "bg-blue-300"
-                  }`}
+                  className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 bg-mediumOrange dark:bg-blue-300 `}
                 >
                   Register
                 </button>
                 <Link
                   to={"/login"}
-                  className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 ${
-                    isLight ? "bg-hotOrange" : "bg-blue-400"
-                  }`}
+                  className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 bg-hotOrange dark:bg-blue-500`}
                 >
                   Login
                 </Link>

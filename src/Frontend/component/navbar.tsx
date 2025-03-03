@@ -1,15 +1,16 @@
 import React, { ReactNode } from "react";
-import { useTheme } from "../context/context";
+import { useTheme,useUser,useScreen } from "../context/context";
 import { useState, useEffect } from "react";
 import { animate, AnimatePresence, motion } from "framer-motion";
 import ToggleThemeButton from "./toggleTheme";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { Link, Navigate, redirect, useNavigate } from "react-router-dom";
 function Navbar() {
-  const { theme, isWideScreen, assignUser, user,isAuthenticated} = useTheme();
+  const {isWideScreen}=useScreen()
+  const {assignUser,user,isAuthenticated}=useUser()
   const [openNav, setOpenNav] = useState<boolean>(false);
   const [modalLogout, setModalLogout] = useState<boolean>(false);
-  const isLight = theme === "light";
   const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const navigate=useNavigate()
   useEffect(() => {
     console.log(modalLogout);
   }, [modalLogout]);
@@ -27,7 +28,8 @@ function Navbar() {
         credentials: "include",
       });
       assignUser("");
-      window.location.reload();
+      navigate('/login')
+      setTimeout(()=>{window.location.reload()},100)
       localStorage.removeItem("user");
       // localStorage.setItem("logout", Date.now().toString());
       // setTimeout(() => {
@@ -44,9 +46,7 @@ function Navbar() {
           <>
             {/* <Link to={"/Dashboard"}></Link> */}
             <motion.button
-              className={`transition ${
-                isLight ? "hover:border-b-pink-300" : "hover:border-b-blue-300"
-              } border-b border-b-transparent`}
+              className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               onClick={() => {
                 // handleLogout();
                 setOpenNav(false);
@@ -60,9 +60,7 @@ function Navbar() {
           <Link
             to={"/login"}
             onClick={() => setOpenNav(false)}
-            className={`transition ${
-              isLight ? "hover:border-b-pink-300" : "hover:border-b-blue-300"
-            } border-b border-b-transparent`}
+            className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
           >
             Login
           </Link>
@@ -86,10 +84,10 @@ function Navbar() {
                 duration: 0.25,
                 ease: "easeIn",
               }}
-              className={` min-w-[300px] max-w-[450px] h-40 p-2 rounded font-mono border uppercase select-none ${isLight?'bg-oceanBlue border-hotOrange text-white':'bg-slate-900 border-violet-900'}`}
+              className={` min-w-[300px] max-w-[450px] h-40 p-2 rounded font-mono  uppercase select-none bg-oceanBlue  shadow-cornerStampLight text-white dark:bg-slate-900 dark:shadow-cornerStampDark `}
             >
               <h1 className="font-semibold text-4xl">Confirm</h1>
-              <p className={`border-b pb-2 ${isLight?'border-white':'border-b-white'}`}>Are You Sure Want To Logout?</p>
+              <p className={`border-b pb-2 border-white dark:border-b-white `}>Are You Sure Want To Logout?</p>
               <div className="flex justify-end items-center w-full mt-8 gap-2">
               <motion.button
                 onClick={() => {
@@ -114,9 +112,7 @@ function Navbar() {
         ) : null}
       </AnimatePresence>
       <div
-        className={`w-full h-20 px-6 flex justify-between relative items-center transition ${
-          isLight ? "text-white bg-oceanBlue" : "text-white bg-transparent"
-        }`}
+        className={`w-full h-20 px-6 flex justify-between relative items-center transition text-white bg-oceanBlue dark:bg-transparent dark:border-b-gray-600 dark:border-b`}
       >
         {/* Logo */}
         <Link
@@ -131,42 +127,26 @@ function Navbar() {
               <p className="mr-auto">{user ? `Welcome ${user}!` : ""}</p>
               <Link
                 to={"/"}
-                className={`transition ${
-                  isLight
-                    ? "hover:border-b-pink-300"
-                    : "hover:border-b-blue-300"
-                } border-b border-b-transparent`}
+                className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               >
                 Home
               </Link>
               <Link
                 to={"/#about"}
-                className={`transition ${
-                  isLight
-                    ? "hover:border-b-pink-300"
-                    : "hover:border-b-blue-300"
-                } border-b border-b-transparent`}
+                className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               >
                 About
               </Link>
               <Link
                 to={"/about"}
-                className={`transition ${
-                  isLight
-                    ? "hover:border-b-pink-300"
-                    : "hover:border-b-blue-300"
-                } border-b border-b-transparent`}
+                className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               >
                 News
               </Link>
               {isAuthenticated && (
                 <Link
                   to={`${user}/dashboard`}
-                  className={`transition ${
-                    isLight
-                      ? "hover:border-b-pink-300"
-                      : "hover:border-b-blue-300"
-                  } border-b border-b-transparent`}
+                  className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                 >
                   Dashboard
                 </Link>
@@ -192,9 +172,7 @@ function Navbar() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                   key="navbar"
-                  className={`bg-black/60 backdrop-blur-sm fixed top-0 left-0 w-screen h-full z-50 flex flex-col justify-center items-center font-mono uppercase ${
-                    isLight ? "text-pink-300" : "text-blue-300"
-                  }`}
+                  className={`bg-black/60 text-pink-300 dark:text-blue-300 backdrop-blur-sm fixed top-0 left-0 w-screen h-full z-50 flex flex-col justify-center items-center font-mono uppercase `}
                 >
                   <motion.button
                     onClick={() => setOpenNav(false)}
@@ -207,11 +185,7 @@ function Navbar() {
                     <Link
                       to={"/"}
                       onClick={() => setOpenNav(false)}
-                      className={`transition ${
-                        isLight
-                          ? "hover:border-b-pink-300"
-                          : "hover:border-b-blue-300"
-                      } border-b border-b-transparent`}
+                      className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                     >
                       Home
                     </Link>
@@ -219,22 +193,14 @@ function Navbar() {
                     <Link
                       to={"/#about"}
                       onClick={() => setOpenNav(false)}
-                      className={`transition ${
-                        isLight
-                          ? "hover:border-b-pink-300"
-                          : "hover:border-b-blue-300"
-                      } border-b border-b-transparent`}
+                      className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                     >
                       About
                     </Link>
                     <Link
                       to={"/news"}
                       onClick={() => setOpenNav(false)}
-                      className={`transition ${
-                        isLight
-                          ? "hover:border-b-pink-300"
-                          : "hover:border-b-blue-300"
-                      } border-b border-b-transparent`}
+                      className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                     >
                       News
                     </Link>
@@ -242,11 +208,7 @@ function Navbar() {
                       <Link
                       onClick={() => setOpenNav(false)}
                         to={`${user}/dashboard`}
-                        className={`transition ${
-                          isLight
-                            ? "hover:border-b-pink-300"
-                            : "hover:border-b-blue-300"
-                        } border-b border-b-transparent`}
+                        className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                       >
                         Dashboard
                       </Link>

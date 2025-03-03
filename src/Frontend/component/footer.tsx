@@ -1,13 +1,9 @@
 import { useTheme } from "../context/context";
 import { FaHeart } from "react-icons/fa";
 function FooterComp() {
-  const { theme } = useTheme();
-  const isLight = theme === "light";
   return (
     <div
-      className={`w-full h-fit flex justify-center p-6 relative ${
-        isLight ? "bg-oceanBlue" : "border-t  border-t-white/40"
-      }`}
+      className={`w-full h-fit flex justify-center p-6 relative bg-oceanBlue dark:border-t dark:bg-transparent dark:border-t-gray-600`}
     >
       <div className={`w-full h-full gap-x-40 gap-y-3 flex justify-evenly flex-wrap`}>
         {/* logo */}
@@ -28,7 +24,7 @@ function FooterComp() {
             </div>
         </div>
       </div>
-      <p className={`absolute bottom-0 ${isLight?'text-black':'text-white'} text-white font-mono flex items-center gap-2`}>Made with Love <span><FaHeart/></span></p>
+      <p className={`absolute bottom-0 text-white font-mono flex items-center gap-2`}>Made with Love <span><FaHeart/></span></p>
     </div>
   );
 }

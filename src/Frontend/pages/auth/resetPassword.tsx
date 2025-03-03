@@ -9,8 +9,6 @@ function ResetPassword() {
   const [verifyUser, setNewVerifyUser] = useState<string>("");
   const regexPassword = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{5,16}$/;
   const isPasswordValid = regexPassword.test(passwordUser);
-  const { theme } = useTheme();
-  const isLight = theme === "light";
   const isPasswordSame=passwordUser===verifyUser
   const baseURL=process.env.REACT_APP_BACKEND_URL
   const handleSubmit=async (e:any)=>{
@@ -41,16 +39,10 @@ function ResetPassword() {
   }
   return (
     <div
-      className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t ${
-        isLight ? "border-t-darkTheme" : "border-t-white"
-      }`}
+      className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t border-t-darkTheme dark:border-gray-600 `}
     >
       <div
-        className={`w-[70%] max-w-96 h-fit p-6 flex flex-col items-center justify-start rounded-md z-10 ${
-          isLight
-            ? "bg-lightOrange shadow-cornerStampLight"
-            : "bg-dark400 shadow-cornerStampDark"
-        }`}
+        className={`w-[70%] max-w-96 h-fit p-6 flex flex-col items-center justify-start rounded-md z-10 bg-lightOrange shadow-cornerStampLight dark:bg-dark300 dark:shadow-cornerStampDark `}
       >
         <form onSubmit={handleSubmit} className="w-full" autoComplete="noo">
           <h2 className="font-mono text-3xl text-center uppercase font-semibold">
@@ -99,9 +91,7 @@ function ResetPassword() {
               />
               <button
                 type="submit"
-                className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 font-mono uppercase ${
-                  isLight ? "bg-mediumOrange" : "bg-blue-300"
-                }`}
+                className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 font-mono uppercase bg-mediumOrange dark:bg-blue-300 `}
               >
                 Reset password
               </button>

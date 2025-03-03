@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme } from "../../context/context";
+import { useTheme, useUser } from "../../context/context";
 import { Link } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
 function CardComponent({
@@ -9,8 +9,7 @@ function CardComponent({
   Tag: any;
   myNews: NewsKey[] | null;
 }) {
-  const { user, theme } = useTheme();
-  const isLight = theme === "light";
+  const {user}=useUser()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const ImgCover = ({ cover }: { cover: string }) => {
     return (
@@ -26,9 +25,7 @@ function CardComponent({
       <Link
         key={news.news_id}
         to={`/${user}/edit-news/${news.news_id}`}
-        className={`bg-gradient-to-br border border-gray-600 ${
-          isLight ? "bg-[#fff]" : "bg-[#0f1936]"
-        } w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
+        className={`bg-gradient-to-br border border-gray-600 bg-white dark:bg-[#0f1936] w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
       >
         {!news.cover ? (
           <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl border border-gray-600 text-black">
@@ -38,24 +35,18 @@ function CardComponent({
           <ImgCover cover={news.cover} />
         )}
         <p
-          className={`text-center break-words border border-gray-600 rounded-sm ${
-            isLight ? "" : "bg-[#121e41]"
-          }`}
+          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `}
         >
           {news.name_news}
         </p>
         <p
-          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 ${
-            isLight ? "" : "bg-[#121e41]"
-          }`}
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 dark:bg-[#121e41]`}
         >
           {news.description}
         </p>
         <div className="flex gap-3">
           <p
-            className={`text-center text-sm border border-gray-600 rounded-sm py-1 ${
-              isLight ? "" : "bg-[#121e41]"
-            }`}
+            className={`text-center text-sm border border-gray-600 rounded-sm py-1 dark:bg-[#121e41]`}
           >
             Last Updated:{" "}
             {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
@@ -78,7 +69,7 @@ function CardComponent({
           </div>
         </div>
       </Link>
-    )):<p className={`text-center ${isLight?'text-black':'text-white'}`}>Lets create your news</p>
+    )):<p className={`text-center text-black dark:text-white `}>Lets create your news</p>
   }
   return myNews?.filter(news=>news.status===Tag).length !== 0?myNews
     ?.filter((news) => news.status === Tag)
@@ -86,9 +77,7 @@ function CardComponent({
       <Link
         key={news.news_id}
         to={`/${user}/edit-news/${news.news_id}`}
-        className={`bg-gradient-to-br border border-gray-600 ${
-          isLight ? "bg-[#fff]" : "bg-[#0f1936]"
-        } w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
+        className={`bg-gradient-to-br border border-gray-600 bg-white dark:bg-[#0f1936] w-80 h-[400px] rounded-lg p-2 overflow-auto flex flex-col justify-evenly gap-1`}
       >
         {!news.cover ? (
           <div className="bg-white/75 backdrop-blur w-full h-28 rounded-md flex justify-center items-center text-6xl border border-gray-600 text-black">
@@ -98,24 +87,18 @@ function CardComponent({
           <ImgCover cover={news.cover} />
         )}
         <p
-          className={`text-center break-words border border-gray-600 rounded-sm ${
-            isLight ? "" : "bg-[#121e41]"
-          }`}
+          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `}
         >
           {news.name_news}
         </p>
         <p
-          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 ${
-            isLight ? "" : "bg-[#121e41]"
-          }`}
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 `}
         >
           {news.description}
         </p>
         <div className="flex gap-3">
           <p
-            className={`text-center text-sm border border-gray-600 rounded-sm py-1 ${
-              isLight ? "" : "bg-[#121e41]"
-            }`}
+            className={`text-center text-sm border border-gray-600 rounded-sm py-1 `}
           >
             Last Updated:{" "}
             {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
@@ -138,6 +121,6 @@ function CardComponent({
           </div>
         </div>
       </Link>
-    )):<p className={`text-center ${isLight?'text-black':'text-white'}`}>There are no <span className="uppercase">{Tag}</span> News</p>
+    )):<p className={`text-center text-black dark:text-white `}>There are no <span className="uppercase">{Tag}</span> News</p>
 }
 export default CardComponent;

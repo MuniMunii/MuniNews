@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes, useParams, Outlet, Navigate } from "react-router-dom";
-import { useTheme } from "./Frontend/context/context";
+import { useTheme, useUser, } from "./Frontend/context/context";
 import Navbar from "./Frontend/component/navbar";
 import Index from "./Frontend/pages";
 import NewsIndex from "./Frontend/pages/newsIndex";
@@ -19,7 +19,9 @@ function App() {
   // const [userRole, setUserRole] = useState<string>("");
   // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
   // const [loading, setIsLoading] = useState<boolean>(true);
-  const { theme, user, isAuthenticated, role } = useTheme();
+  const { theme } = useTheme();
+  const isLight=theme==='light'
+  const {user,isAuthenticated,role}=useUser()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -44,7 +46,6 @@ function App() {
   //   };
   //   fetchUser();
   // }, []);
-  const isLight = theme === "light";
   const ProtectedRoute = ({ isAuthenticated }: { isAuthenticated: string }) => {
     if (!isAuthenticated) {
       return <Navigate to={"/login"} replace />;
@@ -59,10 +60,11 @@ function App() {
   //   )
   // }
   // Note 1: styling dashboard sama reconstruct dashboard component biar Lebih rapih
+  // Note 2: Ubah semua IsLight const pake selector Dark
   return (
     <div
       className={`App transition duration-150 ${
-        isLight ? "bg-white text-black" : " bg-darkTheme text-white"
+        isLight ? "bg-white text-black" : " bg-darkTheme text-white dark"
       }`}
     >
       <Navbar />
@@ -86,7 +88,7 @@ function App() {
           ) : null}
           {role === "admin" ? (
             <>
-            <Route path={`/${user}/dashboard`} element={<DashboardAdmin />} />
+            <Route path={`/${user}/dashboard`} element={<DashboardAdmin/>} />
             <Route path={`/review-news/:news_id`} element={<ReviewNews />} />
             </>
           ) : null}

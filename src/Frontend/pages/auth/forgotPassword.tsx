@@ -6,8 +6,6 @@ function ForgotPassword() {
   const [emailUser, setEmailUser] = useState<string>("");
   const regexEmail =/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;  ;
   const isEmailValid = regexEmail.test(emailUser);
-  const { theme } = useTheme();
-  const isLight = theme === "light";
   const baseURL=process.env.REACT_APP_BACKEND_URL
   const navigate=useNavigate()
   const handleSubmit=async (e:any)=>{
@@ -33,16 +31,10 @@ function ForgotPassword() {
   }
   return (
     <div
-      className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t ${
-        isLight ? "border-t-darkTheme" : "border-t-white"
-      }`}
+      className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t border-t-darkTheme dark:border-gray-600 `}
     >
       <div
-        className={`w-[70%] max-w-96 h-fit p-6 flex flex-col items-center justify-start rounded-md z-10 ${
-          isLight
-            ? "bg-lightOrange shadow-cornerStampLight"
-            : "bg-dark400 shadow-cornerStampDark"
-        }`}
+        className={`w-[70%] max-w-96 h-fit p-6 flex flex-col items-center justify-start rounded-md z-10 bg-lightOrange shadow-cornerStampLight dark:bg-dark400 dark:shadow-cornerStampDark `}
       >
         <form onSubmit={handleSubmit} className="w-full" autoComplete="false">
           <h2 className="font-mono text-3xl text-center uppercase font-semibold">
@@ -70,9 +62,7 @@ function ForgotPassword() {
               />
               <button
                 type="submit"
-                className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 font-mono uppercase ${
-                  isLight ? "bg-mediumOrange" : "bg-blue-300"
-                }`}
+                className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 bg-mediumOrange dark:bg-blue-300 hover:translate-y-1 font-mono uppercase `}
               >
                 Reset password
               </button>

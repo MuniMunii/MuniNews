@@ -1,111 +1,182 @@
-import { useContext, useState, createContext, useEffect,ReactNode } from "react";
+import { useContext, useState, createContext, useEffect, ReactNode, useMemo } from "react";
+
+// Split the context into multiple contexts
 const ThemeContext = createContext({
   theme: "dark",
-  isWideScreen:false,
   toggleTheme: () => {},
-  user:'',
-  role:'',
-  assignRole:(user:string)=>{},
-  assignUser:(user:string)=>{},
-  isAuthenticated:false,
-  assignIsAuthentication:(isAuth:boolean)=>{}
 });
-export function ThemeProvider({ children }: { children: ReactNode }) {
+
+const ScreenContext = createContext({
+  isWideScreen: false,
+});
+
+const UserContext = createContext({
+  user: '',
+  role: '',
+  isAuthenticated: false,
+  assignRole: (role: string) => {},
+  assignUser: (user: string) => {},
+  assignIsAuthentication: (isAuth: boolean) => {},
+});
+
+// Create custom hooks for each context
+export function useTheme() {
+  return useContext(ThemeContext);
+}
+
+export function useScreen() {
+  return useContext(ScreenContext);
+}
+
+export function useUser() {
+  return useContext(UserContext);
+}
+
+// Main provider component
+export function AppProvider({ children }: { children: ReactNode }) {
+  // This is the main provider that wraps everything
+  return (
+    <ScreenProvider>
+      <ThemeProvider>
+        <UserProvider>
+          {children}
+        </UserProvider>
+      </ThemeProvider>
+    </ScreenProvider>
+  );
+}
+
+// Individual providers
+function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "dark";
   });
-  const [role,setRole]=useState<string>('')
-  const [isWideScreen,setIsWideScreen]=useState<boolean>(false)
-  const [user,setUser]=useState<string>('')
-  const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
-  const baseURL=process.env.REACT_APP_BACKEND_URL
-  useEffect(()=>{console.log('user context:',user);console.log('auth context:',isAuthenticated);console.log('role context:',role)},[user])
-  // useEffect buat breakpoint devices < 768
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    if(theme==='light'){
+      document.body.classList.remove('dark')
+    }else{
+      document.body.classList.add('dark')
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  const themeValue = useMemo(() => ({
+    theme,
+    toggleTheme,
+  }), [theme]);
+
+  return <ThemeContext.Provider value={themeValue}>{children}</ThemeContext.Provider>;
+}
+
+function ScreenProvider({ children }: { children: ReactNode }) {
+  const [isWideScreen, setIsWideScreen] = useState<boolean>(false);
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)');
-    const handleMediaQueryChange = (event:MediaQueryListEvent) => {
+    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
       setIsWideScreen(event.matches);
     };
+    
+    // Check initial state
+    setIsWideScreen(mediaQuery.matches);
+    
+    // Set up listener
     mediaQuery.addEventListener('change', handleMediaQueryChange);
-    if(mediaQuery.matches){
-      setIsWideScreen(true)
-    }
+    
+    // Cleanup
     return () => {
       mediaQuery.removeEventListener('change', handleMediaQueryChange);
     };
   }, []);
-  // useEffect buat ganti theme dan keep theme
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-  // function isAuthentication
-  const assignIsAuthentication=(isAuth:boolean)=>{
-    setIsAuthenticated((prev)=>prev=isAuth)
-  }
-  // function assignuser
-  const assignUser=(user:string)=>{
-    console.log("Assigning user:", user);
-    setUser((prev)=>prev=user)
-  }
-  // function assign role
-  const assignRole=(role:string)=>{
-    setRole((prev)=>prev=role)
-  }
-  // function fetch profile user
-  const fetchUser= async ()=>{
-    try{
-      const response=await fetch(`${baseURL}/auth/me`,{
-        method:'get',
-        credentials:'include'
-      })
-      const data:UserStatus=await response.json()
-      if(!response.ok){
-        console.warn("Fetch error:", data.messages);
-      if (data.messages === "invalid Token please Login Again") {
-        setIsAuthenticated(false);
-        setUser("");
-        localStorage.removeItem("user");
-      }
-      return;
-      }
-      if(response.ok){
-        setIsAuthenticated(data.isAuth)
-        setRole(data.role)
-        setUser(data.name)
-        console.log('user id',data.id)
-        console.log('fetch login',data.name)
-        console.log('fetch login',data.isAuth)
-        console.log('fetch login',data.role)
-        // localStorage.setItem('user',data.name)
-      }else{
-        setUser('')
-        // localStorage.removeItem('user')
-      }
-    }
-    catch{
-      setIsAuthenticated(false)
-      setUser('')
-      // localStorage.removeItem('user')
-    }
-  }
-  // useEffect jika user menghapus item di localstorage item akan tetap ada selama token valid dengan function fetchUser
-  useEffect(()=>{
-    fetchUser()
-    const handleChange=(event:StorageEvent)=>{
-      if(event.key==='user'){
-        setUser(event.newValue||'')
-      }
-    }
-    window.addEventListener('storage',handleChange)
-    return ()=> window.removeEventListener('storage',handleChange)
-  },[])
-  // nanti di setting
-  useEffect(()=>{},[isAuthenticated])
-  return <ThemeContext.Provider value={{theme,toggleTheme,isWideScreen,user,assignUser,assignIsAuthentication,isAuthenticated,role,assignRole}}>{children}</ThemeContext.Provider>;
+
+  const screenValue = useMemo(() => ({
+    isWideScreen,
+  }), [isWideScreen]);
+
+  return <ScreenContext.Provider value={screenValue}>{children}</ScreenContext.Provider>;
 }
-export function useTheme() {
-    return useContext(ThemeContext);
-  }
+
+function UserProvider({ children }: { children: ReactNode }) {
+  const [role, setRole] = useState<string>('');
+  const [user, setUser] = useState<string>('');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const baseURL = process.env.REACT_APP_BACKEND_URL;
+
+  const assignIsAuthentication = (isAuth: boolean) => {
+    setIsAuthenticated(isAuth);
+  };
+
+  const assignUser = (user: string) => {
+    console.log("Assigning user:", user);
+    setUser(user);
+  };
+
+  const assignRole = (role: string) => {
+    setRole(role);
+  };
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`${baseURL}/auth/me`, {
+        method: 'get',
+        credentials: 'include'
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.warn("Fetch error:", data.messages);
+        if (data.messages === "invalid Token please Login Again") {
+          setIsAuthenticated(false);
+          setUser("");
+          localStorage.removeItem("user");
+        }
+        return;
+      }
+      
+      if (response.ok) {
+        setIsAuthenticated(data.isAuth);
+        setRole(data.role);
+        setUser(data.name);
+        console.log('user id', data.id);
+        console.log('fetch login', data.name);
+        console.log('fetch login', data.isAuth);
+        console.log('fetch login', data.role);
+      } else {
+        setUser('');
+      }
+    } catch (error) {
+      setIsAuthenticated(false);
+      setUser('');
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+    
+    const handleChange = (event: StorageEvent) => {
+      if (event.key === 'user') {
+        setUser(event.newValue || '');
+      }
+    };
+    
+    window.addEventListener('storage', handleChange);
+    return () => window.removeEventListener('storage', handleChange);
+  }, []);
+
+  const userValue = useMemo(() => ({
+    user,
+    role,
+    isAuthenticated,
+    assignRole,
+    assignUser,
+    assignIsAuthentication,
+  }), [user, role, isAuthenticated]);
+
+  return <UserContext.Provider value={userValue}>{children}</UserContext.Provider>;
+}

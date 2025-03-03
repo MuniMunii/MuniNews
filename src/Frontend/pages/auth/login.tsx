@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "../../context/context";
+import { useTheme, useUser } from "../../context/context";
 import useFetch from "../../hook/useFetch";
 import { redirect, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 type errorParam = "Email Invalid";
 function LoginForm() {
-  const { theme, assignUser, user,assignIsAuthentication,assignRole } = useTheme();
+  const {assignUser, user,assignIsAuthentication,assignRole}=useUser()
   const [role,setRole]=useState<string>('')
   const [isAuthenticated,setIsAuthenticated]=useState<boolean>(false)
   const [emailUser, setEmailUser] = useState<string>("");
@@ -15,7 +15,6 @@ function LoginForm() {
   const [loginAs, setLoginAs] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  const isLight = theme === "light";
   const inputPassRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -99,16 +98,10 @@ function LoginForm() {
   return (
     <>
       <div
-        className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t ${
-          isLight ? "border-t-darkTheme" : "border-t-white"
-        }`}
+        className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t border-t-darkTheme dark:border-gray-600 `}
       >
         <div
-          className={`w-[70%] max-w-96 h-fit min-h-[450px] p-6 flex flex-col items-center justify-around rounded-md z-10 ${
-            isLight
-              ? "bg-lightOrange shadow-cornerStampLight"
-              : "bg-dark400 shadow-cornerStampDark"
-          }`}
+          className={`w-[70%] max-w-96 h-fit min-h-[450px] p-6 flex flex-col items-center justify-around rounded-md z-10 bg-lightOrange shadow-cornerStampLight dark:bg-dark400 dark:shadow-cornerStampDark`}
         >
           <form onSubmit={handleSubmit} className="w-full">
             <h2 className="font-mono text-3xl text-center uppercase font-semibold">Login</h2>
@@ -161,9 +154,9 @@ function LoginForm() {
               </div>
             </div>
             <div className="mt-4 w-full flex flex-col gap-3 font-mono font-semibold tracking-wide">
-            <button type="submit" className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-mediumOrange':'bg-blue-300'}`}>Login</button>
-            <Link to={'/register'} className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-hotOrange':'bg-blue-400'}`}>Register</Link>
-            <Link to={'/forgot-password'} className={`w-full h-fit py-1 px-4  text-center transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-hotOrange':'bg-blue-500'}`}>Forgot Password</Link>
+            <button type="submit" className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 bg-mediumOrange dark:bg-blue-300`}>Login</button>
+            <Link to={'/register'} className={`w-full h-fit py-1 px-4 text-center transition hover:translate-x-1 hover:translate-y-1 bg-hotOrange dark:bg-blue-400`}>Register</Link>
+            <Link to={'/forgot-password'} className={`w-full h-fit py-1 px-4  text-center transition hover:translate-x-1 hover:translate-y-1 bg-hotOrange dark:bg-blue-500`}>Forgot Password</Link>
             {/* <button type="button" onClick={()=>testFetchWithLogin()} className={`w-full h-fit py-1 px-4 transition hover:translate-x-1 hover:translate-y-1 ${isLight?'bg-mediumOrange':'bg-blue-300'}`}>Test Fetch With Login</button> */}
             </div>
             </div>
