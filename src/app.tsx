@@ -15,52 +15,21 @@ import EditNews from "./Frontend/pages/user/editNews";
 import LoadingComp from "./Frontend/component/loadingComp";
 import DashboardAdmin from "./Frontend/pages/admin/dashboard";
 import ReviewNews from "./Frontend/pages/admin/reviewNews";
+import NewsList from "./Frontend/pages/admin/newsList";
 function App() {
-  // const [userRole, setUserRole] = useState<string>("");
-  // const [isAuthenticatedState, setIsAuthenticatedState] = useState<boolean>(false);
-  // const [loading, setIsLoading] = useState<boolean>(true);
   const { theme } = useTheme();
   const isLight=theme==='light'
   const {user,isAuthenticated,role}=useUser()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await fetch(`${baseURL}/auth/me`, {
-  //         method: "get",
-  //         credentials: "include",
-  //       });
-  //       if (response.ok) {
-  //         const data: UserStatus = await response.json();
-  //         setIsAuthenticatedState(data.isAuth);
-  //         setUserRole(data.role);
-  //       } else {
-  //         setIsAuthenticatedState(false);
-  //         setUserRole("");
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, []);
   const ProtectedRoute = ({ isAuthenticated }: { isAuthenticated: string }) => {
     if (!isAuthenticated) {
       return <Navigate to={"/login"} replace />;
     }
     return <Outlet />;
   };
-  // if(loading){
-  //   return (
-  //     <div className="flex justify-center items-center h-screen w-full">
-  //     <p className="text-xl font-semibold">Loading...</p>
-  //   </div>
-  //   )
-  // }
   // Note 1: styling dashboard sama reconstruct dashboard component biar Lebih rapih
   // Note 2: Ubah semua IsLight const pake selector Dark
+  // Note 3: Buat Page for news Index
   return (
     <div
       className={`App transition duration-150 ${
@@ -89,6 +58,7 @@ function App() {
           {role === "admin" ? (
             <>
             <Route path={`/${user}/dashboard`} element={<DashboardAdmin/>} />
+            <Route path={`/${user}/dashboard/news`} element={<NewsList/>} />
             <Route path={`/review-news/:news_id`} element={<ReviewNews />} />
             </>
           ) : null}

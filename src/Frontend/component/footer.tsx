@@ -19,7 +19,6 @@ function FooterComp() {
                 <div className="flex flex-col gap-1 text-xl">
                 <a className="underline">GH Repo</a>
                 <a className="underline">LinkedIn</a>
-                <a className="underline">Facebook</a>
                 </div>
             </div>
         </div>

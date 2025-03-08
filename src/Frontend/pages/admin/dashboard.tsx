@@ -7,6 +7,7 @@ import LoadingComp from "../../component/loadingComp";
 import NewsRecentList from "../../component/admin/NewsRecentList";
 import UserList from "../../component/admin/UserList";
 import { Link } from "react-router-dom";
+import NavbarAdmin from "../../component/admin/navbar";
 const DashboardAdmin=memo(()=>{
     const {user}=useUser()
     const {isWideScreen}=useScreen()
@@ -37,15 +38,7 @@ const DashboardAdmin=memo(()=>{
     return (
         <>
         <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
-            <div className={`w-96 h-full border-r  p-4 flex flex-col items-center justify-between font-Poppins bg-white border-gray-600 dark:bg-darkTheme text-black`}>
-                <div className="flex flex-col gap-2 w-3/4">
-                <a className={`py-1 px-3 font-semibold text-black/50 hover:text-black dark:text-white/40 dark:hover:text-white transition duration-300 select-none cursor-pointer rounded-md flex items-center gap-2`}><HiOutlineTemplate/>Dashboard </a>
-                <a className={`py-1 px-3 font-semibold text-black/50 hover:text-black dark:text-white/40 dark:hover:text-white transition duration-300 select-none cursor-pointer rounded-md flex items-center gap-2`}><HiOutlinePencilAlt/>News</a>
-                </div>
-                <div className={`border-t border-t-gray-600 w-full text-center py-3 dark:text-white text-sm`}>
-                    <a>Admin: {user}</a>
-                </div>
-            </div>
+            <NavbarAdmin/>
             <div className={`w-full h-full p-5 flex flex-col rounded-bl-3xl rounded-tl-3xl border border-gray-600 bg-white dark:bg-darkTheme`}>
                 <div className="w-full h-fit flex gap-3 justify-center mb-3">
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-green-700 shadow-cornerStampGreen dark:from-violet-950 dark:to-darkTheme `}>
@@ -60,14 +53,14 @@ const DashboardAdmin=memo(()=>{
                     {/* nanti di ganti jadi inreview */}
                     <p>{newsDataState.filter(news=>news.status==='archived').length}</p></div>
                 </div>
-                <div className={`w-full h-full flex gap-2`}>
+                <div className={`w-full h-full max-h-[1000px] flex gap-2`}>
                     <div className={`w-9/12 h-full border border-gray-600 dark:bg-[#0f1936] rounded-lg flex flex-col p-4 gap-4`}>
                     <div className={`w-full h-12 rounded-md border border-gray-600 dark:bg-[#121e41]  dark:text-white  font-semibold py-2 px-4 flex items-center`}>Recent News</div>
                     <div className={`w-full h-full border border-gray-600 dark:bg-[#121e41] rounded-md flex flex-col p-3 overflow-auto scrollbar-none gap-4`}>
                         {isLoading?<LoadingComp error={null}/>:<NewsRecentList news={newsDataState}/>}
                     </div>
                     </div>
-                    <div className={`w-1/4 h-full bg-gradient-to-t border border-gray-600 dark:from-indigo-950 dark:to-darkTheme  rounded-lg flex flex-col p-2 gap-3`}>
+                    <div className={`w-1/4 h-full max-h-[1000px] bg-gradient-to-t border border-gray-600 dark:from-indigo-950 dark:to-darkTheme  rounded-lg flex flex-col p-2 gap-3`}>
                     <div className={`w-full h-fit rounded-md border border-gray-600 dark:bg-[#121e41] p-2 flex items-center`}>Journalist List</div>
                     <UserList/>
                     </div>

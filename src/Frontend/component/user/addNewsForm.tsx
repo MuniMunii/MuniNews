@@ -106,6 +106,9 @@ function AddNewsForm({
             </option>
             <option value={"Politics"}>Politics</option>
             <option value={"Sciences"}>Sciences</option>
+            <option value={"Sport"}>Sport</option>
+            <option value={"Tech"}>Technologies</option>
+            <option value={"General"}>General</option>
           </select>
         </div>
         <div className="flex gap-2 flex-wrap font-poppins">

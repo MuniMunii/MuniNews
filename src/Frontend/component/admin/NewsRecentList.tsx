@@ -7,8 +7,8 @@ function NewsRecentList({news}:{news:NewsKey[]|null}){
             <p>{news.name_news}</p>
             </div>
             <div className="flex-col flex">
-            <p className={`text-sm text-green-800`}>Posted By: {news.createdBy}</p>
-            <p className={`text-xs text-blue-700`}>Updated At: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
+            <p className={`text-sm text-green-800 dark:text-white`}>Posted By: {news.createdBy}</p>
+            <p className={`text-xs text-blue-700 dark:text-white`}>Updated At: {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/,"")}</p>
             </div>
             <div>{news.verified?<p className="bg-green-500 py-1 px-3 rounded-md">Published</p>:<p className="bg-red-500 py-1 px-3 rounded-md cursor-pointer">Need Review</p>}</div>
         </Link>

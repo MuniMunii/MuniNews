@@ -46,7 +46,7 @@ function Navbar() {
           <>
             {/* <Link to={"/Dashboard"}></Link> */}
             <motion.button
-              className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
+              className={`transition uppercase hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               onClick={() => {
                 // handleLogout();
                 setOpenNav(false);
@@ -60,7 +60,7 @@ function Navbar() {
           <Link
             to={"/login"}
             onClick={() => setOpenNav(false)}
-            className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
+            className={`transition uppercase hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
           >
             Login
           </Link>
@@ -138,7 +138,7 @@ function Navbar() {
                 About
               </Link>
               <Link
-                to={"/about"}
+                to={"/newslist"}
                 className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
               >
                 News
@@ -198,7 +198,7 @@ function Navbar() {
                       About
                     </Link>
                     <Link
-                      to={"/news"}
+                      to={"/newslist"}
                       onClick={() => setOpenNav(false)}
                       className={`transition hover:border-b-pink-300 dark:hover:border-b-blue-300 border-b border-b-transparent`}
                     >

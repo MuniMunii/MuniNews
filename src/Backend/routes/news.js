@@ -8,6 +8,9 @@ const uuid = require("uuid");
 const verifyToken = require("../middleware/token.js");
 const multer = require("multer");
 const path = require("path");
+const nodemailer = require("nodemailer");
+const { to } = require("@react-spring/web");
+const { start } = require("repl");
 // const ss=require('../assets/cover')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -41,6 +44,7 @@ router.get("/currentnews", async (req, res) => {
     console.log("error:", error);
   }
 });
+// get semua news tanpa query
 router.get("/get-news", async (req, res) => {
   try {
     const getAllNews = await News.findAll({
@@ -66,11 +70,48 @@ router.get("/get-news", async (req, res) => {
     return res.status(403).json({ messages: "server error try again", error });
   }
 });
+// get pakai query untuk performance
+router.get("/query-news", async (req, res) => {
+  try {
+    let {pages}=req.query
+    pages=parseInt(pages)||1
+    const getAllNews = await News.findAll({
+      include: [{ model: User, as: "nama_user", attributes: ["nama_user"],}],
+      order:[["updatedAt","DESC"]]
+    });
+    const pageSize=5
+    const startNews=(pages-1)*5
+    const endIndex=startNews+pageSize
+    const sterilizeNews = getAllNews.slice(startNews,endIndex).map((news) => {
+      return {
+        news_id: news.news_id,
+        name_news: news.name_news,
+        createdBy: news.nama_user.nama_user,
+        createdAt: news.createdAt,
+        updatedAt: news.updatedAt,
+        category: news.category,
+        verified: news.verified,
+        status: news.status,
+        description: news.description,
+        content: news.content,
+        cover: news.cover,
+      };
+    });
+    res.status(200).json({ news: sterilizeNews });
+  } catch (error) {
+    console.log('error :',error)
+    return res.status(403).json({ messages: "server error try again", error });
+  }
+});
 // router make news
 router.post("/make-news", async (req, res) => {
   let { user, isAuth, title, category, description } = req.body;
   title = title.trim();
   description = description.trim().replace(/\s+/g, " ");
+  // nanti di tambah buat category validation
+  if(category!=='Politics'||category!=='Sciences'||category!=='Tech'||category!=='General'||category!=='Sport'){
+    return res.status(403).json({messages:'Choose the category'})
+  }
   if (title.length === 0) {
     return res.status(403).json({ messages: "Title cannot be empty" });
   }
@@ -219,21 +260,53 @@ router.post(`/publish-news/:news_id`,async(req,res)=>{
   const {news_id}=req.params
   try{
     const news=await News.findOne({where:{news_id:news_id}})
+    const user=await User.findOne({where:{id:news.createdBy}})
     if(!news){
       return res.status(403).json({messages:'News not found'})
     }
-    await news.update({
-      verified:true
+    const transporter=nodemailer.createTransport({
+      service:'gmail',
+      auth:{
+        user:process.env.EMAIL_TEST,
+        pass:process.env.EMAIL_TEST_PASSWORD
+      }
     })
-    res.statusMessage(200).json({messages:'News Published'})
+    const mail={
+      from:'Muninews admin (Ramzi)',
+      to:user.email,
+      subject:'Published News',
+      html:`<p>News Published you can check your Dashboard</p>`
+    }
+    await transporter.sendMail(mail)
+    await news.update({
+      verified:true,
+      status:'published'
+    })
+    res.status(200).json({messages:'News Published'})
   }catch(error){return res.status(403).json({messages:'Server Error'})}
 })
 // router untuk menggagalkan news yang di tolak
 router.post(`/cancel-news/:news_id`,async(req,res)=>{
   const {news_id}=req.params
+  const {messages}=req.body
   try{
     const news=await News.findOne({where:{news_id:news_id}})
+    const user=await User.findOne({where:{id:news.createdBy}})
     if(!news){return res.status(403).json({messages:'News not found'})}
+    const transporter=nodemailer.createTransport({
+      service:'gmail',
+      auth:{
+        user:process.env.EMAIL_TEST,
+        pass:process.env.EMAIL_TEST_PASSWORD
+      }
+    })
+    const mail={
+      from:'Muninews admin (Ramzi)',
+      to:user.email,
+      subject:'Published News',
+      html:`<p>News Failed to Publish you can check your Dashboard </br> Reason: ${messages}   </p>`
+    }
+    await transporter.sendMail(mail)
     await news.update({
       status:'cancelled'
     })

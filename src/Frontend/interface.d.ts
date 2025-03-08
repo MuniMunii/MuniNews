@@ -16,11 +16,22 @@ declare global {
     news_id: string;
     messages: string;
   }
+  interface CurrentNews{
+    id:string;
+    title:string;
+    author:string;
+    language:string;
+    category:string[];
+    url:string;
+    description:string;
+    image:string;
+  }
   interface NewsKey {
     news_id: string;
     name_news: string;
     createdBy: string;
     updatedAt: string;
+    createdAt:string;
     category: string;
     verified: boolean;
     status: statusNews;

@@ -16,10 +16,12 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+  *{transition-property: backgroundColor;transition-duration: 150ms;}
 html{
     scroll-behavior: smooth;
 }
 body{
+    position: relative;
     display: flex;
     min-height: 100vh;
     overflow-x:clip;
@@ -31,6 +33,7 @@ body{
     justify-content: center;
 }
 .App{
+    position: relative;
     width: 100vw;
     min-width: fit-content;
     max-width: 100%;

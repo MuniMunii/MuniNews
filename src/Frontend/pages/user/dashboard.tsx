@@ -39,7 +39,7 @@ function DashboardUser() {
   const {theme } = useTheme();
   const {user,role}=useUser()
   const {isWideScreen}=useScreen()
-  const isLight = theme === "light";
+  // const isLight = theme === "light";
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   // const { value: userInfo, isLoading: isLoadingUserInfo } = useFetch(
   //   `${baseURL}/auth/me`,
@@ -51,43 +51,43 @@ function DashboardUser() {
   // console.log(userInfo?.me);
   const NavDashboard = () => {
     return (
-      <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b ${isLight?'border-b-black':'border-b-bwhite'}`}>
+      <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b border-b-black dark:border-b-white `}>
         <div className="flex flex-wrap gap-2">
           <button
-            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300   ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
-              isActive === "mynews" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300 text-black dark:text-white   rounded-md flex items-center justify-center ${
+              isActive === "mynews" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("mynews")}
           >
             MyNews
           </button>
           <button
-            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
-              isActive === "archived" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
+              isActive === "archived" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("archived")}
           >
             Archived
           </button>
           <button
-            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
-              isActive === "published" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
+              isActive === "published" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("published")}
           >
             Published
           </button>
           <button
-            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
-              isActive === "inreview" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
+              isActive === "inreview" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("inreview")}
           >
             In Review
           </button>
           <button
-            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  ${isLight?'text-black':'text-white'} rounded-md flex items-center justify-center ${
-              isActive === "cancelled" ? `text-opacity-100 ${isLight?'bg-lightOrange':'bg-blue-500'}` : `text-opacity-60 hover:text-opacity-100 ${isLight?'':''}`
+            className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
+              isActive === "cancelled" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("cancelled")}
           >
@@ -112,15 +112,15 @@ function DashboardUser() {
     <div className="diagonal-pattern">
       <div className="mx-auto w-[90%] max-w-[800px] h-screen flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div
-          className={`laptop:block laptop:w-1/3 flex bg-white items-center gap-3 p-4 border border-gray-600`}
+          className={`laptop:block laptop:w-1/3 flex bg-white dark:bg-darkTheme  items-center gap-3 p-4 border border-gray-600`}
         >
           <div className="bg-black size-32 rounded-full"></div>
-          <p className="text-black">{user}</p>
+          <p className="">{user}</p>
         </div>
-        <div className={`h-full border ${isLight?'bg-white border-slate-500':'bg-darkTheme border-slate-500'} w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
+        <div className={`h-full border bg-white border-gray-600 dark:bg-darkTheme w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
         <div className={`laptop:h-[90%] phone:h-[67%]`}>
           <NavDashboard />
-          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] ${isLight?'scrollbar-thumb-violet-950' :'scrollbar-thumb-white text-white'} scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
+          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] scrollbar-thumb-violet-950 dark:scrollbar-thumb-white dark:text-white scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
           {isLoading&&<LoadingComp error={error}/>}
             {isActive === "mynews"
               ?<CardComponent Tag='mynews' myNews={myNews}/>
@@ -173,11 +173,7 @@ function DashboardUser() {
             className={`w-screen h-full flex justify-center items-center fixed font-mono `}
           >
             <div
-              className={`size-[400px] p-4 rounded-lg ${
-                isLight
-                  ? "shadow-cornerStampLight bg-lightOrange"
-                  : "shadow-cornerStampDark bg-darkTheme text-white"
-              }`}
+              className={`size-[400px] p-4 rounded-lg shadow-cornerStampLight bg-lightOrange dark:bg-darkTheme dark:shadow-cornerStampDark dark:text-white `}
             >
               <motion.button
                 onClick={() => setModalMakeNews(false)}
