@@ -26,6 +26,15 @@ declare global {
     description:string;
     image:string;
   }
+  interface PublicNews{
+    article_id:string
+    title:string
+    link:string
+    description:string
+    image_url:string
+    language:string
+    source_name:string
+  }
   interface NewsKey {
     news_id: string;
     name_news: string;

@@ -105,6 +105,7 @@ function AddNewsForm({
               Select a Category
             </option>
             <option value={"Politics"}>Politics</option>
+            <option value={"Business"}>Business</option>
             <option value={"Sciences"}>Sciences</option>
             <option value={"Sport"}>Sport</option>
             <option value={"Tech"}>Technologies</option>

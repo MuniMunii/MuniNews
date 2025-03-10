@@ -11,6 +11,7 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 const { to } = require("@react-spring/web");
 const { start } = require("repl");
+const { URLSearchParams } = require("url");
 // const ss=require('../assets/cover')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -44,6 +45,18 @@ router.get("/currentnews", async (req, res) => {
     console.log("error:", error);
   }
 });
+router.get('/publicnews',async (req,res)=>{
+  try{
+  const baseURLPublicAPI="https://newsdata.io/api/1/latest"
+  const apiKey=process.env.API_KEY_PUBLIC_NEWS
+  const newUrlParameter=new URLSearchParams({
+    apiKey,
+    language:"en"
+  }).toString()
+  const publicAPI=`${baseURLPublicAPI}?${newUrlParameter}`
+  const response=await axios.get(publicAPI);
+  res.status(200).json(response.data)}catch(error){console.log('error try again',error)}
+})
 // get semua news tanpa query
 router.get("/get-news", async (req, res) => {
   try {
@@ -109,7 +122,7 @@ router.post("/make-news", async (req, res) => {
   title = title.trim();
   description = description.trim().replace(/\s+/g, " ");
   // nanti di tambah buat category validation
-  if(category!=='Politics'||category!=='Sciences'||category!=='Tech'||category!=='General'||category!=='Sport'){
+  if(category===""){
     return res.status(403).json({messages:'Choose the category'})
   }
   if (title.length === 0) {

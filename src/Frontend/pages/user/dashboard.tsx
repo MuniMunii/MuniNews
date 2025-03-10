@@ -55,7 +55,7 @@ function DashboardUser() {
         <div className="flex flex-wrap gap-2">
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300 text-black dark:text-white   rounded-md flex items-center justify-center ${
-              isActive === "mynews" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
+              isActive === "mynews" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
             }`}
             onClick={() => setIsActive("mynews")}
           >
@@ -63,7 +63,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "archived" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
+              isActive === "archived" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
             }`}
             onClick={() => setIsActive("archived")}
           >
@@ -71,7 +71,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "published" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
+              isActive === "published" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("published")}
           >
@@ -79,7 +79,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "inreview" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
+              isActive === "inreview" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("inreview")}
           >
@@ -87,7 +87,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "cancelled" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 `
+              isActive === "cancelled" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("cancelled")}
           >

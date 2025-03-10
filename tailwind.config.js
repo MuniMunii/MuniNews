@@ -14,6 +14,8 @@ module.exports = {
         cornerStampBlue:'5px 5px 0px 0px rgba(29,78,216)',
         cornerStampRed:'5px 5px 0px 0px rgba(185,28,28)',
         cornerStampDark:'5px 5px 0px 0px #5BC0BE',
+        shadow_Dark:'4px 8px 8px rgba(0,0,0,0.38)',
+        shadow_Light:'4px 5px 5px rgba(255,255,255,0.38)'
       },
       colors:{
         darkTheme:'#0B132B',
@@ -41,7 +43,7 @@ module.exports = {
       }
     },
   },
-  plugins: [require('tailwind-scrollbar')],
+  plugins: [require('tailwind-scrollbar'),require("tailwind-gradient-mask-image")],
 }
 
 
