@@ -16,6 +16,8 @@ import LoadingComp from "./Frontend/component/loadingComp";
 import DashboardAdmin from "./Frontend/pages/admin/dashboard";
 import ReviewNews from "./Frontend/pages/admin/reviewNews";
 import NewsList from "./Frontend/pages/admin/newsList";
+import NewsListCategory from "./Frontend/pages/admin/newsListCategory";
+import NewsPage from "./Frontend/pages/news";
 function App() {
   const { theme } = useTheme();
   const isLight=theme==='light'
@@ -41,6 +43,7 @@ function App() {
         <Route path={"/"} element={<Index />} />
         <Route path={"/newslist"} element={<NewsIndex />} />
         <Route path={"/login"} element={<LoginForm />} />
+        <Route path={"/read/:news_id"} element={<NewsPage />} />
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
@@ -59,6 +62,7 @@ function App() {
             <>
             <Route path={`/${user}/dashboard`} element={<DashboardAdmin/>} />
             <Route path={`/${user}/dashboard/news`} element={<NewsList/>} />
+            <Route path={`/${user}/dashboard/news/list/:status`} element={<NewsListCategory/>} />
             <Route path={`/review-news/:news_id`} element={<ReviewNews />} />
             </>
           ) : null}

@@ -110,17 +110,17 @@ function DashboardUser() {
   return (
     <>
     <div className="diagonal-pattern">
-      <div className="mx-auto w-[90%] max-w-[800px] h-screen flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
+      <div className="mx-auto w-[90%] max-w-[800px] laptop:h-screen phone:h-full flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div
           className={`laptop:block laptop:w-1/3 flex bg-white dark:bg-darkTheme  items-center gap-3 p-4 border border-gray-600`}
         >
           <div className="bg-black size-32 rounded-full"></div>
           <p className="">{user}</p>
         </div>
-        <div className={`h-full border bg-white border-gray-600 dark:bg-darkTheme w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
-        <div className={`laptop:h-[90%] phone:h-[67%]`}>
+        <div className={`phone:h-fit laptop:h-full border bg-white border-gray-600 dark:bg-darkTheme w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
+        <div className={`laptop:h-[90%] laptop:pb-0 phone:h-full phone:pb-32`}>
           <NavDashboard />
-          <div className={`p-4 text-black h-full w-full overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] scrollbar-thumb-violet-950 dark:scrollbar-thumb-white dark:text-white scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
+          <div className={`p-4 text-black h-full w-full phone:overflow-hidden laptop:overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] scrollbar-thumb-violet-950 dark:scrollbar-thumb-white dark:text-white scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
           {isLoading&&<LoadingComp error={error}/>}
             {isActive === "mynews"
               ?<CardComponent Tag='mynews' myNews={myNews}/>

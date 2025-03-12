@@ -162,22 +162,38 @@ function FormEditNews({
           className={`w-full outline-none rounded-lg px-7 py-3 text-5xl resize-none text-center bg-[#FFE9CE] dark:bg-gray-600/40`}
         />
         <div
-          className={`bg-black flex-col text-white w-3/4 h-96 mx-auto rounded-lg my-4 flex justify-center items-center text-7xl min-h-12`}
+          className={`bg-black flex-col text-white w-3/4 h-fit min-h-96 mx-auto rounded-lg my-4 flex justify-center items-center text-7xl`}
         >
           {coverValue ? (
-            <img
+            <div className="relative w-full h-full">
+              <img
               src={`${baseURL}${coverValue}`}
               className="w-full h-full bg-cover"
             />
-          ) : (
-            <>
-              <FaRegNewspaper />
-              <input
+            <label htmlFor="change-img" className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base absolute top-2 right-2">Change Image
+            <input
+            id="change-img"
                 type="file"
                 accept="image/*"
                 onChange={handleSaveCover}
-                className={`bg-oceanBlue py-1 px-3 rounded-md text-xl`}
+                className={`hidden`}
               />
+              </label>
+            </div>
+          ) : (
+            <>
+              <FaRegNewspaper />
+              
+            <label htmlFor="add-img" className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base">Add Image
+            <input
+            id="add-img"
+                type="file"
+                accept="image/*"
+                onChange={handleSaveCover}
+                className={`hidden`}
+              />
+              </label>
+              
             </>
           )}
         </div>

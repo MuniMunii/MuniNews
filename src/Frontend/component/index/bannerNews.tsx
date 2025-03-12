@@ -1,0 +1,35 @@
+import { Link } from "react-router-dom"
+function BannerNews({muniNews,baseURL}:{muniNews:NewsKey[]|undefined,baseURL:string}){
+    return (
+        <div className="w-full h-fit  bg-lightOrange my-5 dark:bg-dark300 py-7 px-7 flex phone:flex-col tablet:flex-row justify-between">
+            <div className="tablet:w-[60%] phone:w-full max-h-[450px] relative">
+            <img
+          src={`${baseURL}${muniNews?.[0].cover}`}
+          className="w-full h-full"
+        />
+            </div>
+        <div className="tablet:w-2/5 phone:w-full flex flex-col justify-center items-start p-3 gap-3">
+          <p className="tablet:text-3xl phone:text-xl uppercase font-Garramond">
+            {muniNews?.[0].name_news}
+          </p>
+          <p className="tablet:text-base">{muniNews?.[0].description}</p>
+          <Link
+            to={`/read/${muniNews?.[0].news_id}`}
+            className="px-6 py-1 border transition duration-300 border-hotOrange hover:bg-hotOrange dark:border-pastelTosca dark:hover:text-black dark:hover:bg-pastelTosca"
+          >
+            Read
+          </Link>
+          <div className="flex gap-2 text-xs">
+            <p>
+              Posted by:{" "}
+              <span className="text-pink-600">{muniNews?.[0].createdBy}</span>
+            </p>
+            <p className="pl-2 border-l border-l-gray-600">
+              {muniNews?.[0].category}
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+}
+export default BannerNews

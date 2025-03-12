@@ -5,6 +5,7 @@ import useFetch from "../../hook/useFetch";
 import '../../style/animation.css'
 import NewsCard from "../../component/admin/newsCard";
 import LoadingComp from "../../component/loadingComp";
+import { Link } from "react-router-dom";
 function NewsList() {
     const [news,setNews]=useState<NewsKey[]|null|undefined>()
     const [error,setError]=useState<boolean|null|String>()
@@ -32,30 +33,41 @@ function NewsList() {
         >
           <div className="dark:bg-[#0f1936] flex gap-3 h-full border rounded-md border-gray-600 p-3 w-full">
             <div className="w-2/6 p-4 gap-2  rounded-lg border dark:bg-[#121e41] border-gray-600 h-full flex flex-col justify-start items-center">
-              <div className="w-full h-12 dark:bg-[#121e41] border border-gray-600 rounded-md flex justify-between items-center p-2">
-                <p>Published</p>
+              <Link to={'list/published'} className="w-full h-fit dark:bg-[#121e41] group border border-gray-600 rounded-md flex justify-between items-center p-3">
+              <div className="flex-col">
+              <p>Published</p>
+              <p className="text-xs text-black/50 dark:text-white/60 group-hover:underline">See More</p>
+              </div>
+                
                 <div className="bg-blue-700 p-1 rounded-full size-6 flex justify-center items-center text-xs">
                   {news?.filter(news=>news.status==='published').length}
                 </div>
-              </div>
+              </Link>
               {isLoading?<LoadingComp error={null}/>:<NewsCard tag="published" news={news}/>}
             </div>
             <div className="w-2/6 p-4 gap-2 dark:bg-[#121e41] rounded-lg border border-gray-600 h-full flex flex-col justify-start items-center">
-              <div className="w-full h-12 dark:bg-[#121e41] border border-gray-600 rounded-md flex justify-between items-center p-2">
-                <p>In Review</p>
+              <Link to={'list/inreview'} className="w-full h-fit dark:bg-[#121e41] group border border-gray-600 rounded-md flex justify-between items-center p-3">
+              <div className="flex-col">
+              <p>In Review</p>
+              <p className="text-xs text-black/50 dark:text-white/60 group-hover:underline">See More</p>
+              </div>
+                
                 <div className="bg-blue-700 p-1 rounded-full size-6 flex justify-center items-center text-xs">
                 {news?.filter(news=>news.status==='inreview').length}
                 </div>
-              </div>
+              </Link>
               {isLoading?<LoadingComp error={null}/>:<NewsCard tag="inreview" news={news}/>}
             </div>
             <div className="w-2/6 p-4 gap-2 dark:bg-[#121e41] rounded-lg border border-gray-600 h-full flex flex-col justify-start items-center">
-              <div className="w-full h-12 dark:bg-[#121e41] border border-gray-600 rounded-md flex justify-between items-center p-2">
-                <p>All News</p>
+              <Link to={'list/all'} className="w-full h-fit dark:bg-[#121e41] group border border-gray-600 rounded-md flex justify-between items-center p-3">
+              <div className="flex-col">
+              <p>All News</p>
+              <p className="text-xs text-black/50 dark:text-white/60 group-hover:underline">See More</p>
+              </div>
                 <div className="bg-blue-700 p-1 rounded-full size-6 flex justify-center items-center text-xs">
                 {news?.length}
                 </div>
-              </div>
+              </Link>
               {isLoading?<LoadingComp error={null}/>:<NewsCard tag="all" news={news}/>}
             </div>
           </div>
