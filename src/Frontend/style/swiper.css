@@ -1,0 +1,7 @@
+.swiper-button-prev,.swiper-button-next{
+    transition: all 300ms ease-in !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+.swiper-button-prev:hover,.swiper-button-next:hover{
+    color: rgba(255, 255, 255, 1) !important;
+}

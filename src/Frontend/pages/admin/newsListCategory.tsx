@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom"
 import LoadingComp from "../../component/loadingComp"
 import { Link } from "react-router-dom"
 import { FaUser } from "react-icons/fa"
+import { BiCategory } from "react-icons/bi";
 function NewsListCategory(){
     const [newsList,setNewsList]=useState<NewsKey[]|undefined>()
     const [isLoading,setIsLoading]=useState<boolean>(true)
@@ -33,14 +34,18 @@ function handlePageChange(newPages:any){
             <NavbarAdmin/>
             <div className={`w-full h-full p-5 flex flex-col rounded-bl-3xl rounded-tl-3xl border border-gray-600 bg-white dark:bg-darkTheme`}>
                 <div className="w-full h-fit flex flex-col items-center gap-5">
+                    {newsList?.length===0 && <p>There are currently no {status==='inreview'?'News to Review':'News to Publish'}</p>}
                 {isLoading?<LoadingComp error={null}/>:newsList?.map((news,index)=>(
                     <Link to={`/review-news/${news.news_id}`} key={news.news_id} className="w-10/12 h-126 rounded-lg group border border-gray-600 py-3 px-4 flex justify-between items-center gap-4">
                         <div className="w-1/5">
                         <img src={`${baseURL}${news.cover}`} className="size-full"></img>
                         </div>
-                        <div className="w-full border-r border-r-gray-600">
-                            <p className="group-hover:underline">{news.name_news}</p>
+                        <div className="w-full border-r border-r-gray-600 flex flex-col">
+                        <p className="group-hover:underline">{news.name_news}</p>
+                            <div className="flex gap-2">
                             <p className="text-xs flex items-center gap-2"><FaUser/> {news.createdBy}</p>
+                            <p className="text-xs flex items-center gap-2 border-l border-l-gray-600 pl-2">{news.category}</p>
+                            </div>
                         </div>
                         <p className={`flex items-center uppercase ${news.status==='published'?'bg-green-500':'bg-red-500'} rounded-md px-3 py-1`}>{news.status}</p>
                     </Link>

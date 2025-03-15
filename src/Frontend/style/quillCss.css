@@ -5,6 +5,7 @@
     word-break: break-word; 
     white-space: normal; 
     overflow-wrap: break-word;
+    spellcheck:false;
   }
   .ql-toolbar{
     background-color: white;
@@ -19,6 +20,7 @@
     color: black;
   }
   .ql-container {
+    
     width: 100%;
     min-height: 400px;
     background-color: transparent;

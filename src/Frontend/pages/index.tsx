@@ -38,15 +38,15 @@ function Index() {
       >
         {/* <Navbar /> */}
         <IndexScreen />
-        <h1 id="about" className="text-center">
+        {/* <h1 id="about" className="text-center">
           About
-        </h1>
+        </h1> */}
         {/* <div className="card h-5 w-7"></div> */}
-        <div
+        {/* <div
           className={`w-[90%] mx-auto flex flex-col items-center flex-wrap gap-5 select-none`}
-        >
+        > */}
           
-          <div
+          {/* <div
             className={`w-4/5 min-h-60 relative z-20 bg-lightOrange shadow-cornerStampLight dark:bg-dark300 dark:shadow-cornerStampDark `}
           > 
           <div className="absolute dotted top-0 left-0 -z-[1] w-full h-full"></div>
@@ -68,12 +68,12 @@ function Index() {
               <ButtonMailTo mailTo="ramziakbar03311@gmail.com" label="Contact Me!"/>
             </div>
             </div>
-          </div>
+          </div> */}
           {/* task besok */}
-          <motion.div ref={containerRef} onViewportEnter={() => console.log('is entering')} onViewportLeave={() => console.log('is Leaving')} >intersecting</motion.div>
+          {/* <motion.div ref={containerRef} onViewportEnter={() => console.log('is entering')} onViewportLeave={() => console.log('is Leaving')} >intersecting</motion.div>
           <div className="bg-slate-900 w-32 h-24 mt-3">
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
       <FooterComp/>
     </>

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useParams } from "react-router-dom";
 import LoadingComp from "../../component/loadingComp";
 import { useTheme } from "../../context/context";
 import { FaRegNewspaper } from "react-icons/fa";
 import DOMPurify from "dompurify";
 import { motion, AnimatePresence } from "framer-motion";
+import PageNotFound from "../../component/404Page";
 function ReviewNews() {
   type newsStatus = "Published" | "Error" | "Cancelled";
   const { news_id } = useParams();
@@ -13,8 +14,10 @@ function ReviewNews() {
   const [popUp, setPopUp] = useState<boolean>(false);
   const [status, setStatus] = useState<newsStatus | null>(null);
   const [isError, setIsError] = useState<boolean | string | null>(null);
+  const [idNotFound,setIdNotFound]=useState<boolean>(false)
   const [modalCancel, setModalCancel] = useState<boolean>(false);
   const [cancelMessages, setCancelMessages] = useState<string>();
+  const urlArticleRef=useRef<HTMLElement|null>(null)
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -37,7 +40,9 @@ function ReviewNews() {
         if (response.ok) {
           setNews(data.news);
           console.log(data.news.content);
-        } else setIsError(data.messages);
+        }
+        else if(data.messages==='News not found'){setIdNotFound(true)}
+         else setIsError(data.messages);
       } catch (error) {
         setIsError("error try again");
       } finally {
@@ -46,6 +51,17 @@ function ReviewNews() {
     };
     fetchNews();
   }, [news_id]);
+  // useEffect ganti semua link menjadi proper dan aktif
+  useEffect(()=>{
+    if(urlArticleRef.current){
+      const links=urlArticleRef.current.querySelectorAll('A')
+      links.forEach((link)=>{const href=link.getAttribute("href")
+        if (href && !href.startsWith("http://") && !href.startsWith("https://")) {
+          link.setAttribute("href", `https://${href}`);
+        }
+      })
+    }
+  },[news])
   const sanitizeContent = DOMPurify.sanitize(news?.content || "", {
     ALLOWED_TAGS: ["a", "ol", "li", "ul", "p", "b", "i", "strong", "em", "br"],
     ALLOWED_ATTR: ["href", "target", "rel","data-list"],
@@ -93,6 +109,7 @@ function ReviewNews() {
       console.log("error");
     }
   };
+  if(idNotFound){return <PageNotFound/>}
   if (isLoading) {
     return <LoadingComp error={null} />;
   }
@@ -168,6 +185,7 @@ function ReviewNews() {
           {news?.description}
         </p>
         <article
+        ref={urlArticleRef}
           dangerouslySetInnerHTML={{ __html: sanitizeContent }}
           className="text-justify text leading-8 font-Poppins list-decimal"
         />

@@ -115,8 +115,52 @@ router.get("/query-news", async (req, res) => {
     return res.status(403).json({ messages: "server error try again", error });
   }
 });
-// get pakai query dan category parameter
+// get pakai query dan status parameter
 router.get("/query-news/:status", async (req, res) => {
+  try {
+    const {status}=req.params
+    let {pages}=req.query
+    pages=parseInt(pages)||1
+    const getAllNews = status==='all'?
+    await News.findAll({
+      include: [
+        { model: User, as: "nama_user", attributes: ["nama_user"] }
+      ],
+      order: [["updatedAt", "DESC"]]
+    }):await News.findAll({
+      where: { status: status },
+      include: [
+        { model: User, as: "nama_user", attributes: ["nama_user"] }
+      ],
+      order: [["updatedAt", "DESC"]]
+    });
+    const pageSize=5
+    const startNews=(pages-1)*5
+    const endIndex=startNews+pageSize
+    const sterilizeNews = getAllNews.slice(startNews,endIndex).map((news) => {
+      return {
+        news_id: news.news_id,
+        name_news: news.name_news,
+        createdBy: news.nama_user.nama_user,
+        createdAt: news.createdAt,
+        updatedAt: news.updatedAt,
+        category: news.category,
+        verified: news.verified,
+        status: news.status,
+        description: news.description,
+        content: news.content,
+        cover: news.cover,
+      };
+    });
+    res.status(200).json({ news: sterilizeNews });
+  } catch (error) {
+    console.log('error :',error)
+    return res.status(403).json({ messages: "server error try again", error });
+  }
+});
+// note 1 :benerin route ini 
+// get pakai query dan category parameter
+router.get("/query-news/:category", async (req, res) => {
   try {
     const {status}=req.params
     let {pages}=req.query
@@ -287,6 +331,8 @@ router.post(
 // router user ingin meng publish
 router.post('/edit-news/publish/:news_id',async (req,res)=>{
   const {news_id}=req.params
+  const date = new Date();
+  const DATE_FORMAT = date.toISOString().slice(0, 19).replace("T", " ");
   try{
     const news=await News.findOne({where:{news_id:news_id}})
     if(!news){
@@ -294,7 +340,8 @@ router.post('/edit-news/publish/:news_id',async (req,res)=>{
     }
     if(news.status==='inreview'){return res.status(403).json({messages:'News In review Wait for validation'})}
     await news.update({
-      status:'inreview'
+      status:'inreview',
+      updatedAt:DATE_FORMAT
     })
     res.status(200).json({messages:'News in review wait for validation'})
   }catch(error){return res.status(403).json({messages:'Server error try again'})}

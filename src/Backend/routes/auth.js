@@ -111,11 +111,12 @@ router.post('/register',async (req,res)=>{
     id:`user-${uuidv4()}`,
     email:email,
     nama_user:nama_user,
+    isAuth:false,
     role:'journalist',
     password:hashedPassword
   })
   res.status(200).json({messages:'User successfull registered'})
-}catch(error){return res.status(500).json({messages:'Server Error, try again'})}})
+}catch(error){return res.status(500).json({messages:'Server Error, try again :',error})}})
 //   route test endpoint user
 router.get("/me",verifyToken, async (req, res) => {
   try {

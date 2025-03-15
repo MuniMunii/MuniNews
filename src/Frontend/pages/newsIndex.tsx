@@ -3,15 +3,17 @@ import { useState, useEffect } from "react";
 import { useScreen } from "../context/context";
 import FooterComp from "../component/footer";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay,Navigation } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import useFetch from "../hook/useFetch";
 import "swiper/css";
 import "swiper/css/pagination";
-import 'swiper/css/navigation';
+import "swiper/css/navigation";
+import "../style/swiper.css";
 import { FaRegNewspaper } from "react-icons/fa";
 import LoadingComp from "../component/loadingComp";
 import { Link } from "react-router-dom";
-import BannerNews from "./index/bannerNews";
+import BannerNews from "../component/index/bannerNews";
+import PageNotFound from "../component/404Page";
 function NewsIndex() {
   const [muniNews, setMuniNews] = useState<NewsKey[] | undefined>();
   const [query, setQuery] = useState<number>(1);
@@ -27,10 +29,9 @@ function NewsIndex() {
   useEffect(() => {
     const fetchMuniNews = async () => {
       try {
-        const response = await fetch(
-          `${baseURL}/news/query-news?pages=${query ? query : 1}`,
-          { method: "Get" }
-        );
+        const response = await fetch(`${baseURL}/news/get-news`, {
+          method: "Get",
+        });
         const data = await response.json();
         if (response.ok) {
           setMuniNews(data.news);
@@ -51,24 +52,39 @@ function NewsIndex() {
       news: data.results as PublicNews[] | undefined,
     })
   );
-  function MuniNewsIndex() {
-    return muniNews?.map((news, index) => (
-      <div key={news.news_id} className=" w-full h-56 bg-black"></div>
-    ));
+  function MuniNewsIndex({ tag }: { tag: Category }) {
+    return muniNews
+      ?.filter((news) => news.category === tag && news.status==='published')
+      .slice(0, 3)
+      .sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() -
+          new Date(a.updatedAt).getTime()
+      )
+      .map((news, index) => (
+        <Link to={`/read/${news.news_id}`} key={news.news_id} className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group ">
+          <p className="group-hover:underline">{news.name_news}</p>
+          <div className="flex flex-row-reverse gap-1 justify-end text-sm">
+          <p className="pl-1 border-l border-l-gray-600 break-page-all">{news.category}</p>
+          <p className="">{news.createdBy}</p>
+          </div>
+          <p className="text-xs text-left">{news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}</p>
+        </Link>
+      ));
   }
   // const RandomIndex=muniNews&&muniNews.length>0?Math.floor(Math.random()*(muniNews?.length??1)):1;
   return (
     <>
       <div className="w-full h-full mx-auto flex flex-col my-3 relative">
-        <div className="w-[90%] mx-auto h-fit border border-gray-600 flex justify-between">
-          <div className="w-full py-10">
+        <div className="w-[90%] mx-auto h-fit border border-gray-600 rounded-md flex justify-between">
+          <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
             <Swiper
-              modules={[Pagination, Autoplay,Navigation]}
+              modules={[Pagination, Autoplay, Navigation]}
               navigation={true}
               loop={true}
               pagination={{ dynamicBullets: true }}
               autoplay={{ delay: 4000, pauseOnMouseEnter: true }}
-              className="mySwiper w-[90%] max-w-[800px] tablet:h-96 phone:h-72 border border-gray-600 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
+              className="mySwiper w-[90%] max-w-[800px] tablet:h-96 phone:h-72 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
             >
               {isLoadingPublicAPI ? (
                 <SwiperSlide className="!w-full h-full flex justify-center items-center">
@@ -128,12 +144,22 @@ function NewsIndex() {
           {/* side news */}
           {isWideScreen && (
             <div className="w-1/3 h-full border-l border-gray-600 sticky bg-white dark:bg-darkTheme flex flex-col p-2 gap-1 justify-evenly items-center font-Garramond">
-              <h1 className="uppercase tracking-wider">Recent News</h1>
+              <h1 className="uppercase tracking-widest border-b border-hotOrange dark:border-pastelTosca">
+                Recent News
+              </h1>
               {isLoading ? (
                 <LoadingComp error={null} />
               ) : (
-                muniNews?.map((news, index) => (
-                  <Link to={`/read/${news.news_id}`} key={`recent-news-${news.news_id}`} className="w-full h-fit p-2 border-x border-gray-600 group cursor-pointer">
+                muniNews?.filter(news=>news.status==='published').sort(
+                  (a, b) =>
+                    new Date(b.updatedAt).getTime() -
+                    new Date(a.updatedAt).getTime()
+                ).slice(0, 5).map((news, index) => (
+                  <Link
+                    to={`/read/${news.news_id}`}
+                    key={`recent-news-${news.news_id}`}
+                    className="w-full h-fit p-2 border-x border-gray-600 group cursor-pointer"
+                  >
                     <p className="group-hover:underline">{news.name_news}</p>
                     <div className="w-full flex justify-start gap-2 text-xs pointer-events-none">
                       <p>
@@ -151,52 +177,111 @@ function NewsIndex() {
           )}
         </div>
         {/* news bawah /main*/}
-        <div className="w-full h-fit border-y border-y-gray-600 flex items-center justify-evenly mt-5">
+        <div className="w-full h-fit border-y border-hotOrange dark:border-pink-700 flex items-center justify-evenly gap-3 flex-wrap mt-5 font-semibold font-Poppins">
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"politics/"}
           >
             Politic
           </Link>
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"business/"}
           >
             Business
           </Link>
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"science/"}
           >
             Science
           </Link>
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"tech/"}
           >
             Tech
           </Link>
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"sport/"}
           >
             Sport
           </Link>
           <Link
-            className="text-opacity-60 hover:text-opacity-100 transition duration-200"
+            className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
             to={"general/"}
           >
             General
           </Link>
         </div>
-        <BannerNews baseURL={`${baseURL}`} muniNews={muniNews?.filter(news=>news.status==='published')}/>
+        <BannerNews
+          baseURL={`${baseURL}`}
+          muniNews={muniNews
+            ?.filter((news) => news.status === "published")
+            .sort(
+              (a, b) =>
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime()
+            )}
+        />
         <div className="w-[90%] mx-auto">
-          <div className="w-full flex flex-col gap-1 p-1 border border-gray-600">
-            <div className="flex justify-between px-3 items-center">
-            <p className="uppercase">Only From MuniNews</p>
-            <Link to={'/'}>More...</Link>
+          <div className="w-full flex flex-col gap-4 p-1 pb-3 font-Poppins">
+              <p className="uppercase text-center font-Garramond text-6xl">Only From MuniNews</p>
+            <div className="w-full flex tablet:flex-row tablet:items-start phone:flex-col phone:items-center flex-wrap gap-2 justify-evenly">
+              <div className="flex tablet:w-[45%] phone:w-full gap-x-2 gap-y-4 laptop:justify-start phone:justify-center flex-wrap">
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>General</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="General" />
+                </div>
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>Business</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="Business" />
+                </div>
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>Sports</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="Sport" />
+                </div>
+              </div>
+              <div className="flex tablet:w-[45%] phone:w-full gap-x-2 gap-y-4 laptop:justify-start phone:justify-center flex-wrap">
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>Tech</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="Tech" />
+                </div>
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>Sciences</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="Sciences" />
+                </div>
+                <div className="flex flex-col w-64 gap-3 items-center">
+                  <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
+                    <p className="text-xs text-black/60 dark:text-white/60">More...</p>
+                    <h1>Politics</h1>
+                  </div>
+                  
+                  <MuniNewsIndex tag="Politics" />
+                </div>
+              </div>
             </div>
-            <MuniNewsIndex />
           </div>
         </div>
       </div>

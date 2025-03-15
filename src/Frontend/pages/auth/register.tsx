@@ -9,6 +9,7 @@ function RegisterForm() {
   const [verifyPassword, setVerifyPasswordUser] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const navigate=useNavigate()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const isPasswordSame = passwordUser === verifyPassword;
   const regexEmail =
@@ -64,6 +65,9 @@ function RegisterForm() {
         }),
       });
       const data = await response.json();
+      if(response.ok){
+        setTimeout(()=>navigate('/login'),2000)
+      }
       setError(data.messages);
     } catch (error) {}
   };

@@ -90,6 +90,7 @@ function FormEditNews({
         setIsLoading(false);
       }
     };
+    document.querySelector('.ql-editor')?.setAttribute('spellcheck','false')
     fetchNews();
   }, [news_id]);
   // fetch gambar

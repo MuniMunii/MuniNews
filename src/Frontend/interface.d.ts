@@ -41,7 +41,7 @@ declare global {
     createdBy: string;
     updatedAt: string;
     createdAt:string;
-    category: string;
+    category: Category;
     verified: boolean;
     status: statusNews;
     description: string;
@@ -56,5 +56,6 @@ declare global {
     image:string;
   }
   type statusNews="inreview"|"mynews"|"archived"|"cancelled"|"published"
+  type Category="General"|"Politics"|"Sciences"|"Tech"|"Sport"|"Business"
 }
 window.isLight = theme === "light";
