@@ -5,6 +5,7 @@ const cors = require("cors");
 const app = express();
 const authRoute = require("./routes/auth");
 const newsRoute = require("./routes/news");
+const otherRoute=require("./routes/other");
 const {sequelize} = require("./config/index");
 const path=require('path')
 const cookieparser=require('cookie-parser')
@@ -23,6 +24,7 @@ sequelize
   .catch((err) => console.log("error cannot sync with sequelize"));
 app.use(`/auth`, authRoute);
 app.use(`/news`, newsRoute);
+app.use('/other',otherRoute);
 app.use("/assets/cover", express.static(path.join(__dirname, "assets","cover")));
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -22,7 +22,7 @@ function BannerNews({muniNews,baseURL}:{muniNews:NewsKey[]|undefined,baseURL:str
           <div className="flex gap-2 text-xs">
             <p>
               Posted by:{" "}
-              <span className="text-pink-600">{muniNews?.[0].createdBy}</span>
+              <span className="text-blue-600">{muniNews?.[0].createdBy}</span>
             </p>
             <p className="pl-2 border-l border-l-gray-600">
               {muniNews?.[0].category}

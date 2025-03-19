@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// fetch untuk external api route
 function useFetch<T>(url: string,processData:(data:any)=>T){
   const [value, setValue] = useState<T|null>();
   const [isLoading, setIsLoading] = useState<boolean | null>(true);

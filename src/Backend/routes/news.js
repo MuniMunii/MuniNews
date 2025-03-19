@@ -1,8 +1,8 @@
 const express = require("express");
 const axios = require("axios");
-const { News, User } = require("../config/index.js");
+const { News, User, sequelize } = require("../config/index.js");
 const connection = require("../config/database.db");
-const { where, UUIDV4, Model } = require("sequelize");
+const { where, UUIDV4, Model, Op, fn, col } = require("sequelize");
 const router = express.Router();
 const uuid = require("uuid");
 const verifyToken = require("../middleware/token.js");
@@ -158,6 +158,20 @@ router.get("/query-news/:status", async (req, res) => {
     return res.status(403).json({ messages: "server error try again", error });
   }
 });
+router.post("/search-news",async (req,res)=>{
+  try{
+    let {value}=req.body
+    const news = await News.findAll({
+      where: sequelize.where(
+        sequelize.fn("LOWER", sequelize.col("name_news")),
+        "LIKE",
+        `%${value.toLowerCase()}%`
+      )
+    });
+  if(news.length===0){return res.status(404).json({messages:'ga ada news'})}
+    res.status(200).json({news})
+  }catch(error){return res.status(403).json({messages:'Failed to search'})}
+})
 // note 1 :benerin route ini 
 // get pakai query dan category parameter
 router.get("/query-news/:category", async (req, res) => {
@@ -289,6 +303,7 @@ router.post("/edit-news/save-value/:news_id", async (req, res) => {
   try {
     const news = await News.findOne({ where: { news_id: news_id } });
     if (!news) return res.status(403).json({ messages: "News not found" });
+    if (news.status==='published'&&news.status){await news.update({status:'archived',verified:false});return res.status(200).json({messages:'Status Archived'})}
     await news.update({
       name_news: title,
       description: description,

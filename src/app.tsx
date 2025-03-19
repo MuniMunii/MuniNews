@@ -42,8 +42,9 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Index />} />
         <Route path={"/newslist"} element={<NewsIndex />} />
-        <Route path={"/login"} element={<LoginForm />} />
+        <Route path={"/newslist/:category"}></Route>
         <Route path={"/read/:news_id"} element={<NewsPage />} />
+        <Route path={"/login"} element={<LoginForm />} />
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
