@@ -3,7 +3,7 @@ const router=express.Router();
 const axios=require('axios');
 router.get('/weather-current',async (req,res)=>{
     try{
-    const baseURLWeatherApi='http://api.weatherapi.com/v1/current.json'
+    const baseURLWeatherApi='https://api.weatherapi.com/v1/current.json'
     const apiKey=process.env.API_KEY_WEATHER
     const cities=['Jakarta','kuala lumpur','tokyo','singapore','dubai','new york','seoul','berlin','london','paris','vienna']
     const cityRequest=cities.map((city)=>{return axios.get(`${baseURLWeatherApi}?key=${apiKey}&q=${city}`)})

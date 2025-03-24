@@ -16,6 +16,7 @@ import BannerNews from "../component/index/bannerNews";
 import PageNotFound from "../component/404Page";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import SearchNews from "../component/index/searchNews";
+import WeatherStatus from "../component/index/weatherStatus";
 function NewsIndex() {
   const [muniNews, setMuniNews] = useState<NewsKey[] | undefined>();
   const [query, setQuery] = useState<number>(1);
@@ -54,21 +55,12 @@ function NewsIndex() {
       news: data.results as PublicNews[] | undefined,
     })
   );
-  const { value: Weather, isLoading: isLoadingWeather } = useFetch(
-    `${baseURL}/other/weather-current`,
-    (data) => ({
-      country: data.weatherData.map((data: any) => {
-        return {
-          country: data.weather.location.name,
-          cel: data.weather.current.temp_c,
-          condition: data.weather.current.condition.icon,
-        };
-      }),
-    })
-  );
-  // console.log(Weather?.country)
   function MuniNewsIndex({ tag }: { tag: Category }) {
-    return muniNews
+    return isLoading?<div className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group flex flex-col gap-y-2">
+      <div className="w-full h-5 rounded-full bg-gray-500 animate-pulse"></div>
+      <div className="w-[90%] h-5 rounded-full bg-gray-500 animate-pulse"></div>
+      <div className="w-1/2 h-5 rounded-full bg-gray-500 animate-pulse"></div>
+    </div>:muniNews
       ?.filter((news) => news.category === tag && news.status === "published")
       .slice(0, 3)
       .sort(
@@ -79,7 +71,7 @@ function NewsIndex() {
         <Link
           to={`/read/${news.news_id}`}
           key={news.news_id}
-          className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group "
+          className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group"
         >
           <p className="group-hover:underline">{news.name_news}</p>
           <div className="flex flex-row-reverse gap-1 justify-end text-sm">
@@ -97,9 +89,9 @@ function NewsIndex() {
   // const RandomIndex=muniNews&&muniNews.length>0?Math.floor(Math.random()*(muniNews?.length??1)):1;
   return (
     <>
-    <div className="w-full h-9 border border-gray-600 flex justify-end px-8">
-      <SearchNews/>
-    </div>
+    <div className="w-72 h-12 flex justify-end items-center px-8 pt-2 ml-auto max-tablet:mx-auto relative">
+  <SearchNews/>
+</div>
       <div className="w-full h-full mx-auto flex flex-col my-3 relative">
         <div className="w-[90%] mx-auto h-fit border border-gray-600 rounded-md flex justify-between">
           <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
@@ -293,34 +285,7 @@ function NewsIndex() {
           </div>
           {/* Weather */}
           {isWideScreen ? (
-            isLoadingWeather ? (
-              <div className="w-1/4 ml-auto flex justify-center border-l border-l-gray-600">
-                <LoadingComp error={null} />
-              </div>
-            ) : (
-              <div className="w-1/4 h-full border-l border-l-gray-600 ml-auto flex flex-col justify-start gap-4 p-3 font-Poppins">
-                <p className="text-center text-blue-700 text-2xl font-semibold font-Poppins tracking-widest uppercase border-b-2 border-b-hotOrange dark:border-b-pastelTosca dark:text-white">
-                  Weather
-                </p>
-                {Weather?.country.map((country: any, index: number) => (
-                  <div className="w-full flex justify-between items-center font-semiBold gap-2">
-                    <div>
-                      <p className="font-semibold">{country.country}</p>
-                      <p
-                        className={`${
-                          Math.floor(country.cel) > 20
-                            ? "text-red-600"
-                            : "text-blue-600"
-                        }`}
-                      >
-                        {country.cel}°
-                      </p>
-                    </div>
-                    <img src={country.condition} alt={country.condition} />
-                  </div>
-                ))}
-              </div>
-            )
+            <WeatherStatus/>
           ) : null}
         </div>
         <BannerNews
@@ -335,7 +300,7 @@ function NewsIndex() {
         />
         <div className="w-[90%] mx-auto">
           <div className="w-full flex flex-col gap-4 p-1 pb-3 font-Poppins">
-            <p className="uppercase text-center font-Garramond text-6xl">
+            <p id="newstitle" className="uppercase text-center font-Garramond text-6xl">
               Only From MuniNews
             </p>
             <div className="w-full flex tablet:flex-row tablet:items-start phone:flex-col phone:items-center flex-wrap gap-2 justify-evenly">

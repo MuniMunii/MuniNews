@@ -174,19 +174,15 @@ router.post("/search-news",async (req,res)=>{
 })
 // note 1 :benerin route ini 
 // get pakai query dan category parameter
-router.get("/query-news/:category", async (req, res) => {
+router.get("/query-news-category/:category", async (req, res) => {
   try {
-    const {status}=req.params
+    const {category}=req.params
     let {pages}=req.query
     pages=parseInt(pages)||1
-    const getAllNews = status==='all'?
-    await News.findAll({
-      include: [
-        { model: User, as: "nama_user", attributes: ["nama_user"] }
-      ],
-      order: [["updatedAt", "DESC"]]
-    }):await News.findAll({
-      where: { status: status },
+    const categoryList=["Tech",'Business','Sciences','Politics','General','Sport']
+    if(!categoryList.includes(category)){return res.status(403).json({messages:'Category not found'})}
+    const getAllNews =await News.findAll({
+      where: { category: category,verified:true },
       include: [
         { model: User, as: "nama_user", attributes: ["nama_user"] }
       ],
@@ -284,12 +280,26 @@ router.get("/my-news", verifyToken, async (req, res) => {
 // router get news value sesuai param/idnews
 router.get("/get-news/:news_id", async (req, res) => {
   const { news_id } = req.params;
-  const news = await News.findOne({ where: { news_id: news_id } });
+  try {
+  const news = await News.findOne({include: [{ model: User, as: "nama_user", attributes: ["nama_user"] }],where: { news_id: news_id } });
+  const user=await User.findOne({where:{id:news.createdBy}})
   if (!news) {
     return res.status(403).json({ messages: "News not found" });
   }
-  try {
-    res.status(200).json({ messages: "News found", news });
+    const sterilizeNews={
+      news_id: news.news_id,
+      name_news: news.name_news,
+      createdBy: user.nama_user,
+      createdAt: news.createdAt,
+      updatedAt: news.updatedAt,
+      category: news.category,
+      verified: news.verified,
+      status: news.status,
+      description: news.description,
+      content: news.content,
+      cover: news.cover,
+    }
+    res.status(200).json({ messages: "News found", news:sterilizeNews });
   } catch (error) {
     return res.status(403).json({ messages: "server error try again", error });
   }

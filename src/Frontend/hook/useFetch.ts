@@ -6,7 +6,7 @@ function useFetch<T>(url: string,processData:(data:any)=>T){
   useEffect(()=>{
     setIsLoading(true);
     fetch(url,
-      {method:'get',credentials:'include',headers:{ "Content-Type": "application/json" }}
+      {method:'get',credentials:'include',headers:{ "Content-Type": "application/json", }}
     )
     .then((response) => response.json())
     .then((data) => {

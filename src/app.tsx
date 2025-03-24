@@ -18,6 +18,7 @@ import ReviewNews from "./Frontend/pages/admin/reviewNews";
 import NewsList from "./Frontend/pages/admin/newsList";
 import NewsListCategory from "./Frontend/pages/admin/newsListCategory";
 import NewsPage from "./Frontend/pages/news";
+import IndexNewsListCategory from "./Frontend/pages/newsListCategory";
 function App() {
   const { theme } = useTheme();
   const isLight=theme==='light'
@@ -42,7 +43,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Index />} />
         <Route path={"/newslist"} element={<NewsIndex />} />
-        <Route path={"/newslist/:category"}></Route>
+        <Route path={"/newslist/:category"} element={<IndexNewsListCategory/>}></Route>
         <Route path={"/read/:news_id"} element={<NewsPage />} />
         <Route path={"/login"} element={<LoginForm />} />
         <Route path={"/register"} element={<RegisterForm />} />

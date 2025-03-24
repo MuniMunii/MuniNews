@@ -44,8 +44,8 @@ body{
     flex-direction: column;
 }
 article ol{
-  margin-left: 10%;
-    list-style: decimal !important;
+  margin-left: 5%;
+    list-style: inherit !important;
 }
 article a{
     text-decoration: none !important;
