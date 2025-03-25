@@ -13,8 +13,7 @@ import { FaRegNewspaper } from "react-icons/fa";
 import LoadingComp from "../component/loadingComp";
 import { Link } from "react-router-dom";
 import BannerNews from "../component/index/bannerNews";
-import PageNotFound from "../component/404Page";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import {motion}from "framer-motion"
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
 function NewsIndex() {
@@ -89,7 +88,7 @@ function NewsIndex() {
   // const RandomIndex=muniNews&&muniNews.length>0?Math.floor(Math.random()*(muniNews?.length??1)):1;
   return (
     <>
-    <div className="w-72 h-12 flex justify-end items-center px-8 pt-2 ml-auto max-tablet:mx-auto relative">
+    <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
   <SearchNews/>
 </div>
       <div className="w-full h-full mx-auto flex flex-col my-3 relative">
@@ -215,7 +214,7 @@ function NewsIndex() {
           </Link>
           <Link
             className="text-black/60 hover:text-black/100 dark:text-white/60 dark:hover:text-white/100 transition duration-200"
-            to={"science/"}
+            to={"sciences/"}
           >
             Science
           </Link>
@@ -256,7 +255,7 @@ function NewsIndex() {
                 <div className="bg-gray-500 size-16 animate-pulse"></div>
               </div>
             ) : (
-              muniNews?.sort(
+              muniNews?.filter(news=>news.verified).sort(
                 (a, b) =>
                   new Date(b.updatedAt).getTime() -
                   new Date(a.updatedAt).getTime()
@@ -305,7 +304,7 @@ function NewsIndex() {
             </p>
             <div className="w-full flex tablet:flex-row tablet:items-start phone:flex-col phone:items-center flex-wrap gap-2 justify-evenly">
               <div className="flex tablet:w-[45%] phone:w-full gap-x-2 gap-y-4 laptop:justify-start phone:justify-center flex-wrap">
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex bg-[#B3DEE2] dark:bg-transparent flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`general`}
@@ -318,7 +317,7 @@ function NewsIndex() {
 
                   <MuniNewsIndex tag="General" />
                 </div>
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`business`}
@@ -331,7 +330,7 @@ function NewsIndex() {
 
                   <MuniNewsIndex tag="Business" />
                 </div>
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`sport`}
@@ -346,7 +345,7 @@ function NewsIndex() {
                 </div>
               </div>
               <div className="flex tablet:w-[45%] phone:w-full gap-x-2 gap-y-4 laptop:justify-start phone:justify-center flex-wrap">
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`tech`}
@@ -359,7 +358,7 @@ function NewsIndex() {
 
                   <MuniNewsIndex tag="Tech" />
                 </div>
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`sciences`}
@@ -372,7 +371,7 @@ function NewsIndex() {
 
                   <MuniNewsIndex tag="Sciences" />
                 </div>
-                <div className="flex flex-col w-64 gap-3 items-center">
+                <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
                   <div className="flex flex-row-reverse items-center w-full justify-between px-3 py-1 border border-gray-600 rounded-full">
                     <Link
                       to={`politics`}
@@ -388,6 +387,13 @@ function NewsIndex() {
             </div>
           </div>
         </div>
+        <motion.div className="w-full  h-32 bg-gradient-to-b from-lightOrange to-mediumOrange  dark:from-darkTheme dark:to-violet-950 flex justify-center items-center flex-col gap-2" initial={{x:-100}} whileInView={{x:0}}>
+          <p className="font-Poppins text-2xl uppercase text-center">Start Write your News/Article Now!</p>
+          <div className="flex gap-2">
+          <Link to={'/register'} className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md">Sign Up</Link>
+          <Link to={'/login'} className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md">Login</Link>
+          </div>
+        </motion.div>
       </div>
       <FooterComp />
     </>

@@ -84,7 +84,10 @@ function NewsPage() {
               ? `${Math.floor(
                   (new Date().getTime() - new Date(news.updatedAt).getTime()) /
                     (1000 * 60 * 60 * 24)
-                )} Days Ago`
+                )?`${Math.floor(
+                  (new Date().getTime() - new Date(news.updatedAt).getTime()) /
+                    (1000 * 60 * 60 * 24)
+                )} Days Ago`:'Today'}`
               : ""}
           </p>
         </div>

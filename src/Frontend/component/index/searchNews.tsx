@@ -86,7 +86,7 @@ function SearchNews() {
             <Link
             to={`/read/${newsItem.news_id}`}
               key={newsItem.news_id}
-              className="p-2 h-fit search-dropdown hover:bg-gray-100 cursor-pointer border-b border-b-gray-600 last:border-b-transparent"
+              className="p-2 h-fit search-dropdown hover:bg-gray-200 cursor-pointer border-b border-b-gray-600 last:border-b-transparent"
               role="option"
               onMouseDown={() => setTimeout(() => setSearchDropdown(false), 100)}
               onClick={() => {
@@ -94,7 +94,8 @@ function SearchNews() {
                 setSearchDropdown(false);
               }}
             >
-              {newsItem.name_news}
+              <p>{newsItem.name_news}</p>
+              <p className="text-gray-600 text-sm uppercase">{newsItem.category}</p>
             </Link>
           ))
         ) : (

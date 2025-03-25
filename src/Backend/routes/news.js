@@ -173,11 +173,11 @@ router.post("/search-news",async (req,res)=>{
   }catch(error){return res.status(403).json({messages:'Failed to search'})}
 })
 // note 1 :benerin route ini 
-// get pakai query dan category parameter
-router.get("/query-news-category/:category", async (req, res) => {
+// get pakai param dan category parameter
+router.get("/query-news-category/:category/:pages", async (req, res) => {
   try {
     const {category}=req.params
-    let {pages}=req.query
+    let {pages}=req.params
     pages=parseInt(pages)||1
     const categoryList=["Tech",'Business','Sciences','Politics','General','Sport']
     if(!categoryList.includes(category)){return res.status(403).json({messages:'Category not found'})}
