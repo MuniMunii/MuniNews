@@ -6,7 +6,27 @@ Project for My Internship Program
 empty
 
 ## Getting Started
-
+### Feature
+* Change Theme Dark/light
+* Reset Password That directly sent link into email user using token
+* Publish News With approval Admin that can be seen into email user if the news Rejected/Published
+* Fetching with loading Effect/Skeleton Effect
+* Search feature
+* Responsive for all devices
+* Auto Save Archived News
+* Modal Component for interactive UI/UX
+* Fetch news with Queries
+* Display Current Weather
+#### External Api
+* [Weather API](https://www.weatherapi.com/)
+* [Newsdata.io](https://newsdata.io/)
+### Sneak Peak
+![index](assets/indexchangetheme.gif)
+![Login](assets/Loginscreen.png)
+![newsindex](assets/newsindex.gif)
+![loading](assets/skeletonloading.)
+![dashboardadmin](assets/dashboardadmin.gif)
+![adminpublishnews](assets/adminpublishnews.gif)
 ### Dependencies
 * Windows 10
 #### Frontend
@@ -27,9 +47,8 @@ empty
 * jsonwebtoken
 * Sequelizer
 * Axios
+* Multer
 * Node Mailer
-
-
 ### Installing
 
 * How/where to download your program
