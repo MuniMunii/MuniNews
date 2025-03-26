@@ -55,11 +55,12 @@ command to run if program contains helper info
 Contributors names and contact info
 
 ex. Ramzi Akbar Ramadhan
+
 ex. [@Ramzi Akbar Ramadhan](https://www.linkedin.com/in/ramzi-akbar-ramadhan-b8b05a243/)
 
 ## Version History
 * 0.1
-    * See [commit change]() or See [release history]()
+    * See [commit change](https://github.com/MuniMunii/MuniNews/commits/main/)
 ## License
 
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
