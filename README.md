@@ -24,7 +24,7 @@ empty
 ![index](assets/indexchangetheme.gif)
 ![Login](assets/Loginscreen.png)
 ![newsindex](assets/newsindex.gif)
-![loading](assets/skeletonloading.)
+![loading](assets/skeletonloading.gif)
 ![dashboardadmin](assets/dashboardadmin.gif)
 ![adminpublishnews](assets/adminpublishnews.gif)
 ### Dependencies
