@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useFetch from "../hook/useFetch";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
 import DOMPurify from "dompurify";
 import LoadingComp from "../component/loadingComp";
@@ -76,7 +76,7 @@ function NewsPage() {
           {news?.name_news}
         </h1>
         <div className="flex justify-between text-sm text-black/70 dark:text-gray-400">
-          <p className="">Posted By : <span className="text-blue-600">{news?.createdBy}</span></p>
+          <Link to={`/user/${news?.createdBy}`} className="">Posted By : <span className="text-blue-600 hover:underline">{news?.createdBy}</span></Link>
           <p>
             {" "}
             {news?.updatedAt &&

@@ -19,12 +19,14 @@ import NewsList from "./Frontend/pages/admin/newsList";
 import NewsListCategory from "./Frontend/pages/admin/newsListCategory";
 import NewsPage from "./Frontend/pages/news";
 import IndexNewsListCategory from "./Frontend/pages/newsListCategory";
+import EditProfile from "./Frontend/pages/user/editProfile";
+import UserInfo from "./Frontend/pages/userInfo";
 function App() {
   const { theme } = useTheme();
   const isLight=theme==='light'
   const {user,isAuthenticated,role}=useUser()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  const ProtectedRoute = ({ isAuthenticated }: { isAuthenticated: string }) => {
+  const ProtectedRoute = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     if (!isAuthenticated) {
       return <Navigate to={"/login"} replace />;
     }
@@ -45,15 +47,17 @@ function App() {
         <Route path={"/newslist"} element={<NewsIndex />} />
         <Route path={"/newslist/:category"} element={<IndexNewsListCategory/>}></Route>
         <Route path={"/read/:news_id"} element={<NewsPage />} />
+        <Route path={"/user/:nama_user"} element={<UserInfo />} />
         <Route path={"/login"} element={<LoginForm />} />
         <Route path={"/register"} element={<RegisterForm />} />
         <Route path={"/forgot-password"} element={<ForgotPassword />} />
         <Route path={"/reset-password/:token"} element={<ResetPassword />} />
         <Route path={"/test-comp"} element={<LoadingComp error={null} />} />
-        <Route element={<ProtectedRoute isAuthenticated={user} />}>
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           {role === "journalist" ? (
             <>
               <Route path={`/${user}/dashboard`} element={<DashboardUser />} />
+              <Route path={`/${user}/dashboard/edit-profile`} element={<EditProfile />} />
               <Route
                 path={`/${user}/edit-news/:news_id`}
                 element={<EditNews />}

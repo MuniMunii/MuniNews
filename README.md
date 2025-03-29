@@ -45,7 +45,7 @@ empty
 * MySQL
 ##### Libraries
 * jsonwebtoken
-* Sequelizer
+* Sequelize
 * Axios
 * Multer
 * Node Mailer

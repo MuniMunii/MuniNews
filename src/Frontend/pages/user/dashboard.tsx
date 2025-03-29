@@ -5,12 +5,16 @@ import AddNewsForm from "../../component/user/addNewsForm";
 import CardComponent from "../../component/user/CardComponent";
 import "../../style/animation.css"
 import LoadingComp from "../../component/loadingComp";
-
+import { Link } from "react-router-dom";
+import { CiMenuKebab } from "react-icons/ci";
+import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import {IoPerson}from"react-icons/io5" 
 function DashboardUser() {
   const [isActive, setIsActive] = useState<statusNews>('mynews');
   const [modalPopUp, setModalPopUp] = useState<boolean>(false);
   const [error, setError] = useState<string|boolean|null>(null);
   const [reload, setIsReload] = useState<boolean>(false);
+  const [userState,setUserState]=useState<Userkey>()
   const [modalMakeNews, setModalMakeNews] = useState<boolean>(false);
   const [isLoading,setIsLoading]=useState<Boolean>(true)
   const [myNews, setMyNews] = useState<NewsKey[] | null>(null);
@@ -31,8 +35,17 @@ function DashboardUser() {
       const data = await response.json();
       setMyNews(data.news);}catch(error){console.log(error)}finally{setIsLoading(false)}
     };
+    const getUser = async () => {
+      try{
+      const response = await fetch(`${baseURL}/user/get-user/${user}`, {
+        credentials: "include",
+      });
+      const data = await response.json();
+      setUserState(data.user);}catch(error){console.log(error)}finally{setIsLoading(false)}
+    };
+    getUser()
     getNews();
-  }, [reload]);
+  }, []);
   useEffect(() => {
     console.log(isActive);
   }, [isActive]);
@@ -51,7 +64,7 @@ function DashboardUser() {
   // console.log(userInfo?.me);
   const NavDashboard = () => {
     return (
-      <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b border-b-black dark:border-b-white `}>
+      <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b border-b-gray-600 `}>
         <div className="flex flex-wrap gap-2">
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300 text-black dark:text-white   rounded-md flex items-center justify-center ${
@@ -112,13 +125,22 @@ function DashboardUser() {
     <div className="diagonal-pattern">
       <div className="mx-auto w-[90%] max-w-[800px] laptop:h-screen phone:h-full flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div
-          className={`laptop:block laptop:w-1/3 flex bg-white dark:bg-darkTheme  items-center gap-3 p-4 border border-gray-600`}
+          className={`laptop:block laptop:w-1/3 laptop:pr-8 flex-col bg-white dark:bg-darkTheme items-center gap-2 p-4 border border-gray-600`}
         >
-          <div className="bg-black size-32 rounded-full"></div>
+          <div className="flex items-center gap-2 border-b border-gray-600 pb-2 relative">
+            <Link to={'edit-profile'} className="py-1 px-3 rounded-md dark:bg-blue-500 bg-lightOrange absolute right-0 top-0 flex items-center justify-center gap-1">Edit<CiMenuKebab className="text-black"/></Link>
+          {userState?.image?<img src={`${baseURL}${userState?.image}`} className="size-32 rounded-full"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
           <p className="">{user}</p>
+          </div>
+          <p className="text-center italic font-Poppins text-sm py-2 border-b border-b-gray-600">{userState?.description?userState.description:'This user not created description yet'}</p>
+          <div className="flex gap-2 text-xl w-full justify-center py-2">
+            {userState?.facebook?<a href={userState.facebook} target="_blank"><FaFacebook className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+            {userState?.twitter?<a href={userState?.twitter} target="_blank"><FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+            {userState?.instagram?<a href={userState.instagram} target="_blank"><FaInstagram className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+          </div>
         </div>
         <div className={`phone:h-fit laptop:h-full border bg-white border-gray-600 dark:bg-darkTheme w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>
-        <div className={`laptop:h-[90%] laptop:pb-0 phone:h-full phone:pb-32`}>
+        <div className={`laptop:h-[90%] laptop:pb-0 phone:h-full phone:pb-44`}>
           <NavDashboard />
           <div className={`p-4 text-black h-full w-full phone:overflow-hidden laptop:overflow-auto scrollbar-thin scrollbar-thumb-rounded-[10px] scrollbar-thumb-violet-950 dark:scrollbar-thumb-white dark:text-white scrollbar-track-slate-300/40 flex flex-wrap gap-2 justify-center`}>
           {isLoading&&<LoadingComp error={error}/>}

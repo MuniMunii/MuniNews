@@ -80,10 +80,12 @@ function IndexNewsListCategory() {
                   to={`/read/${news?.[0].news_id}`}
                   className="w-full h-full mx-auto border-b border-b-hotOrange dark:border-b-pastelTosca py-2 group"
                 >
+                  <div className="w-full overflow-hidden rounded-md">
                   <img
                     src={`${baseURL}${news?.[0].cover}`}
-                    className="w-full rounded-md"
+                    className="w-full group-hover:scale-105 transition-all duration-300"
                   />
+                  </div>
                   <h3 className="font-Garramond text-4xl group-hover:underline">
                     {news?.[0].name_news}
                   </h3>
@@ -109,10 +111,12 @@ function IndexNewsListCategory() {
                       )} Days Ago`
                     : "Today";
                   return (
+                    <>
+                    <div className="border-b border-b-hotOrange dark:border-b-pastelTosca flex flex-col py-2">
                     <Link
                       to={`/read/${newsItem.news_id}`}
                       key={`odd-${newsItem.name_news}`}
-                      className="border-b border-b-hotOrange dark:border-b-pastelTosca flex tablet:flex-row phone:flex-col gap-2 py-2 group"
+                      className=" group flex tablet:flex-row phone:flex-col gap-2"
                     >
                       <img
                         src={`${baseURL}${newsItem.cover}`}
@@ -123,14 +127,16 @@ function IndexNewsListCategory() {
                           {newsItem.name_news}
                         </p>
                         <p className="text-gray-600 dark:text-gray-400">{newsItem.description}</p>
-                        <div className="flex gap-2 items-center text-sm">
-                          <p className="pr-2 border-r border-r-gray-600 text-blue-600">
-                            {newsItem.createdBy}
-                          </p>
-                          <p>{Time}</p>
-                        </div>
                       </div>
                     </Link>
+                    <div className="flex gap-2 items-center text-sm">
+                          <Link to={`/user/${newsItem.createdBy}`} className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline">
+                            {newsItem.createdBy}
+                          </Link>
+                          <p>{Time}</p>
+                        </div>
+                        </div>
+                    </>
                   );
                 })}
               </div>
@@ -151,6 +157,7 @@ function IndexNewsListCategory() {
                       )} Days Ago`
                     : "Today";
                   return (
+                    <>
                     <Link
                       to={`/read/${newsItem.news_id}`}
                       key={`odd-${newsItem.news_id}`}
@@ -166,13 +173,14 @@ function IndexNewsListCategory() {
                         </p>
                         <p className="text-gray-600 dark:text-gray-400">{newsItem.description}</p>
                         <div className="flex gap-2 items-center text-sm">
-                          <p className="pr-2 border-r border-r-gray-600 text-blue-600">
+                          <Link to={`/user/${newsItem.createdBy}`} className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline z-30">
                             {newsItem.createdBy}
-                          </p>
+                          </Link>
                           <p>{Time}</p>
                         </div>
                       </div>
                     </Link>
+                    </>
                   );
                 })}
               {(news || []).length % 5 !== 0 ? (

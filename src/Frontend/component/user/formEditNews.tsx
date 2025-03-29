@@ -94,6 +94,7 @@ function FormEditNews({
     fetchNews();
   }, [news_id]);
   // fetch gambar
+  //
   const uploadCover = async (formData: FormData) => {
     try {
       const response = await fetch(

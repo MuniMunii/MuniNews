@@ -50,11 +50,15 @@ declare global {
   }
   interface Userkey{
     id:string;
-    nama_user:string;
     isAuth:boolean;
+    nama_user:string;
+    description:string;
+    instagram:string;
+    facebook:string;
+    twitter:string;
     role:string;
     image:string;
-  }
+}
   type statusNews="inreview"|"mynews"|"archived"|"cancelled"|"published"
   type Category="General"|"Politics"|"Sciences"|"Tech"|"Sport"|"Business"
 }

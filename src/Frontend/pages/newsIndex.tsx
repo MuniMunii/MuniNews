@@ -13,7 +13,7 @@ import { FaRegNewspaper } from "react-icons/fa";
 import LoadingComp from "../component/loadingComp";
 import { Link } from "react-router-dom";
 import BannerNews from "../component/index/bannerNews";
-import {motion}from "framer-motion"
+import { motion } from "framer-motion";
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
 function NewsIndex() {
@@ -55,42 +55,55 @@ function NewsIndex() {
     })
   );
   function MuniNewsIndex({ tag }: { tag: Category }) {
-    return isLoading?<div className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group flex flex-col gap-y-2">
-      <div className="w-full h-5 rounded-full bg-gray-500 animate-pulse"></div>
-      <div className="w-[90%] h-5 rounded-full bg-gray-500 animate-pulse"></div>
-      <div className="w-1/2 h-5 rounded-full bg-gray-500 animate-pulse"></div>
-    </div>:muniNews
-      ?.filter((news) => news.category === tag && news.status === "published")
-      .slice(0, 3)
-      .sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-      )
-      .map((news, index) => (
-        <Link
-          to={`/read/${news.news_id}`}
-          key={news.news_id}
-          className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group"
-        >
-          <p className="group-hover:underline">{news.name_news}</p>
-          <div className="flex flex-row-reverse gap-1 justify-end text-sm">
-            <p className="pl-1 border-l border-l-gray-600 break-page-all">
-              {news.category}
-            </p>
-            <p className="text-blue-600">{news.createdBy}</p>
-          </div>
-          <p className="text-xs text-left">
-            {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
-          </p>
-        </Link>
-      ));
+    return isLoading ? (
+      <div className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2 group flex flex-col gap-y-2">
+        <div className="w-full h-5 rounded-full bg-gray-500 animate-pulse"></div>
+        <div className="w-[90%] h-5 rounded-full bg-gray-500 animate-pulse"></div>
+        <div className="w-1/2 h-5 rounded-full bg-gray-500 animate-pulse"></div>
+      </div>
+    ) : (
+      muniNews
+        ?.filter((news) => news.category === tag && news.status === "published")
+        .slice(0, 3)
+        .sort(
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        )
+        .map((news, index) => (
+          <>
+            <div className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2">
+              <Link
+                to={`/read/${news.news_id}`}
+                key={news.news_id}
+                className="group"
+              >
+                <p className="group-hover:underline">{news.name_news}</p>
+              </Link>
+              <div className="flex flex-row-reverse gap-1 justify-end text-sm">
+                <p className="pl-1 border-l border-l-gray-600 break-page-all">
+                  {news.category}
+                </p>
+                <Link
+                  to={`/user/${news.createdBy}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {news.createdBy}
+                </Link>
+              </div>
+              <p className="text-xs text-left">
+                {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
+              </p>
+            </div>
+          </>
+        ))
+    );
   }
   // const RandomIndex=muniNews&&muniNews.length>0?Math.floor(Math.random()*(muniNews?.length??1)):1;
   return (
     <>
-    <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
-  <SearchNews/>
-</div>
+      <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
+        <SearchNews />
+      </div>
       <div className="w-full h-full mx-auto flex flex-col my-3 relative">
         <div className="w-[90%] mx-auto h-fit border border-gray-600 rounded-md flex justify-between">
           <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
@@ -175,24 +188,33 @@ function NewsIndex() {
                   )
                   .slice(0, 5)
                   .map((news, index) => (
-                    <Link
-                      to={`/read/${news.news_id}`}
-                      key={`recent-news-${news.news_id}`}
-                      className="w-full h-fit p-2 border-x border-gray-600 group cursor-pointer"
-                    >
-                      <p className="group-hover:underline">{news.name_news}</p>
-                      <div className="w-full flex justify-start gap-2 text-xs pointer-events-none">
-                        <p>
-                          Posted by:{" "}
-                          <span className="text-blue-600">
-                            {news.createdBy}
-                          </span>
-                        </p>
-                        <p className="border-l border-l-gray-600 pl-2 ">
-                          {news.category}
-                        </p>
+                    <>
+                      <div className="w-full h-fit p-2 border-x border-gray-600">
+                        <Link
+                          to={`/read/${news.news_id}`}
+                          key={`recent-news-${news.news_id}`}
+                          className=" group "
+                        >
+                          <p className="group-hover:underline">
+                            {news.name_news}
+                          </p>
+                        </Link>
+                        <div className="w-full flex justify-start gap-2 text-xs">
+                          <Link
+                            to={`/user/${news.createdBy}`}
+                            className="flex gap-1 items-center"
+                          >
+                            Posted by:{" "}
+                            <span className="text-blue-600 hover:underline">
+                              <p>{news.createdBy}</p>
+                            </span>
+                          </Link>
+                          <p className="border-l border-l-gray-600 pl-2 ">
+                            {news.category}
+                          </p>
+                        </div>
                       </div>
-                    </Link>
+                    </>
                   ))
               )}
             </div>
@@ -255,37 +277,55 @@ function NewsIndex() {
                 <div className="bg-gray-500 size-16 animate-pulse"></div>
               </div>
             ) : (
-              muniNews?.filter(news=>news.verified).sort(
-                (a, b) =>
-                  new Date(b.updatedAt).getTime() -
-                  new Date(a.updatedAt).getTime()
-              ).slice(0, 8).map((news, index) => (
-                <Link
-                to={`/read/${news.news_id}`}
-                  key={`news-list-vertical-${news.news_id}`}
-                  className="w-full flex justify-between gap-7 p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca"
-                >
-                  <div className="flex flex-col gap-1">
-                    <p className="text-xl group-hover:underline">{news.name_news}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{news.description}</p>
-                    <div className="flex text-sm gap-2">
-                      <p className="text-blue-600">{news.createdBy}</p>
-                      <p className="pl-2 border-l border-l-gray-600">{news.category}</p>
+              muniNews
+                ?.filter((news) => news.verified)
+                .sort(
+                  (a, b) =>
+                    new Date(b.updatedAt).getTime() -
+                    new Date(a.updatedAt).getTime()
+                )
+                .slice(0, 8)
+                .map((news, index) => (
+                  <>
+                  <div className="w-full flex flex-col justify-between  p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca">
+                  <Link
+                    to={`/read/${news.news_id}`}
+                    key={`news-list-vertical-${news.news_id}`}
+                    className="group flex gap-7"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xl group-hover:underline">
+                        {news.name_news}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {news.description}
+                      </p>
+                      
                     </div>
+                    <img
+                      src={`${baseURL}${news.cover}`}
+                      alt={`img-${news.name_news}`}
+                      className="w-24 h-12"
+                    />
+                  </Link>
+                  <div className="w-full text-left flex text-sm gap-2">
+                        <Link
+                          to={`/user/${news.createdBy}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {news.createdBy}
+                        </Link>
+                        <p className="pl-2 border-l border-l-gray-600">
+                          {news.category}
+                        </p>
+                      </div>
                   </div>
-                  <img
-                    src={`${baseURL}${news.cover}`}
-                    alt={`img-${news.name_news}`}
-                    className="w-24 h-12"
-                  />
-                </Link>
-              ))
+                  </>
+                ))
             )}
           </div>
           {/* Weather */}
-          {isWideScreen ? (
-            <WeatherStatus/>
-          ) : null}
+          {isWideScreen ? <WeatherStatus /> : null}
         </div>
         <BannerNews
           baseURL={`${baseURL}`}
@@ -299,7 +339,10 @@ function NewsIndex() {
         />
         <div className="w-[90%] mx-auto">
           <div className="w-full flex flex-col gap-4 p-1 pb-3 font-Poppins">
-            <p id="newstitle" className="uppercase text-center font-Garramond text-6xl">
+            <p
+              id="newstitle"
+              className="uppercase text-center font-Garramond text-6xl"
+            >
               Only From MuniNews
             </p>
             <div className="w-full flex tablet:flex-row tablet:items-start phone:flex-col phone:items-center flex-wrap gap-2 justify-evenly">
@@ -387,11 +430,27 @@ function NewsIndex() {
             </div>
           </div>
         </div>
-        <motion.div className="w-full  h-32 bg-gradient-to-b from-lightOrange to-mediumOrange  dark:from-darkTheme dark:to-violet-950 flex justify-center items-center flex-col gap-2" initial={{x:-100}} whileInView={{x:0}}>
-          <p className="font-Poppins text-2xl uppercase text-center">Start Write your News/Article Now!</p>
+        <motion.div
+          className="w-full  h-32 bg-gradient-to-b from-lightOrange to-mediumOrange  dark:from-darkTheme dark:to-violet-950 flex justify-center items-center flex-col gap-2"
+          initial={{ x: -100 }}
+          whileInView={{ x: 0 }}
+        >
+          <p className="font-Poppins text-2xl uppercase text-center">
+            Start Write your News/Article Now!
+          </p>
           <div className="flex gap-2">
-          <Link to={'/register'} className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md">Sign Up</Link>
-          <Link to={'/login'} className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md">Login</Link>
+            <Link
+              to={"/register"}
+              className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md"
+            >
+              Sign Up
+            </Link>
+            <Link
+              to={"/login"}
+              className="border uppercase font-semibold border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue px-4 py-1 transition duration-300 rounded-md"
+            >
+              Login
+            </Link>
           </div>
         </motion.div>
       </div>

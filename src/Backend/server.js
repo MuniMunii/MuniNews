@@ -6,11 +6,14 @@ const app = express();
 const authRoute = require("./routes/auth");
 const newsRoute = require("./routes/news");
 const otherRoute=require("./routes/other");
+const userRoute = require("./routes/user");
 const {sequelize} = require("./config/index");
 const path=require('path')
 const cookieparser=require('cookie-parser')
 const port = 5000;
 app.use(cors({origin:'http://localhost:3000',credentials:true}));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieparser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,7 +28,9 @@ sequelize
 app.use(`/auth`, authRoute);
 app.use(`/news`, newsRoute);
 app.use('/other',otherRoute);
+app.use('/user',userRoute);
 app.use("/assets/cover", express.static(path.join(__dirname, "assets","cover")));
+app.use("/assets/user", express.static(path.join(__dirname, "assets","user")));
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -17,6 +17,22 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
       },
     },
+    description:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
+    instagram:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    facebook:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    twitter:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     role: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -9,6 +9,7 @@ const verifyToken = require("../middleware/token.js");
 const multer = require("multer");
 const path = require("path");
 const nodemailer = require("nodemailer");
+const fs=require('fs')
 const { URLSearchParams } = require("url");
 // const ss=require('../assets/cover')
 const storage = multer.diskStorage({
@@ -341,11 +342,16 @@ router.post(
       }
       if (!req.file) {
         return res.status(403).json({ messages: "no file uploaded" });
-      }
+      }else{ 
+        const oldImagePath=path.join(__dirname,`../${news.cover}`)
+        if(fs.existsSync(oldImagePath)){
+          await fs.promises.unlink(oldImagePath)
+        }
       const filePath = `/assets/${folder}/${req.file.filename}`;
       news.cover = filePath;
       await news.save();
-      res.status(200).json({ messages: "file uploaded", filePath });
+      return res.status(200).json({ messages: "file uploaded", filePath });
+      }
     } catch (error) {
       return res
         .status(403)
