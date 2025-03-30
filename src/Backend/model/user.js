@@ -23,15 +23,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     instagram:{
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     facebook:{
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     twitter:{
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     role: {
       type: DataTypes.STRING,

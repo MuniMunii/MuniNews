@@ -6,9 +6,14 @@ import DOMPurify from "dompurify";
 import LoadingComp from "../component/loadingComp";
 import PageNotFound from "../component/404Page";
 import { motion, useScroll } from "framer-motion";
+import { FaFacebook, FaInstagram} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { IoPerson } from "react-icons/io5";
+import { MdArrowOutward } from "react-icons/md";
 function NewsPage() {
   const { news_id } = useParams();
   const [news, setNews] = useState<NewsKey | undefined>();
+  const [user,setUser]=useState<Userkey>();
   const [error, setIsError] = useState<boolean | string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [idNotFound, setIdNotFound] = useState<boolean>(false);
@@ -54,6 +59,18 @@ function NewsPage() {
     };
     fetchNews();
   }, [news_id]);
+  useEffect(()=>{
+    const fetchUser=async ()=>{
+      try{
+        const response=await fetch(`${baseURL}/user/get-user-info/${news?.createdBy}/1`,{method:'get',credentials:'include'})
+        const data=await response.json()
+        if(response.ok){
+          setUser(data.user)
+        }
+      }catch(error){console.log(error)}
+    }
+    fetchUser()
+  },[news])
   const sanitizeContent = DOMPurify.sanitize(news?.content || "", {
     ALLOWED_TAGS: ["a", "ol", "li", "ul", "p", "b", "i", "strong", "em", "br"],
     ALLOWED_ATTR: ["href", "target", "rel", "data-list"],
@@ -71,7 +88,7 @@ function NewsPage() {
         style={{ scaleX: scrollYProgress || 0, originX: 0 }}
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-400 to-pink-700 dark:from-blue-400 dark:to-blue-700"
       ></motion.div>
-      <div className={`tablet:w-[60%] w-3/4 h-full mx-auto text-center mt-4`}>
+      <div className={`tablet:w-[60%] w-3/4 h-full mx-auto text-center mt-4 py-4`}>
         <h1 className="text-5xl font-Garramond mb-3 uppercase">
           {news?.name_news}
         </h1>
@@ -94,7 +111,7 @@ function NewsPage() {
         {news?.cover ? (
           <img
             src={`${baseURL}${news.cover}`}
-            className="mx-auto w-full tablet:h-96 h-80 border border-gray-600/40"
+            className="mx-auto w-full tablet:h-96 h-80 border border-gray-600/40 object-[100%_50%]"
           ></img>
         ) : (
           <div
@@ -111,6 +128,32 @@ function NewsPage() {
           dangerouslySetInnerHTML={{ __html: sanitizeContent }}
           className="text-justify text leading-8 font-Poppins list-decimal"
         />
+        <div className="w-full h-fit border-y border-y-gray-600 my-4 p-4">
+        <div className="flex gap-3 items-center justify-between flex-wrap">
+        <div className="flex items-center gap-3">
+          {user?.image?<img src={`${baseURL}${user?.image}`} className="size-16 rounded-full object-cover"/>:<div className="size-16 bg-black rounded-full flex justify-center items-center"><IoPerson/></div>}
+          <p className="text-left">Posted By: <span className="font-bold hover:underline"><Link to={`/user/${user?.nama_user}`}>{user?.nama_user}</Link></span> {user?.description?user?.description:'Check out other news from this user'}</p>
+          </div>
+        </div>
+          <div className="flex gap-2 w-fit">
+                            {user?.facebook ? (
+                              <a href={user.facebook} target="_blank">
+                                <FaFacebook className="hover:text-gray-700 dark:hover:text-black transition" />
+                              </a>
+                            ) : null}
+                            {user?.twitter ? (
+                              <a href={user?.twitter} target="_blank">
+                                <FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition" />
+                              </a>
+                            ) : null}
+                            {user?.instagram ? (
+                              <a href={user.instagram} target="_blank">
+                                <FaInstagram className="hover:text-gray-700 dark:hover:text-black transition" />
+                              </a>
+                            ) : null}
+                          </div>
+                          <Link to={`/user/${user?.nama_user}`} className="flex items-center gap-2 w-fit hover:underline mt-2">Check other news from this author<MdArrowOutward/></Link> 
+        </div>
       </div>
     </>
   );

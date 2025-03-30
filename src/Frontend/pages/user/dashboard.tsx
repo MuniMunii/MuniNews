@@ -129,7 +129,7 @@ function DashboardUser() {
         >
           <div className="flex items-center gap-2 border-b border-gray-600 pb-2 relative">
             <Link to={'edit-profile'} className="py-1 px-3 rounded-md dark:bg-blue-500 bg-lightOrange absolute right-0 top-0 flex items-center justify-center gap-1">Edit<CiMenuKebab className="text-black"/></Link>
-          {userState?.image?<img src={`${baseURL}${userState?.image}`} className="size-32 rounded-full"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
+          {userState?.image?<img src={`${baseURL}${userState?.image}`} className="size-32 rounded-full object-cover"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
           <p className="">{user}</p>
           </div>
           <p className="text-center italic font-Poppins text-sm py-2 border-b border-b-gray-600">{userState?.description?userState.description:'This user not created description yet'}</p>

@@ -35,6 +35,11 @@ function App() {
   // Note 1: styling dashboard sama reconstruct dashboard component biar Lebih rapih
   // Note 2: Ubah semua IsLight const pake selector Dark
   // Note 3: Buat Page for news Index
+  // Debugging
+  // O Success X Failed
+  // Register User (Validating,etc) O
+  // Login O
+  // Reset Password (Validating,Send Link to email,etc) O
   return (
     <div
       className={`App transition duration-150 ${

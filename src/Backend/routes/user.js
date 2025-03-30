@@ -7,6 +7,8 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const fs=require("fs");
 const news = require("../model/news");
+const { Op, fn, col } = require("sequelize");
+const sequelize=require('sequelize')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder;
@@ -90,12 +92,13 @@ router.post('/update-user/change-image/:id/:folder',upload.single('user'),async(
     return res.status(400).json({messages:'Error changing image (no image to be changed)'})
     }catch(err){return res.status(500).json({messages:'error changing image',error: err.toString()})}
 })
-router.post('/user-info/:nama_user/:page',async(req,res)=>{
+router.get('/get-user-info/:nama_user/:page',async(req,res)=>{
   try{
-    let {nama_user,page}=req.params
+    let {page}=req.params
+    const {nama_user}=req.params
     const user=await User.findOne({where:{nama_user:nama_user}})
     if(!user){return res.status(403).json({messages:'User not found'})}
-    const news=await News.findAll({where:{createdBy:user,verified:true,status:'published'},
+    const news=await News.findAll({where:{createdBy:user.id,verified:true,status:'published'},
       include: [
       { model: User, as: "nama_user", attributes: ["nama_user"] }
     ],
@@ -114,7 +117,7 @@ router.post('/user-info/:nama_user/:page',async(req,res)=>{
       twitter:user.twitter,
       role:user.role,
       image:user.image
-  }
+    }
     const sterilizeNews=news.slice(startNews,endNews).map((news)=>{
       return {
         news_id: news.news_id,
@@ -130,9 +133,24 @@ router.post('/user-info/:nama_user/:page',async(req,res)=>{
         cover: news.cover,
       }
     })
-    res.status(200).json({messages:'successfull fetched',news:sterilizeNews,user:sterilizeUser})
+    res.status(200).json({messages:'successfull fetched',user:sterilizeUser,news:sterilizeNews})
   }catch(error){
     return res.status(500).json({messages:'error fetching news'+error})
   }
+})
+router.post("/search-user",async (req,res)=>{
+  try{
+    let {value}=req.body
+    const user = await User.findAll({
+      where: {
+        [Op.and]: [
+          sequelize.where(fn("LOWER", col("nama_user")), "LIKE", `%${value.toLowerCase()}%`),
+          { role: { [Op.not]: "admin" } }
+        ]
+      }
+    });
+  if(user.length===0){return res.status(404).json({messages:'ga ada user'})}
+    res.status(200).json({user})
+  }catch(error){return res.status(403).json({messages:'Failed to search',error:error.toString()})}
 })
 module.exports=router;

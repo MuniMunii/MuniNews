@@ -154,6 +154,7 @@ router.post("/forgot-password", async (req, res) => {
   if (!user) {
     return res.status(403).json({ messages: "User not found" });
   }
+  try {
   const resetToken = crypto.randomBytes(32).toString("hex");
   user.resetToken = resetToken;
   user.resetTokenExpiry = Date.now() + ONE_HOUR;
@@ -173,9 +174,9 @@ router.post("/forgot-password", async (req, res) => {
     // nanti di style kalo ada waktu
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
   };
-  try {
-    const info = await transporter.sendMail(mail);
-    return res
+  
+    await transporter.sendMail(mail);
+     res
       .status(200)
       .json({ messages: "Mail is send, Check your email", token: resetToken });
   } catch (error) {
