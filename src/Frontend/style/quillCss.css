@@ -8,6 +8,7 @@
     spellcheck:false;
   }
   .ql-toolbar{
+    border-radius: 25px 25px 0 0;
     background-color: white;
   }
   .ql-container {
@@ -20,7 +21,7 @@
     color: black;
   }
   .ql-container {
-    
+    border-radius: 0 0 25px 25px;
     width: 100%;
     min-height: 400px;
     background-color: transparent;

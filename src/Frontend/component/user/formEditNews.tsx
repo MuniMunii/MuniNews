@@ -25,13 +25,18 @@ function FormEditNews({
   setValidation
 }: FormInterface) {
   const [newsValue, setNewsValue] = useState<NewsKey | null>();
+  const [originalValue,setOriginalValue]=useState({
+    title: "",
+  description: "",
+  content: ""
+  })
   const [titleValue, setTitleValue] = useState<string>("");
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [contentValue, setContentValue] = useState<string>("");
   const [coverValue, setCoverValue] = useState<string>("");
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const inputTitleRef = useRef<HTMLTextAreaElement>(null);
-
+  useEffect(()=>{setIsSaving(false)},[isSaving])
   const autoSave = async () => {
     try {
       const response = await fetch(
@@ -57,11 +62,18 @@ function FormEditNews({
     }
   };
 
-  const debounceAutoSave = useDebounce(autoSave, 3000);
+  const {debounceEffect:debounceAutoSave,cancelDebounce} = useDebounce(autoSave, 3000);
 
   useEffect(() => {
-    debounceAutoSave();
-  }, [titleValue, descriptionValue, contentValue]);
+    if (
+      titleValue !== originalValue.title ||
+      descriptionValue !== originalValue.description ||
+      contentValue !== originalValue.content
+    ) {
+      debounceAutoSave();
+    }
+    return ()=>{cancelDebounce()}
+  }, [titleValue, descriptionValue, contentValue,contentValue]);
   useEffect(() => {
     console.log("titleValue: ", titleValue);
     console.log("descriptionValue: ", descriptionValue);
@@ -83,6 +95,11 @@ function FormEditNews({
         setDescriptionValue(data.news.description);
         setCoverValue(data.news.cover);
         setContentValue(data.news.content);
+        setOriginalValue({
+          title: data.news.name_news || "",
+          description: data.news.description,
+          content: data.news.content
+        });
         console.log(data);
       } catch (error) {
         console.log(error);

@@ -2,6 +2,7 @@ import { useUser } from "../../context/context";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import "../../style/animation.css"
 function EditProfile() {
   const [userState, setUserState] = useState<Userkey>();
   const [nameState, setNameState] = useState<string|undefined>("");
@@ -19,15 +20,14 @@ function EditProfile() {
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const regexPassword = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{5,16}$/;
 //   debug
-//   useEffect(() => {
-//     console.log(userState);
-//     setNameState(userState?.nama_user)
-//     setDescriptionState(userState?.description)
-//     setFacebookState(userState?.facebook)
-//     setTwitterState(userState?.twitter)
-//     setInstagramState(userState?.instagram)
-//     setImageState(userState?.image)
-//   }, [userState]);
+  useEffect(() => {
+    setNameState(userState?.nama_user)
+    setDescriptionState(userState?.description)
+    setFacebookState(userState?.facebook)
+    setTwitterState(userState?.twitter)
+    setInstagramState(userState?.instagram)
+    setImageState(userState?.image)
+  }, [userState]);
   useEffect(()=>{
     let timer: NodeJS.Timeout;
     timer=setTimeout(()=>{setPopUpMessage(false)},3000)
@@ -53,16 +53,17 @@ function EditProfile() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log('submitted')
     e.preventDefault();
-
-      if (!nameState?.trim() || nameState?.length === 0) {
-        return setErrorMessages("Name cannot be empty");
-      }
-      if (
-        passwordState&&!regexPassword.test(passwordState)
-      ) {
-        return setErrorMessages("Password not match");
-      }
       try {
+        if (!nameState?.trim() || nameState?.length === 0) {
+          setPopUpMessage(true);
+          return setErrorMessages("Name cannot be empty");
+        }
+        if (
+          passwordState&&!regexPassword.test(passwordState)
+        ) {
+          setPopUpMessage(true);
+          return setErrorMessages("Password not match");
+        }
       const response = await fetch(`${baseURL}/user/update-user/${userState?.id}`, {
         method: "post",
         credentials: "include",
@@ -130,14 +131,14 @@ function EditProfile() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <div className="w-full h-full flex justify-center items-center py-4">
+      <div className="w-full h-full flex justify-center items-center py-4 dotted-without-mask">
         <form
           onSubmit={handleSubmit}
-          className="max-w-[500px] min-w-80 w-3/5 border border-gray-600 h-full p-3 flex flex-col"
+          className="max-w-[500px] min-w-80 w-3/5 border rounded-md dark:bg-darkTheme bg-white  border-gray-600 h-full p-3 flex flex-col"
         >
             <div className="w-full justify-center items-center flex flex-col gap-2">
-            {imageState?<img src={`${baseURL}${imageState}`} className="size-20 rounded-full"></img>:<div className="size-20 rounded-full bg-black"></div>}
-            <label htmlFor="add-img" className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base w-fit">{imageState?'Change image':'Add Image'}
+            {imageState?<img src={`${baseURL}${imageState}`} className="size-20 rounded-full object-cover"></img>:<div className="size-20 rounded-full bg-black"></div>}
+            <label htmlFor="add-img" className="font-Poppins bg-lightOrange dark:bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base w-fit">{imageState?'Change image':'Add Image'}
             <input
             id="add-img"
                 type="file"
@@ -153,7 +154,7 @@ function EditProfile() {
           <input
             type="text"
             id="name"
-            value={nameState}
+            value={nameState||""}
             placeholder="Input Username"
             onChange={(e) => setNameState(e.target.value)}
             className="w-full h-10 border text-black border-gray-600 rounded-md px-2 my-2"
@@ -218,13 +219,13 @@ function EditProfile() {
           <div className="flex gap-2 my-2">
             <button
               type="submit"
-              className="w-full border text-black border-gray-600 rounded-md px-2 py-1 "
+              className="w-full border border-hotOrange hover:bg-hotOrange dark:border-oceanBlue dark:hover:bg-oceanBlue transition duration-200 text-black dark:text-white  rounded-md px-2 py-1 "
             >
               Save
             </button>
             <Link
               to={`/${user}/dashboard`}
-              className="w-full border text-black border-gray-600 rounded-md px-2 py-1 text-center"
+              className="w-full border text-black dark:text-white border-gray-600 rounded-md px-2 py-1 text-center"
             >
               Cancel
             </Link>

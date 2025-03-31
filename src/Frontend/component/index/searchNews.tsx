@@ -42,11 +42,15 @@ function SearchNews() {
       console.log(error);
     }
   };
-  const debounceSearchNews = useDebounce(fetchSearchNews, 1000);
-  const debounceSearchUser = useDebounce(fetchSearchUser, 1000);
+  const {debounceEffect:debounceSearchNews,cancelDebounce:cancelDebounceNews} = useDebounce(fetchSearchNews, 1000);
+  const {debounceEffect:debounceSearchUser,cancelDebounce:cancelDebounceUser} = useDebounce(fetchSearchUser, 1000);
   useEffect(() => {
     debounceSearchNews();
     debounceSearchUser();
+    return ()=>{
+      cancelDebounceNews()
+      cancelDebounceUser()
+    }
   }, [searchNews]);
   useEffect(() => {
     console.log(news);

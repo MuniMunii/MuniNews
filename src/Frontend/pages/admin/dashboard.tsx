@@ -47,11 +47,11 @@ const DashboardAdmin=memo(()=>{
                     </div>
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-blue-700 shadow-cornerStampBlue dark:from-amber-950 dark:to-darkTheme `}>
                     <p>Total News<HiOutlineClipboardList className={`text-black dark:text-white mx-auto text-3xl`}/></p>
-                    <p>{newsDataState.filter(news=>news.news_id).length}</p></div>
+                    <p>{newsDataState.filter(news=>news.status==='inreview'||news.status==="published").length}</p></div>
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-red-700 shadow-cornerStampRed dark:from-pink-950 dark:to-darkTheme`}>
                     <p>News In Review<HiOutlineClipboardCopy className={`text-black dark:text-white mx-auto text-3xl`}/></p>
                     {/* nanti di ganti jadi inreview */}
-                    <p>{newsDataState.filter(news=>news.status==='archived').length}</p></div>
+                    <p>{newsDataState.filter(news=>news.status==='inreview').length}</p></div>
                 </div>
                 <div className={`w-full h-full max-h-[1000px] flex gap-2`}>
                     <div className={`w-9/12 h-full border border-gray-600 dark:bg-[#0f1936] rounded-lg flex flex-col p-4 gap-4`}>

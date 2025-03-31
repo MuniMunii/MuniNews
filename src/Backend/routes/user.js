@@ -49,6 +49,9 @@ router.post('/update-user/:id',async (req,res)=>{
     const {id}=req.params
     const {nama_user,description,instagram,facebook,twitter,password}=req.body
     const user=await User.findOne({where:{id:id}})
+    if(description.length>=300){
+      return res.status(403).json({messages:'description too long'})
+    }
     if(!user){return res.status(403).json({messages:'user not found'})}
     let hashedPassword = user.password;
     // password di ganti kalo di input

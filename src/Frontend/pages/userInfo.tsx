@@ -4,16 +4,29 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaRegNewspaper } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { HashLink } from "react-router-hash-link";
 function UserInfo() {
   const [userInfo, setUserInfo] = useState<Userkey>();
-  const [news, setNews] = useState<NewsKey[] | undefined>();
+  const [news, setNews] = useState<NewsKey[] | undefined>([]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [stopLoading,setStopLoading]=useState<boolean>(false)
+  const [stopLoading, setStopLoading] = useState<boolean>(false);
   const { nama_user } = useParams();
   const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const isNewsLengthMoreThanOne =
+    news instanceof Array ? news?.length >= 1 : false;
+  const isNewsArray = news instanceof Array;
   useEffect(() => {
     console.log(userInfo);
+    console.log(
+      news instanceof Array
+        ? `News Length is more than one: ${news?.length >= 1}`
+        : null
+    );
+    console.log(
+      isNewsArray && news.length > 0 && news.length % 5 === 0,
+      "text modular"
+    );
   }, [userInfo]);
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -31,11 +44,11 @@ function UserInfo() {
         console.log(error);
       } finally {
         setIsLoading(false);
-        setStopLoading(true)
+        setStopLoading(true);
       }
     };
     fetchUserInfo();
-  }, [nama_user,page]);
+  }, [nama_user, page]);
   // note: 1 rapihin ini
   // note: 2 tambahin skeleton loading
   return (
@@ -54,9 +67,9 @@ function UserInfo() {
             ></img>
           ) : (
             <div className="w-fit">
-            <div className="size-48 my-auto rounded-full bg-black flex justify-center items-center">
-              <IoPerson />
-            </div>
+              <div className="size-48 my-auto rounded-full bg-black flex justify-center items-center">
+                <IoPerson />
+              </div>
             </div>
           )}
           <div className="flex flex-col gap-2 w-full p-3">
@@ -109,69 +122,109 @@ function UserInfo() {
             )}
           </div>
         </div>
-        <div className="flex-col w-full items-center flex">
-          {isLoading&&!stopLoading?
-        //   Skeleton Loading
-          <>
-          <div className="flex w-full border-b border-b-gray-600 p-3 gap-2">
-            <div className="w-32 h-24 bg-gray-600 rounded-mg animate-pulse"></div>
-            <div className="w-full flex flex-col gap-1">
-                <div className="w-64 h-6 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-16 h-4 bg-gray-600 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          <div className="flex w-full border-b border-b-gray-600 p-3 gap-2">
-            <div className="w-32 h-24 bg-gray-600 rounded-mg animate-pulse"></div>
-            <div className="w-full flex flex-col gap-1">
-                <div className="w-64 h-6 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
-                <div className="w-16 h-4 bg-gray-600 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          </>:news?.map((news, index) => {
-            const TimeFormat =
-              news?.updatedAt &&
-              new Date(news.updatedAt).getTime() <
-                new Date().getTime() - 24 * 60 * 60 * 1000;
-            const Time = TimeFormat
-              ? `${Math.floor(
-                  (new Date().getTime() - new Date(news.updatedAt).getTime()) /
-                    (1000 * 60 * 60 * 24)
-                )} Days Ago`
-              : "Today";
-            return (
-              <Link
-                to={`/read/${news.news_id}`}
-                key={`${news.name_news}-${news.news_id}`}
-                className="border-b border-b-gray-600 flex justify-between gap-2 p-3 group"
-              >
-                {news.cover ? (
-                  <img
-                    src={`${baseURL}${news.cover}`}
-                    className="w-32 h-24 object-cover rounded-md"
-                  />
-                ) : (
-                  <div className="w-32 h-24 bg-black flex justify-center items-center rounded-md">
-                    <FaRegNewspaper />
-                  </div>
-                )}
-                <div className="flex flex-col">
-                  <p className="group-hover:underline">{news.name_news}</p>
-                  <p className="text-gray-900 dark:text-gray-400">{news.description}</p>
-                  <p className="text-sm text-gray-800 dark:text-gray-500">
-                    {Time}
-                  </p>
+        <div className="flex-col w-full h-full items-center flex">
+          {isLoading && !stopLoading ? (
+            //   Skeleton Loading
+            <>
+              <div className="flex w-full border-b border-b-gray-600 p-3 gap-2">
+                <div className="w-32 h-24 bg-gray-600 rounded-mg animate-pulse"></div>
+                <div className="w-full flex flex-col gap-1">
+                  <div className="w-64 h-6 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-16 h-4 bg-gray-600 rounded-full animate-pulse"></div>
                 </div>
-              </Link>           
-            );
-          })}
+              </div>
+              <div className="flex w-full border-b border-b-gray-600 p-3 gap-2">
+                <div className="w-32 h-24 bg-gray-600 rounded-mg animate-pulse"></div>
+                <div className="w-full flex flex-col gap-1">
+                  <div className="w-64 h-6 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-full h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                  <div className="w-16 h-4 bg-gray-600 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div>
+              {!isNewsLengthMoreThanOne ? (
+                <div className="w-full flex flex-col justify-center items-center h-full mt-5 gap-4">
+                  <p>This user hasnt created news yet.</p>
+                  <HashLink to={'/newslist#newstitle'} smooth className="py-2 px-4 rounded-md transition-all duration-300 shadow-none bg-lightOrange shadow-cornerStampLight dark:bg-oceanBlue hover:dark:shadow-cornerStampDark">Check Other News</HashLink>
+                </div>
+              ) : (
+                <>
+                  {news?.map((news, index) => {
+                    const TimeFormat =
+                      news?.updatedAt &&
+                      new Date(news.updatedAt).getTime() <
+                        new Date().getTime() - 24 * 60 * 60 * 1000;
+                    const Time = TimeFormat
+                      ? `${Math.floor(
+                          (new Date().getTime() -
+                            new Date(news.updatedAt).getTime()) /
+                            (1000 * 60 * 60 * 24)
+                        )} Days Ago`
+                      : "Today";
+                    return (
+                      <Link
+                        to={`/read/${news.news_id}`}
+                        key={`${news.name_news}-${news.news_id}`}
+                        className="border-b border-b-gray-600 flex justify-between gap-2 p-3 group"
+                      >
+                        {news.cover ? (
+                          <img
+                            src={`${baseURL}${news.cover}`}
+                            className="w-32 h-24 object-cover rounded-md"
+                          />
+                        ) : (
+                          <div className="w-32 h-24 bg-black flex justify-center items-center rounded-md">
+                            <FaRegNewspaper />
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <p className="group-hover:underline">
+                            {news.name_news}
+                          </p>
+                          <p className="text-gray-900 dark:text-gray-400">
+                            {news.description}
+                          </p>
+                          <p className="text-sm text-gray-800 dark:text-gray-500">
+                            {Time}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          )}
         </div>
-        {isLoading?(news||[])?.length>0?<div className="w-20 h-8 rounded-md bg-gray-600 animate-pulse my-2"></div>:(news||[])?.length%5===0?<button type="button" className="bg-lightOrange dark:bg-oceanBlue w-fit py-1 px-3 mx-auto my-2 rounded-md" onClick={()=>setPage(prev=>prev+1)}>Add News</button>:<button type="button" className="border border-lightOrange dark:border-blue-700 w-fit py-1 px-3 cursor-not-allowed my-2 rounded-md">No More News</button>:null}
+        {/* note */}
+        {isLoading ? (
+          <div className="w-20 h-8 rounded-md bg-gray-600 animate-pulse my-2 mx-auto"></div>
+        ) : null}
+        {isNewsLengthMoreThanOne ? (
+          isNewsArray && news.length > 0 && news.length % 5 === 0 ? (
+            <button
+              type="button"
+              className="bg-lightOrange dark:bg-oceanBlue w-fit py-1 px-3 mx-auto my-2 rounded-md"
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              Add News
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="border border-lightOrange dark:border-blue-700 w-fit py-1 px-3 cursor-not-allowed my-2 rounded-md mx-auto"
+            >
+              No More News
+            </button>
+          )
+        ) : null}
       </div>
     </div>
   );

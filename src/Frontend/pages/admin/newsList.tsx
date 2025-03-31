@@ -65,7 +65,7 @@ function NewsList() {
               <p className="text-xs text-black/50 dark:text-white/60 group-hover:underline">See More</p>
               </div>
                 <div className="bg-blue-700 p-1 rounded-full size-6 flex justify-center items-center text-xs">
-                {news?.length}
+                {news?.filter(news=>news.status==='inreview'||news.status==="published").length}
                 </div>
               </Link>
               {isLoading?<LoadingComp error={null}/>:<NewsCard tag="all" news={news}/>}

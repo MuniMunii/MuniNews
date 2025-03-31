@@ -9,5 +9,11 @@ export default function useDebounce(callback:(...args:any[])=>void,delay:number)
             callback(...args)
         },delay)
     },[callback,delay])
-    return debounceEffect
+    const cancelDebounce = useCallback(() => {
+        if (timeoutREf.current) {
+          clearTimeout(timeoutREf.current);
+          timeoutREf.current = null;
+        }
+      }, []);
+    return {debounceEffect,cancelDebounce}
 }

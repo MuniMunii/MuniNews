@@ -70,11 +70,9 @@ function NewsIndex() {
             new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
         )
         .map((news, index) => (
-          <>
-            <div className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2">
+            <div key={news.news_id} className="w-full tablet:max-w-52 h-fit border-b border-b-gray-600 pb-2">
               <Link
                 to={`/read/${news.news_id}`}
-                key={news.news_id}
                 className="group"
               >
                 <p className="group-hover:underline">{news.name_news}</p>
@@ -94,7 +92,7 @@ function NewsIndex() {
                 {news.updatedAt.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z/, "")}
               </p>
             </div>
-          </>
+          
         ))
     );
   }
@@ -122,12 +120,12 @@ function NewsIndex() {
               ) : (
                 newsData?.news?.map((news, index) => (
                   <SwiperSlide
-                    key={`current-news-${news.article_id}`}
+                    key={`current-news-${news.article_id}-${index}`}
                     className="!w-full h-full bg-cover relative group"
                   >
                     <a
                       href={news.link}
-                      className="cursor-pointer"
+                      className="cursor-pointer group"
                       target="_blank"
                     >
                       <div className="absolute w-full top-0 left-0 z-20 text-white font-Poppins">
@@ -156,7 +154,7 @@ function NewsIndex() {
                       {!imgError && news.image_url ? (
                         <img
                           src={`${news.image_url}`}
-                          className="object-fill absolute top-0 left-0 w-full h-full z-0"
+                          className="object-fill absolute top-0 left-0 w-full h-full z-0 group-hover:scale-105 transition duration-200"
                           onError={() => setError(true)}
                         />
                       ) : (
@@ -188,11 +186,9 @@ function NewsIndex() {
                   )
                   .slice(0, 5)
                   .map((news, index) => (
-                    <>
-                      <div className="w-full h-fit p-2 border-x border-gray-600">
+                      <div       key={`recent-news-${news.news_id}-${index}`} className="w-full h-fit p-2 border-x border-gray-600">
                         <Link
                           to={`/read/${news.news_id}`}
-                          key={`recent-news-${news.news_id}`}
                           className=" group "
                         >
                           <p className="group-hover:underline">
@@ -214,7 +210,6 @@ function NewsIndex() {
                           </p>
                         </div>
                       </div>
-                    </>
                   ))
               )}
             </div>
@@ -286,11 +281,9 @@ function NewsIndex() {
                 )
                 .slice(0, 8)
                 .map((news, index) => (
-                  <>
-                  <div className="w-full flex flex-col justify-between  p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca">
+                  <div key={`news-list-vertical-${news.news_id}`} className="w-full flex flex-col justify-between  p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca">
                   <Link
                     to={`/read/${news.news_id}`}
-                    key={`news-list-vertical-${news.news_id}`}
                     className="group flex gap-7"
                   >
                     <div className="flex flex-col gap-1">
@@ -320,7 +313,7 @@ function NewsIndex() {
                         </p>
                       </div>
                   </div>
-                  </>
+
                 ))
             )}
           </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import LoadingComp from "../loadingComp";
 import { useTheme } from "../../context/context";
+import { Link } from "react-router-dom";
 function UserList (){
     const [userList,setUserList]=useState<Userkey[]|null>();
     const [error,setError]=useState<string|boolean|null>(null);
@@ -20,10 +21,10 @@ function UserList (){
         fetchUser()
     },[])
     return isLoading?<LoadingComp error={error}/>:userList?.map((user,index)=>(
-        <div key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
+        <Link to={`/user/${user.nama_user}`} key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
             <p>{user.nama_user}</p>
             {user.isAuth?<div className="size-2 rounded-full bg-green-600"></div>:<div className="size-2 rounded-full bg-red-600"></div>}
-        </div>
+        </Link>
     ))
 }
 export default UserList;

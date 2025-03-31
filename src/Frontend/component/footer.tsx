@@ -13,12 +13,12 @@ function FooterComp() {
             <div className="w-full flex justify-between gap-2">
                 <div className="flex flex-col gap-1 text-xl">
                 <a className="underline">Get Started</a>
-                <a className="underline">Community</a>
-                <a className="underline">About me</a>
+                <a href="https://github.com/MuniMunii" className="underline">Community</a>
+                <a href="https://github.com/MuniMunii" className="underline">About me</a>
                 </div>
                 <div className="flex flex-col gap-1 text-xl">
-                <a className="underline">GH Repo</a>
-                <a className="underline">LinkedIn</a>
+                <a href="https://github.com/MuniMunii/MuniNews" className="underline">GH Repo</a>
+                <a href="https://www.linkedin.com/in/ramzi-akbar-ramadhan-b8b05a243/" className="underline">LinkedIn</a>
                 </div>
             </div>
         </div>

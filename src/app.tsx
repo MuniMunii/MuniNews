@@ -40,6 +40,16 @@ function App() {
   // Register User (Validating,etc) O
   // Login O
   // Reset Password (Validating,Send Link to email,etc) O
+  // Modal Component (editProfile,formAddNews,Logout,etc) O
+  // Search User and News (With Filter and Includes) ) O
+  // External API (Newsdata.io,WeatherAPI) O
+  // News Page O
+  // User Info Page (Fetching with param,Link Social Media) O
+  // News List Category Page (Fetching,Skeleton Loading) O
+  // Auto Save (Cleanup,Doesnt save when nothing is changed) O
+  // Edit Profil (Cleanup Old Image if image change,Change Password etc,Modal Validation) O
+  // Add News O
+  // Publish And Reject News (Publish,Reject with reason and send to user email) O
   return (
     <div
       className={`App transition duration-150 ${
