@@ -22,6 +22,7 @@ sequelize
   .then(console.log("connected with sequelize"))
   .catch((err) => console.log("error cannot connected with sequelize"));
 sequelize
+// sync forced here/disini
   .sync()
   .then(console.log("sync with sequelize"))
   .catch((err) => console.log("error cannot sync with sequelize"));
