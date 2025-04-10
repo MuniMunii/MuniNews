@@ -1,5 +1,4 @@
-# Project Title
-Muni News
+# Muni News
 ## Description
 This project was built during my internship for a company focused on delivering high-quality journalism. The core idea behind the website is to empower journalists to create timely and relevant news that truly matters—whether it's in Politics, Science, Sports, Business, Technology, or even everyday General News. But it doesn’t stop there.
 
@@ -64,6 +63,14 @@ The platform is designed with a strong emphasis on UI/UX, making it incredibly u
 ```
 sequelize.sync({forced:true})
 ```
+* access your database in Database.db.js (first arg is name DB,second arg username,third arg password)
+```
+const sequelize=new Sequelize('(Your db name)','(Your username)','(your password, leave an empty string if you use root)',{
+    host:'localhost',
+    dialect:'mysql',
+    logging:console.log,
+})
+```
 * Make a .env file in root project
 * Here is variable that you need for your .env file
 #### Important 
@@ -91,8 +98,8 @@ npm start
 * If you encounter error when starting the program its mostly because different Node version
 ## Authors
 Contributors names and contact info
-ex. Ramzi Akbar Ramadhan
-ex. [@Ramzi Akbar Ramadhan](https://www.linkedin.com/in/ramzi-akbar-ramadhan-b8b05a243/)
+* ex. Ramzi Akbar Ramadhan
+* ex. [@Ramzi Akbar Ramadhan](https://www.linkedin.com/in/ramzi-akbar-ramadhan-b8b05a243/)
 ## Version History
 * 0.1
     * See [commit change](https://github.com/MuniMunii/MuniNews/commits/main/)
