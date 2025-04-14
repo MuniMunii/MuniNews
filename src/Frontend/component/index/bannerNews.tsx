@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 function BannerNews({muniNews,baseURL}:{muniNews:NewsKey[]|undefined,baseURL:string}){
+  if (!muniNews || muniNews.length === 0) return null;
     return (
         <div className="w-full h-fit  bg-lightOrange my-5 dark:bg-dark300 py-7 px-7 flex phone:flex-col tablet:flex-row justify-between">
             <div className="tablet:w-[60%] phone:w-full max-h-[450px] relative">

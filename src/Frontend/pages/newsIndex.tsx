@@ -279,7 +279,7 @@ function NewsIndex() {
                     <img
                       src={`${baseURL}${news.cover}`}
                       alt={`img-${news.name_news}`}
-                      className="w-24 h-12"
+                      className="w-24 h-12 ml-auto object-cover"
                     />
                   </Link>
                   <div className="w-full text-left flex text-sm gap-2">

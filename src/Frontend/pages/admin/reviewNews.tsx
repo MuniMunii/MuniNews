@@ -35,29 +35,6 @@ function ReviewNews() {
   useEffect(() => {
     console.log(cancelMessages);
   }, [cancelMessages]);
-  // useEffect(() => {
-  //   const fetchNews = async () => {
-  //     try {
-  //       const response = await fetch(`${baseURL}/news/get-news/${news_id}`, {
-  //         method: "get",
-  //         credentials: "include",
-  //       });
-  //       const data = await response.json();
-  //       if (response.ok) {
-  //         setNews(data.news);
-  //         console.log(data.news.content);
-  //       }
-  //       else if(data.messages==='News not found'){setIdNotFound(true)}
-  //        else setIsError(data.messages);
-  //     } catch (error) {
-  //       setIsError("error try again");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchNews();
-  // }, [news_id]);
-  // useEffect ganti semua link menjadi proper dan aktif
   useEffect(()=>{
     if(urlArticleRef.current){
       const links=urlArticleRef.current.querySelectorAll('A')

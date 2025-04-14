@@ -7,8 +7,6 @@ import { FaUser } from "react-icons/fa"
 import { BiCategory } from "react-icons/bi";
 import useFetch from "../../hook/useFetch"
 function NewsListCategory(){
-    // const [newsList,setNewsList]=useState<NewsKey[]|undefined>()
-    // const [isLoading,setIsLoading]=useState<boolean>(true)
     const [useSearchParam,setSearchParam]=useSearchParams()
     const pages=parseInt(useSearchParam.get('pages')??'1')
     const {status}=useParams()
@@ -18,20 +16,6 @@ function NewsListCategory(){
         (data) => data.news as NewsKey[]|null,
         "GET"
       );
-    // useEffect(()=>{
-    //     const fetchNews=async()=>{
-    //         try{
-    //             const response=await fetch(`${baseURL}/news/query-news/${status}?pages=${pages}`,{method:'get',credentials:'include'})
-    //             const data=await response.json()
-    //             if(response.ok){
-    //                 setNewsList(data.news)
-    //             }else{
-    //                 console.log('error fetching')
-    //             }
-    //         }catch(error){console.log(error)}finally{setIsLoading(false)}
-    //     }
-    //     fetchNews()
-    // },[status,pages])
 function handlePageChange(newPages:any){
     setSearchParam({pages:newPages})
 }

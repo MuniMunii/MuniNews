@@ -412,7 +412,9 @@ router.post(`/publish-news/:news_id`,async(req,res)=>{
       subject:'Published News',
       html:`<p>News Published you can check your Dashboard</p>`
     }
-    await transporter.sendMail(mail)
+    if (process.env.NODE_ENV !== "development") {
+      await transporter.sendMail(mail);
+    }
     await news.update({
       verified:true,
       updatedAt:DATE_FORMAT,
@@ -442,7 +444,9 @@ router.post(`/cancel-news/:news_id`,async(req,res)=>{
       subject:'Published News',
       html:`<p>News Failed to Publish you can check your Dashboard </br> Reason: ${messages}   </p>`
     }
-    await transporter.sendMail(mail)
+    if (process.env.NODE_ENV !== "development") {
+      await transporter.sendMail(mail);
+    }
     await news.update({
       status:'cancelled'
     })

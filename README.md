@@ -31,6 +31,8 @@ The platform is designed with a strong emphasis on UI/UX, making it incredibly u
 ![News Category](assets/newscategory.png)
 * Make News (edit,etc...)
 ![Make News](assets/makenews.gif)
+* Public User
+![Public User](assets/publicuser.png)
 * Dashboard User
 ![Dashboard User](assets/dashboarduser.png)
 * Dashboard Admin
@@ -59,11 +61,11 @@ The platform is designed with a strong emphasis on UI/UX, making it incredibly u
 * Node Mailer
 ### Before Executing Program
 * use Node v18.17.1 (any higher version is okay)
-* You need to make database first and then add this line in backend/server.js (Search Method sync and add object forced:true, this will make model inserted into your database)
+* You need to make database first and then add this line in backend/server.js (Search Method sync and add object alter:true, this will make model inserted into your database)
 ```
-sequelize.sync({forced:true})
+sequelize.sync({alter:true})
 ```
-* access your database in Database.db.js (first arg is name DB,second arg username,third arg password)
+* access your database in Database.db.js (first param is name DB,second param username and the third param is password)
 ```
 const sequelize=new Sequelize('(Your db name)','(Your username)','(your password, leave an empty string if you use root)',{
     host:'localhost',
@@ -78,6 +80,7 @@ const sequelize=new Sequelize('(Your db name)','(Your username)','(your password
 * FRONEND_URL=(Your Localhost port for React)
 * JWT_KEY=(Random Number)
 * JWT_DUR=30m (This is the default in server,You can change it to whatever duration you want)
+* NODE_ENV=development (change to anything to bypass NodeMailer if you use Fake email for register user)
 #### Optional
 * API_KEY_PUBLIC_NEWS=(You can get the key in [here](https://newsdata.io/) ,Must create account first)
 * API_KEY_WEATHER=(You can get the key in [here](https://www.weatherapi.com/),Must create account first)
@@ -94,7 +97,6 @@ npm start
 ```
 ## Help
 * If page empty you need to make a news and user first (I only provide dummy news for my company)
-* Some database need to modify a little because sequelize doesnt support Text,Longtext DataType for table news
 * If you encounter error when starting the program its mostly because different Node version
 ## Authors
 Contributors names and contact info

@@ -9,31 +9,35 @@ import useFetch from "../hook/useFetch";
 function UserInfo() {
   const [news, setNews] = useState<NewsKey[] | undefined>([]);
   const [page, setPage] = useState<number>(1);
+  const [userInfo,setUserInfo]=useState<Userkey>()
+  const [isLoading,setIsLoading]=useState<boolean>(true)
   const [stopLoading, setStopLoading] = useState<boolean>(false);
   const { nama_user } = useParams();
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const isNewsLengthMoreThanOne =
     news instanceof Array ? news?.length >= 1 : false;
   const isNewsArray = news instanceof Array;
-  // note: 1 rapihin ini
-  // note: 2 tambahin skeleton loading
-    const { value: userInfo, isLoading: isLoading } = useFetch<Userkey>(
-      `/user/get-user-info/${nama_user}/${page}`,
-      (data) => data.user as Userkey,
-      "GET"
-    );
-    useEffect(() => {
-      console.log(userInfo);
-      console.log(
-        news instanceof Array
-          ? `News Length is more than one: ${news?.length >= 1}`
-          : null
-      );
-      console.log(
-        isNewsArray && news.length > 0 && news.length % 5 === 0,
-        "text modular"
-      );
-    }, [userInfo]);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch(
+          `${baseURL}/user/get-user-info/${nama_user}/${page}`,
+          { method: "get", credentials: "include" }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setUserInfo(data.user);
+          setNews((prev) => [...(prev || []), ...data.news]);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+        setStopLoading(true);
+      }
+    };
+    fetchUserInfo();
+  }, [nama_user, page]);
   return (
     <div className="w-[90%] h-full mx-auto  my-2 flex">
       <div className="tablet:w-2/3 phone:w-full h-full  flex flex-col">
@@ -105,7 +109,11 @@ function UserInfo() {
             )}
           </div>
         </div>
-        <div className="flex-col w-full h-full items-center flex">
+        <div
+          className={`flex-col w-full h-full flex justify-start ${
+            news?.length === 0 ? "items-center" : " items-start"
+          }`}
+        >
           {isLoading && !stopLoading ? (
             //   Skeleton Loading
             <>
@@ -135,7 +143,13 @@ function UserInfo() {
               {!isNewsLengthMoreThanOne ? (
                 <div className="w-full flex flex-col justify-center items-center h-full mt-5 gap-4">
                   <p>This user hasnt created news yet.</p>
-                  <HashLink to={'/newslist#newstitle'} smooth className="py-2 px-4 rounded-md transition-all duration-300 shadow-none bg-lightOrange shadow-cornerStampLight dark:bg-oceanBlue hover:dark:shadow-cornerStampDark">Check Other News</HashLink>
+                  <HashLink
+                    to={"/newslist#newstitle"}
+                    smooth
+                    className="py-2 px-4 rounded-md transition-all duration-300 shadow-none bg-lightOrange shadow-cornerStampLight dark:bg-oceanBlue hover:dark:shadow-cornerStampDark"
+                  >
+                    Check Other News
+                  </HashLink>
                 </div>
               ) : (
                 <>

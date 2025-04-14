@@ -18,23 +18,23 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     description:{
-      type:DataTypes.STRING,
+      type:DataTypes.TEXT,
       allowNull:true
     },
     instagram:{
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     facebook:{
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     twitter:{
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('admin', 'journalist'),
       allowNull: false,
     },
     password: {

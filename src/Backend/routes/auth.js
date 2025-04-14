@@ -175,7 +175,9 @@ router.post("/forgot-password", async (req, res) => {
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
   };
   
+  if (process.env.NODE_ENV !== "development") {
     await transporter.sendMail(mail);
+  }
      res
       .status(200)
       .json({ messages: "Mail is send, Check your email", token: resetToken });
