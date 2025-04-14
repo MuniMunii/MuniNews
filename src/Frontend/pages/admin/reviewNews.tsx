@@ -6,11 +6,12 @@ import { FaRegNewspaper } from "react-icons/fa";
 import DOMPurify from "dompurify";
 import { motion, AnimatePresence } from "framer-motion";
 import PageNotFound from "../../component/404Page";
+import useFetch from "../../hook/useFetch";
 function ReviewNews() {
   type newsStatus = "Published" | "Error" | "Cancelled";
   const { news_id } = useParams();
-  const [news, setNews] = useState<NewsKey>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [news, setNews] = useState<NewsKey>();
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
   const [popUp, setPopUp] = useState<boolean>(false);
   const [status, setStatus] = useState<newsStatus | null>(null);
   const [isError, setIsError] = useState<boolean | string | null>(null);
@@ -19,6 +20,11 @@ function ReviewNews() {
   const [cancelMessages, setCancelMessages] = useState<string>();
   const urlArticleRef=useRef<HTMLElement|null>(null)
   const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const { value: news, isLoading: isLoading } = useFetch<NewsKey|null>(
+    `/news/get-news/${news_id}`,
+    (data) => data.news as NewsKey|null,
+    "GET"
+  );
   useEffect(() => {
     let timer: NodeJS.Timeout;
     timer = setTimeout(() => {
@@ -29,28 +35,28 @@ function ReviewNews() {
   useEffect(() => {
     console.log(cancelMessages);
   }, [cancelMessages]);
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(`${baseURL}/news/get-news/${news_id}`, {
-          method: "get",
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setNews(data.news);
-          console.log(data.news.content);
-        }
-        else if(data.messages==='News not found'){setIdNotFound(true)}
-         else setIsError(data.messages);
-      } catch (error) {
-        setIsError("error try again");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchNews();
-  }, [news_id]);
+  // useEffect(() => {
+  //   const fetchNews = async () => {
+  //     try {
+  //       const response = await fetch(`${baseURL}/news/get-news/${news_id}`, {
+  //         method: "get",
+  //         credentials: "include",
+  //       });
+  //       const data = await response.json();
+  //       if (response.ok) {
+  //         setNews(data.news);
+  //         console.log(data.news.content);
+  //       }
+  //       else if(data.messages==='News not found'){setIdNotFound(true)}
+  //        else setIsError(data.messages);
+  //     } catch (error) {
+  //       setIsError("error try again");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchNews();
+  // }, [news_id]);
   // useEffect ganti semua link menjadi proper dan aktif
   useEffect(()=>{
     if(urlArticleRef.current){

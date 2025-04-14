@@ -12,7 +12,7 @@ function WeatherStatus(){
               condition: data.weather.current.condition.icon,
             };
           }),
-        })
+        }),"GET"
       );
     return isLoadingWeather ? (
         <div className="w-1/4 ml-auto flex justify-center border-l border-l-gray-600">

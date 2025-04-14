@@ -12,15 +12,22 @@ import { IoPerson } from "react-icons/io5";
 import { MdArrowOutward } from "react-icons/md";
 function NewsPage() {
   const { news_id } = useParams();
-  const [news, setNews] = useState<NewsKey | undefined>();
-  const [user,setUser]=useState<Userkey>();
   const [error, setIsError] = useState<boolean | string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [idNotFound, setIdNotFound] = useState<boolean>(false);
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const { scrollYProgress } = useScroll();
   const urlArticleRef = useRef<HTMLElement | null>(null);
-  // useEffect ganti semua link menjadi proper dan aktif
+  const { value: news, isLoading: isLoading } = useFetch<NewsKey>(
+    `/news/get-news/${news_id}`,
+    (data) => data.news as NewsKey,
+    "GET"
+  );
+  const { value: user, isLoading: userIsLoading } = useFetch<Userkey>(
+    `/user/get-user-info/${news?.createdBy}/1`,
+    (data) => data.user as Userkey,
+    "GET"
+  );
+  // useEffect ngubah link dalem artikel jadi proper link
   useEffect(() => {
     if (urlArticleRef.current) {
       const links = urlArticleRef.current.querySelectorAll("A");
@@ -36,41 +43,6 @@ function NewsPage() {
       });
     }
   }, [news]);
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(`${baseURL}/news/get-news/${news_id}`, {
-          method: "get",
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setNews(data.news);
-        } else if (data.messages === "News not found") {
-          setIdNotFound(true);
-        } else {
-          setIsError(data.messages);
-        }
-      } catch (error) {
-        setIsError("Error Try Again");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchNews();
-  }, [news_id]);
-  useEffect(()=>{
-    const fetchUser=async ()=>{
-      try{
-        const response=await fetch(`${baseURL}/user/get-user-info/${news?.createdBy}/1`,{method:'get',credentials:'include'})
-        const data=await response.json()
-        if(response.ok){
-          setUser(data.user)
-        }
-      }catch(error){console.log(error)}
-    }
-    fetchUser()
-  },[news])
   const sanitizeContent = DOMPurify.sanitize(news?.content || "", {
     ALLOWED_TAGS: ["a", "ol", "li", "ul", "p", "b", "i", "strong", "em", "br"],
     ALLOWED_ATTR: ["href", "target", "rel", "data-list"],

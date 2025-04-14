@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import "../../style/animation.css"
+import useFetch from "../../hook/useFetch";
 function EditProfile() {
-  const [userState, setUserState] = useState<Userkey>();
+  // const [userState, setUserState] = useState<Userkey>();
   const [nameState, setNameState] = useState<string|undefined>("");
   const [error, setError] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<string>("");
@@ -19,6 +20,11 @@ function EditProfile() {
   const navigate=useNavigate()
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const regexPassword = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d]{5,16}$/;
+  const { value: userState, isLoading: isLoading } = useFetch<Userkey>(
+    `/user/get-user/${user}`,
+    (data) => data.user as Userkey,
+    "GET"
+  );
 //   debug
   useEffect(() => {
     setNameState(userState?.nama_user)
@@ -33,23 +39,6 @@ function EditProfile() {
     timer=setTimeout(()=>{setPopUpMessage(false)},3000)
     return ()=>clearTimeout(timer)
   },[popUpMessage])
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch(`${baseURL}/user/get-user/${user}`, {
-          method: "Get",
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUserState(data.user);
-        }
-      } catch (error) {
-        console.log("Fetching User Error", error);
-      }
-    };
-    getUser();
-  }, []);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log('submitted')
     e.preventDefault();

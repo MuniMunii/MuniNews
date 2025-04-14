@@ -14,12 +14,12 @@ function Index() {
     page_size: 5,
   });
   const baseURL = process.env.REACT_APP_BACKEND_URL;
-  const { value: userData, isLoading: isLoadingUser } = useFetch(
-    `${baseURL}/auth/user`,
-    (data) => ({
-      user: data,
-    })
-  );
+  // const { value: userData, isLoading: isLoadingUser } = useFetch(
+  //   `${baseURL}/auth/user`,
+  //   (data) => ({
+  //     user: data,
+  //   })
+  // );
   const containerRef=useRef(null)
   function ButtonMailTo({label,mailTo}:{label:string,mailTo:string}){
     return (

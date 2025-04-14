@@ -79,8 +79,8 @@ const sequelize=new Sequelize('(Your db name)','(Your username)','(your password
 * JWT_KEY=(Random Number)
 * JWT_DUR=30m (This is the default in server,You can change it to whatever duration you want)
 #### Optional
-* API_KEY_PUBLIC_NEWS=(You can get the key in here,Must create account first)
-* API_KEY_WEATHER=(You can get the key in here,Must create account first)
+* API_KEY_PUBLIC_NEWS=(You can get the key in [here](https://newsdata.io/) ,Must create account first)
+* API_KEY_WEATHER=(You can get the key in [here](https://www.weatherapi.com/),Must create account first)
 * EMAIL_TEST=(Email for node mailer)
 * EMAIL_TEST_PASSWORD=(Email password for node mailer,This is not your email password but you need to Generate an app password from your email,Read gmail Docs for better understanding)
 ### Executing program

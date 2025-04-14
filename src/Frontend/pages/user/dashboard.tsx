@@ -9,15 +9,28 @@ import { Link } from "react-router-dom";
 import { CiMenuKebab } from "react-icons/ci";
 import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import {IoPerson}from"react-icons/io5" 
+import useFetch from "../../hook/useFetch";
 function DashboardUser() {
   const [isActive, setIsActive] = useState<statusNews>('mynews');
   const [modalPopUp, setModalPopUp] = useState<boolean>(false);
   const [error, setError] = useState<string|boolean|null>(null);
   const [reload, setIsReload] = useState<boolean>(false);
-  const [userState,setUserState]=useState<Userkey>()
+  // const [userState,setUserState]=useState<Userkey>()
   const [modalMakeNews, setModalMakeNews] = useState<boolean>(false);
-  const [isLoading,setIsLoading]=useState<Boolean>(true)
-  const [myNews, setMyNews] = useState<NewsKey[] | null>(null);
+  // const [isLoading,setIsLoading]=useState<Boolean>(true)
+  // const [myNews, setMyNews] = useState<NewsKey[] | null>(null);
+  const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const {user,role}=useUser()
+  const { value: myNews, isLoading: isLoading } = useFetch<NewsKey[]|null>(
+    `/news/my-news`,
+    (data) => data.news as NewsKey[]|null,
+    "GET"
+  );
+  const { value: userState, isLoading: userIsLoading } = useFetch<Userkey>(
+    `/user/get-user/${user}`,
+    (data) => data.user as Userkey,
+    "GET"
+  );
   useEffect(() => {
     console.log(modalMakeNews);
     if (modalMakeNews) {
@@ -27,41 +40,8 @@ function DashboardUser() {
     }
   }, [modalMakeNews]);
   useEffect(() => {
-    const getNews = async () => {
-      try{
-      const response = await fetch(`${baseURL}/news/my-news`, {
-        credentials: "include",
-      });
-      const data = await response.json();
-      setMyNews(data.news);}catch(error){console.log(error)}finally{setIsLoading(false)}
-    };
-    const getUser = async () => {
-      try{
-      const response = await fetch(`${baseURL}/user/get-user/${user}`, {
-        credentials: "include",
-      });
-      const data = await response.json();
-      setUserState(data.user);}catch(error){console.log(error)}finally{setIsLoading(false)}
-    };
-    getUser()
-    getNews();
-  }, []);
-  useEffect(() => {
     console.log(isActive);
   }, [isActive]);
-  const {theme } = useTheme();
-  const {user,role}=useUser()
-  const {isWideScreen}=useScreen()
-  // const isLight = theme === "light";
-  const baseURL = process.env.REACT_APP_BACKEND_URL;
-  // const { value: userInfo, isLoading: isLoadingUserInfo } = useFetch(
-  //   `${baseURL}/auth/me`,
-  //   (data) => ({
-  //     //   news: data.news as NewsItem[],
-  //     me: data,
-  //   })
-  // );
-  // console.log(userInfo?.me);
   const NavDashboard = () => {
     return (
       <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b border-b-gray-600 `}>

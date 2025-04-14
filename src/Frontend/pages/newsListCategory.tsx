@@ -6,11 +6,10 @@ import PageNotFound from "../component/404Page";
 import SkeletonIndexNews from "../component/SkeletonIndexNews";
 import FooterComp from "../component/footer";
 import NewsList from "./admin/newsList";
+import useFetch from "../hook/useFetch";
 function IndexNewsListCategory() {
   const { category } = useParams();
-  const [news, setNews] = useState<NewsKey[] | undefined>();
   const [pages, setPages] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [removeSkeleton, setRemoveSkeleton] = useState<boolean>(false);
   //   note fix ini nanti
   const TemporalNews: any[] = [];
@@ -23,35 +22,22 @@ function IndexNewsListCategory() {
     "General",
     "Sport",
   ];
+  const startNews = 4;
+  const endIndex = pages * 5;
+  const { value: news, isLoading: isLoading } = useFetch<NewsKey[]>(
+    `/news/query-news-category/${
+            category
+              ? category?.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())
+              : ""
+          }/${pages}`,
+    (data) => data.news as NewsKey[],
+    "GET"
+  );
   useEffect(() => {
     TemporalNews.push(news);
     console.log(pages);
     console.log(TemporalNews);
   }, [news, pages]);
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(
-          `${baseURL}/news/query-news-category/${
-            category
-              ? category?.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())
-              : ""
-          }/${pages}`,
-          { method: "get", credentials: "include" }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setNews((prev) => [...(prev || []), ...data.news]);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-        setRemoveSkeleton(true);
-      }
-    };
-    fetchNews();
-  }, [category, pages]);
   if (
     !categoryList
       .map((cat) => cat.toLowerCase())
@@ -59,8 +45,6 @@ function IndexNewsListCategory() {
   ) {
     return <PageNotFound />;
   }
-  const startNews = 4;
-  const endIndex = pages * 5;
   return (
     <>
       <div className="w-[90%] h-full my-3 mx-auto">

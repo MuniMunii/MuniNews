@@ -5,52 +5,35 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaRegNewspaper } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { HashLink } from "react-router-hash-link";
+import useFetch from "../hook/useFetch";
 function UserInfo() {
-  const [userInfo, setUserInfo] = useState<Userkey>();
   const [news, setNews] = useState<NewsKey[] | undefined>([]);
   const [page, setPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [stopLoading, setStopLoading] = useState<boolean>(false);
   const { nama_user } = useParams();
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const isNewsLengthMoreThanOne =
     news instanceof Array ? news?.length >= 1 : false;
   const isNewsArray = news instanceof Array;
-  useEffect(() => {
-    console.log(userInfo);
-    console.log(
-      news instanceof Array
-        ? `News Length is more than one: ${news?.length >= 1}`
-        : null
-    );
-    console.log(
-      isNewsArray && news.length > 0 && news.length % 5 === 0,
-      "text modular"
-    );
-  }, [userInfo]);
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch(
-          `${baseURL}/user/get-user-info/${nama_user}/${page}`,
-          { method: "get", credentials: "include" }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setUserInfo(data.user);
-          setNews((prev) => [...(prev || []), ...data.news]);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-        setStopLoading(true);
-      }
-    };
-    fetchUserInfo();
-  }, [nama_user, page]);
   // note: 1 rapihin ini
   // note: 2 tambahin skeleton loading
+    const { value: userInfo, isLoading: isLoading } = useFetch<Userkey>(
+      `/user/get-user-info/${nama_user}/${page}`,
+      (data) => data.user as Userkey,
+      "GET"
+    );
+    useEffect(() => {
+      console.log(userInfo);
+      console.log(
+        news instanceof Array
+          ? `News Length is more than one: ${news?.length >= 1}`
+          : null
+      );
+      console.log(
+        isNewsArray && news.length > 0 && news.length % 5 === 0,
+        "text modular"
+      );
+    }, [userInfo]);
   return (
     <div className="w-[90%] h-full mx-auto  my-2 flex">
       <div className="tablet:w-2/3 phone:w-full h-full  flex flex-col">

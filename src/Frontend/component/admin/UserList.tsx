@@ -2,24 +2,14 @@ import { useEffect, useState } from "react";
 import LoadingComp from "../loadingComp";
 import { useTheme } from "../../context/context";
 import { Link } from "react-router-dom";
+import useFetch from "../../hook/useFetch";
 function UserList (){
-    const [userList,setUserList]=useState<Userkey[]|null>();
     const [error,setError]=useState<string|boolean|null>(null);
-    const [isLoading,setIsLoading]=useState<boolean>(true);
-    const baseURL=process.env.REACT_APP_BACKEND_URL;
-    useEffect(()=>{
-        const fetchUser=async()=>{
-            try{
-                const response=await fetch(`${baseURL}/auth/get-user`,{method:'get',credentials:'include',headers:{'Content-Type':'application/json'}})
-                const data=await response.json()
-                if(response.ok){
-                    setUserList(data.getUser)
-                }else{setError(data.messages)}
-                
-            }catch(error){console.log(error)}finally{setIsLoading(false)}
-        }
-        fetchUser()
-    },[])
+      const { value: userList, isLoading: isLoading } = useFetch<Userkey[]|null>(
+        `/auth/get-user`,
+        (data) => data.getUser as Userkey[]|null,
+        "GET"
+      );
     return isLoading?<LoadingComp error={error}/>:userList?.map((user,index)=>(
         <Link to={`/user/${user.nama_user}`} key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
             <p>{user.nama_user}</p>

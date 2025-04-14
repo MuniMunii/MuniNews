@@ -9,23 +9,12 @@ import UserList from "../../component/admin/UserList";
 import { Link } from "react-router-dom";
 import NavbarAdmin from "../../component/admin/navbar";
 const DashboardAdmin=memo(()=>{
-    const {user}=useUser()
     const {isWideScreen}=useScreen()
-    const [newsDataState,setNewsDataState]=useState<NewsKey[]>([]);
-    const [isLoading,setIsLoading]=useState<boolean>(true)
-    const baseURL=process.env.REACT_APP_BACKEND_URL;
-    useEffect(()=>{
-        const fetchNews=async()=>{
-            try{
-            const response=await fetch(`${baseURL}/news/get-news`,{method:'get',credentials:'include',headers:{'Content-Type':'application/json'}})
-            const data=await response.json()
-            setNewsDataState(data.news)
-            }
-            catch(error){console.log(error)}finally{setIsLoading(false)}
-        }
-        fetchNews()
-        console.log('rerender')
-    },[])
+    const { value: newsDataState, isLoading: isLoading } = useFetch<NewsKey[]|null>(
+        `/news/get-news`,
+        (data) => data.news as NewsKey[]|null,
+        "GET",
+      );
     console.log('component re render')
     useEffect(()=>{console.log(newsDataState)},[newsDataState])
     if(!isWideScreen){
@@ -43,15 +32,15 @@ const DashboardAdmin=memo(()=>{
                 <div className="w-full h-fit flex gap-3 justify-center mb-3">
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-green-700 shadow-cornerStampGreen dark:from-violet-950 dark:to-darkTheme `}>
                     <p>Published News<HiOutlineClipboardCheck className={`text-black dark:text-white mx-auto text-3xl`}/></p>
-                    <p>{newsDataState.filter(news=>news.verified).length}</p>
+                    <p>{newsDataState?.filter(news=>news.verified).length}</p>
                     </div>
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-blue-700 shadow-cornerStampBlue dark:from-amber-950 dark:to-darkTheme `}>
                     <p>Total News<HiOutlineClipboardList className={`text-black dark:text-white mx-auto text-3xl`}/></p>
-                    <p>{newsDataState.filter(news=>news.status==='inreview'||news.status==="published").length}</p></div>
+                    <p>{newsDataState?.filter(news=>news.status==='inreview'||news.status==="published").length}</p></div>
                     <div className={`w-1/3 h-32 rounded-lg p-4 text-center flex flex-col items-center justify-center text-xl border bg-gradient-to-t dark:shadow-none dark:text-white text-red-700 shadow-cornerStampRed dark:from-pink-950 dark:to-darkTheme`}>
                     <p>News In Review<HiOutlineClipboardCopy className={`text-black dark:text-white mx-auto text-3xl`}/></p>
                     {/* nanti di ganti jadi inreview */}
-                    <p>{newsDataState.filter(news=>news.status==='inreview').length}</p></div>
+                    <p>{newsDataState?.filter(news=>news.status==='inreview').length}</p></div>
                 </div>
                 <div className={`w-full h-full max-h-[1000px] flex gap-2`}>
                     <div className={`w-9/12 h-full border border-gray-600 dark:bg-[#0f1936] rounded-lg flex flex-col p-4 gap-4`}>

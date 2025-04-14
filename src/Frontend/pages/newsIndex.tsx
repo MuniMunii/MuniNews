@@ -17,42 +17,24 @@ import { motion } from "framer-motion";
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
 function NewsIndex() {
-  const [muniNews, setMuniNews] = useState<NewsKey[] | undefined>();
   const [query, setQuery] = useState<number>(1);
   const [error, setError] = useState<string | boolean>();
-  const [isLoading, setIsloading] = useState<boolean>(true);
-  // const [randomNews,setRandomNews]=useState<number>()
   const { isWideScreen } = useScreen();
   const [imgError, setImgError] = useState<boolean>(false);
   const baseURL = process.env.REACT_APP_BACKEND_URL;
+  const { value: muniNews, isLoading: isLoading } = useFetch<NewsKey[]>(
+    `/news/get-news`,
+    (data) => data.news as NewsKey[],
+    "GET"
+  );
   useEffect(() => {
     console.log(muniNews);
   }, [muniNews]);
-  useEffect(() => {
-    const fetchMuniNews = async () => {
-      try {
-        const response = await fetch(`${baseURL}/news/get-news`, {
-          method: "Get",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setMuniNews(data.news);
-        } else {
-          setError("Error try again");
-        }
-      } catch (error) {
-        console.log("error");
-      } finally {
-        setIsloading(false);
-      }
-    };
-    fetchMuniNews();
-  }, []);
   const { value: newsData, isLoading: isLoadingPublicAPI } = useFetch(
-    `${baseURL}/news/publicnews`,
+    `/news/publicnews`,
     (data) => ({
       news: data.results as PublicNews[] | undefined,
-    })
+    }),"GET"
   );
   function MuniNewsIndex({ tag }: { tag: Category }) {
     return isLoading ? (
@@ -96,7 +78,6 @@ function NewsIndex() {
         ))
     );
   }
-  // const RandomIndex=muniNews&&muniNews.length>0?Math.floor(Math.random()*(muniNews?.length??1)):1;
   return (
     <>
       <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">

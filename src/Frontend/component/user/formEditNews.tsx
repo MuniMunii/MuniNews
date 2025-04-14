@@ -12,7 +12,7 @@ interface FormInterface {
   isSaving: boolean;
   setIsSaving: React.Dispatch<SetStateAction<boolean>>;
   setModalValidation: React.Dispatch<SetStateAction<boolean>>;
-  setValidation:any;
+  setValidation: any;
 }
 function FormEditNews({
   news_id,
@@ -22,21 +22,25 @@ function FormEditNews({
   isSaving,
   setIsSaving,
   setModalValidation,
-  setValidation
+  setValidation,
 }: FormInterface) {
   const [newsValue, setNewsValue] = useState<NewsKey | null>();
-  const [originalValue,setOriginalValue]=useState({
+  const [originalValue, setOriginalValue] = useState({
     title: "",
-  description: "",
-  content: ""
-  })
+    description: "",
+    content: "",
+  });
   const [titleValue, setTitleValue] = useState<string>("");
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [contentValue, setContentValue] = useState<string>("");
   const [coverValue, setCoverValue] = useState<string>("");
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const inputTitleRef = useRef<HTMLTextAreaElement>(null);
-  useEffect(()=>{setIsSaving(false)},[isSaving])
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    timer = setTimeout(() => setIsSaving(false), 3000);
+    return ()=>clearTimeout(timer)
+  }, [isSaving]);
   const autoSave = async () => {
     try {
       const response = await fetch(
@@ -62,7 +66,10 @@ function FormEditNews({
     }
   };
 
-  const {debounceEffect:debounceAutoSave,cancelDebounce} = useDebounce(autoSave, 3000);
+  const { debounceEffect: debounceAutoSave, cancelDebounce } = useDebounce(
+    autoSave,
+    3000
+  );
 
   useEffect(() => {
     if (
@@ -72,8 +79,10 @@ function FormEditNews({
     ) {
       debounceAutoSave();
     }
-    return ()=>{cancelDebounce()}
-  }, [titleValue, descriptionValue, contentValue,contentValue]);
+    return () => {
+      cancelDebounce();
+    };
+  }, [titleValue, descriptionValue, contentValue, contentValue]);
   useEffect(() => {
     console.log("titleValue: ", titleValue);
     console.log("descriptionValue: ", descriptionValue);
@@ -98,7 +107,7 @@ function FormEditNews({
         setOriginalValue({
           title: data.news.name_news || "",
           description: data.news.description,
-          content: data.news.content
+          content: data.news.content,
         });
         console.log(data);
       } catch (error) {
@@ -107,7 +116,7 @@ function FormEditNews({
         setIsLoading(false);
       }
     };
-    document.querySelector('.ql-editor')?.setAttribute('spellcheck','false')
+    document.querySelector(".ql-editor")?.setAttribute("spellcheck", "false");
     fetchNews();
   }, [news_id]);
   // fetch gambar
@@ -149,14 +158,13 @@ function FormEditNews({
       const data = await response.json();
       if (response.ok) {
         setModalValidation(true);
-        setValidation(data.messages||null);
-      }
-      else{
+        setValidation(data.messages || null);
+      } else {
         setModalValidation(true);
-        setValidation(data.messages||null);
+        setValidation(data.messages || null);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -186,33 +194,40 @@ function FormEditNews({
           {coverValue ? (
             <div className="relative w-full h-full">
               <img
-              src={`${baseURL}${coverValue}`}
-              className="w-full h-full bg-cover"
-            />
-            <label htmlFor="change-img" className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base absolute top-2 right-2">Change Image
-            <input
-            id="change-img"
-                type="file"
-                accept="image/*"
-                onChange={handleSaveCover}
-                className={`hidden`}
+                src={`${baseURL}${coverValue}`}
+                className="w-full h-full bg-cover"
               />
+              <label
+                htmlFor="change-img"
+                className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base absolute top-2 right-2"
+              >
+                Change Image
+                <input
+                  id="change-img"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleSaveCover}
+                  className={`hidden`}
+                />
               </label>
             </div>
           ) : (
             <>
               <FaRegNewspaper />
-              
-            <label htmlFor="add-img" className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base">Add Image
-            <input
-            id="add-img"
-                type="file"
-                accept="image/*"
-                onChange={handleSaveCover}
-                className={`hidden`}
-              />
+
+              <label
+                htmlFor="add-img"
+                className="bg-oceanBlue py-1 px-3 rounded-md cursor-pointer text-base"
+              >
+                Add Image
+                <input
+                  id="add-img"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleSaveCover}
+                  className={`hidden`}
+                />
               </label>
-              
             </>
           )}
         </div>

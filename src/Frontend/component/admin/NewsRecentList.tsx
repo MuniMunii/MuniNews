@@ -2,8 +2,8 @@ import { useTheme } from "../../context/context"
 import { Link } from "react-router-dom"
 function NewsRecentList({news}:{news:NewsKey[]|null}){
     return news?.filter(news=>news.status==='inreview'||news.verified).slice(0,5).sort((a,b)=>new Date(b.updatedAt).getTime()-new Date(a.updatedAt).getTime()).map((news,index)=>(
-        <Link to={`/review-news/${news.news_id}`} key={news.news_id} className={`w-full h-fit py-2 px-3 border border-gray-600 dark:bg-[#182858] flex rounded-md items-center justify-between flex-wrap gap-1`}>
-            <div className="flex-col flex w-2/5 break-all">
+        <Link to={`/review-news/${news.news_id}`} key={news.news_id} className={`w-full h-fit py-2 px-3 border border-gray-600 dark:bg-[#182858] flex rounded-md items-center justify-between flex-wrap gap-1 `}>
+            <div className="flex-col flex w-2/5 break-words whitespace-break-spaces">
             <p>{news.name_news}</p>
             </div>
             <div className="flex-col flex">

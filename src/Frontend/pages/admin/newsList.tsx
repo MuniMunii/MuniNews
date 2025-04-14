@@ -7,23 +7,11 @@ import NewsCard from "../../component/admin/newsCard";
 import LoadingComp from "../../component/loadingComp";
 import { Link } from "react-router-dom";
 function NewsList() {
-    const [news,setNews]=useState<NewsKey[]|null|undefined>()
-    const [error,setError]=useState<boolean|null|String>()
-    const [isLoading,setIsLoading]=useState<boolean>(true)
-    const baseURL=process.env.REACT_APP_BACKEND_URL
-    useEffect(()=>{console.log(news)},[news])
-    useEffect(()=>{
-        const fetchNews=async()=>{
-            try{
-                const response=await fetch(`${baseURL}/news/get-news`,{method:'GET',credentials:'include'})
-                const data=await response.json()
-                if(response.ok){
-                    setNews(data.news)
-                }else{setError(data.messages||'Error try again')}
-            }catch(error){setError("error")}finally{setIsLoading(false)}
-        }
-        fetchNews()
-    },[])
+    const { value: news, isLoading: isLoading } = useFetch<NewsKey[]|null>(
+      `/news/get-news`,
+      (data) => data.news as NewsKey[]|null,
+      "GET"
+    );
   return (
     <>
       <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
