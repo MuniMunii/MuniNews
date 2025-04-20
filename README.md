@@ -9,6 +9,7 @@ The platform is designed with a strong emphasis on UI/UX, making it incredibly u
 * Reset Password That directly sent link into email user using token
 * Publish News With approval Admin that can be seen into email user if the news Rejected/Published
 * Fetching with loading Effect/Skeleton Effect
+* Pagination
 * Search feature
 * Responsive for all devices
 * Auto Save Archived News
