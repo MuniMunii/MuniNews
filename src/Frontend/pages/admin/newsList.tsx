@@ -1,6 +1,4 @@
 import NavbarAdmin from "../../component/admin/navbar";
-import SearchNews from "../../component/admin/searchNews";
-import { useEffect,useState } from "react";
 import useFetch from "../../hook/useFetch";
 import '../../style/animation.css'
 import NewsCard from "../../component/admin/newsCard";

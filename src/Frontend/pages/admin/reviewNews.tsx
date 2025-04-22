@@ -1,7 +1,6 @@
 import { useEffect, useState,useRef } from "react";
 import { useParams } from "react-router-dom";
 import LoadingComp from "../../component/loadingComp";
-import { useTheme } from "../../context/context";
 import { FaRegNewspaper } from "react-icons/fa";
 import DOMPurify from "dompurify";
 import { motion, AnimatePresence } from "framer-motion";

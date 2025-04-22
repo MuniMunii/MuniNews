@@ -1,8 +1,6 @@
-import { useEffect,useState } from "react";
-import { useTheme,useScreen } from "../../context/context";
+import { useScreen } from "../../context/context";
 import testSVG from "../../assets/test_2.svg";
 import { MdVerified } from "react-icons/md";
-import {motion} from "framer-motion";
 import '../../style/animation.css'
 import { Link } from "react-router-dom";
 function IndexScreen(){
@@ -20,7 +18,7 @@ function IndexScreen(){
           <p className="flex items-center gap-1"><MdVerified className={`fa-outline text-hotOrange dark:text-blue-500`}/>Trusted</p>
         </div>
         </div>
-        {isWideScreen?<img src={testSVG} alt="logo-index" loading="lazy" className=" w-1/2 h-screen select-none pointer-events-none"/>:''}
+        {isWideScreen?<img src={testSVG} alt="logo-index" loading="lazy" rel="preload" className=" w-1/2 h-screen select-none pointer-events-none"/>:''}
         </div>
     )
 }

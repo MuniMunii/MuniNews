@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React,{ useState, useEffect, useRef, useMemo } from "react";
 import useFetch from "../hook/useFetch";
 import { Link, useParams } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
@@ -43,12 +43,13 @@ function NewsPage() {
       });
     }
   }, [news]);
-  const sanitizeContent = DOMPurify.sanitize(news?.content || "", {
+  const sanitizeContent =useMemo(()=>DOMPurify.sanitize(news?.content || "", {
     ALLOWED_TAGS: ["a", "ol", "li", "ul", "p", "b", "i", "strong", "em", "br"],
     ALLOWED_ATTR: ["href", "target", "rel", "data-list"],
-  });
+  }),[news?.content]);
+  const PageNotFoundMemo = React.memo(PageNotFound);
   if (idNotFound) {
-    return <PageNotFound />;
+    return <PageNotFoundMemo />;
   }
   if (isLoading) {
     return <LoadingComp error={error} />;

@@ -1,4 +1,3 @@
-import { useTheme } from "../context/context";
 
 function LoadingComp({ error }: { error: string | null | boolean}) {
   return (

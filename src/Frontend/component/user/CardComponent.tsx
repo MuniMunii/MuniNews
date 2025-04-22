@@ -1,5 +1,4 @@
-import React from "react";
-import { useTheme, useUser } from "../../context/context";
+import {  useUser } from "../../context/context";
 import { Link } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
 function CardComponent({
@@ -14,6 +13,7 @@ function CardComponent({
   const ImgCover = ({ cover }: { cover: string }) => {
     return (
       <img
+      loading="lazy"
         src={`${baseURL}${cover}`}
         className="cover rounded-md w-full h-28 border border-gray-600"
         alt="cover-news"

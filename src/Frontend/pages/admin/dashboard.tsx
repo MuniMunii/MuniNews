@@ -1,12 +1,11 @@
-import { useTheme,useUser,useScreen } from "../../context/context";
+import { useScreen } from "../../context/context";
 import useFetch from "../../hook/useFetch";
-import { useEffect, useState,memo } from "react";
-import { HiOutlineTemplate,HiOutlinePencilAlt,HiOutlineClipboardList,HiOutlineClipboardCheck,HiOutlineClipboardCopy } from "react-icons/hi";
+import { useEffect, memo } from "react";
+import {HiOutlineClipboardList,HiOutlineClipboardCheck,HiOutlineClipboardCopy } from "react-icons/hi";
 import '../../style/animation.css'
 import LoadingComp from "../../component/loadingComp";
 import NewsRecentList from "../../component/admin/NewsRecentList";
 import UserList from "../../component/admin/UserList";
-import { Link } from "react-router-dom";
 import NavbarAdmin from "../../component/admin/navbar";
 const DashboardAdmin=memo(()=>{
     const {isWideScreen}=useScreen()

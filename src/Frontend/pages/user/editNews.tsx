@@ -1,11 +1,7 @@
-import { useEffect, useState, forwardRef, useRef } from "react";
-import { redirect, useParams } from "react-router-dom";
-import useFetch from "../../hook/useFetch";
-import { FaRegNewspaper } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import {useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme, useUser } from "../../context/context";
-import useDebounce from "../../hook/useDebounce";
-import LoadingComp from "../../component/loadingComp";
+import { useUser } from "../../context/context";
 import FormEditNews from "../../component/user/formEditNews";
 import { useNavigate } from "react-router-dom";
 function EditNews() {

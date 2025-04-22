@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import PageNotFound from "../component/404Page";
 import SkeletonIndexNews from "../component/SkeletonIndexNews";
 import FooterComp from "../component/footer";
-import NewsList from "./admin/newsList";
 import useFetch from "../hook/useFetch";
 function IndexNewsListCategory() {
   const { category } = useParams();
@@ -65,6 +64,7 @@ function IndexNewsListCategory() {
                 >
                   <div className="w-full overflow-hidden rounded-md">
                   <img
+                  alt={`main-news-${news?.[0].name_news}`}
                     src={`${baseURL}${news?.[0].cover}`}
                     className="w-full group-hover:scale-105 transition-all duration-300"
                   />
@@ -100,6 +100,8 @@ function IndexNewsListCategory() {
                       className=" group flex tablet:flex-row phone:flex-col gap-2"
                     >
                       <img
+                        loading="lazy"
+                      alt={newsItem.name_news}
                         src={`${baseURL}${newsItem.cover}`}
                         className="w-32 h-24 self-center rounded-md"
                       ></img>
@@ -143,6 +145,8 @@ function IndexNewsListCategory() {
                       className=" group flex tablet:flex-row phone:flex-col gap-2"
                     >
                       <img
+                      loading="lazy"
+                      alt={`${newsItem.name_news}`}
                         src={`${baseURL}${newsItem.cover}`}
                         className="w-32 h-24 self-center rounded-md"
                       ></img>

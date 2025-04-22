@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaRegNewspaper } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { HashLink } from "react-router-hash-link";
-import useFetch from "../hook/useFetch";
 function UserInfo() {
   const [news, setNews] = useState<NewsKey[] | undefined>([]);
   const [page, setPage] = useState<number>(1);

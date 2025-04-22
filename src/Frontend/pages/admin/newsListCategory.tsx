@@ -1,10 +1,8 @@
-import { useState,useEffect } from "react"
 import NavbarAdmin from "../../component/admin/navbar"
 import { useParams, useSearchParams } from "react-router-dom"
 import LoadingComp from "../../component/loadingComp"
 import { Link } from "react-router-dom"
 import { FaUser } from "react-icons/fa"
-import { BiCategory } from "react-icons/bi";
 import useFetch from "../../hook/useFetch"
 function NewsListCategory(){
     const [useSearchParam,setSearchParam]=useSearchParams()

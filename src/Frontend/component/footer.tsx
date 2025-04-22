@@ -1,4 +1,3 @@
-import { useTheme } from "../context/context";
 import { FaHeart } from "react-icons/fa";
 function FooterComp() {
   return (

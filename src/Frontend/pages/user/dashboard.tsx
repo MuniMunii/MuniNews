@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { useScreen, useTheme, useUser } from "../../context/context";
-import { animate, AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useUser } from "../../context/context";
+import {  AnimatePresence, motion } from "framer-motion";
 import AddNewsForm from "../../component/user/addNewsForm";
 import CardComponent from "../../component/user/CardComponent";
 import "../../style/animation.css"
@@ -48,7 +48,7 @@ function DashboardUser() {
         <div className="flex flex-wrap gap-2">
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300 text-black dark:text-white   rounded-md flex items-center justify-center ${
-              isActive === "mynews" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
+              isActive === "mynews" ? `text-opacity-100 bg-light-Orange dark:bg-blue-600 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
             }`}
             onClick={() => setIsActive("mynews")}
           >
@@ -56,7 +56,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "archived" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
+              isActive === "archived" ? `text-opacity-100 bg-light-Orange dark:bg-blue-600 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100`
             }`}
             onClick={() => setIsActive("archived")}
           >
@@ -64,7 +64,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "published" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
+              isActive === "published" ? `text-opacity-100 bg-light-Orange dark:bg-blue-600 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("published")}
           >
@@ -72,7 +72,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "inreview" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
+              isActive === "inreview" ? `text-opacity-100 bg-light-Orange dark:bg-blue-600 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("inreview")}
           >
@@ -80,7 +80,7 @@ function DashboardUser() {
           </button>
           <button
             className={`px-3 py-1 font-Poppins tracking-wider transition duration-300  text-black dark:text-white rounded-md flex items-center justify-center ${
-              isActive === "cancelled" ? `text-opacity-100 bg-light-Orange dark:bg-blue-500 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
+              isActive === "cancelled" ? `text-opacity-100 bg-light-Orange dark:bg-blue-600 ` : `text-opacity-60 hover:text-opacity-100 dark:text-opacity-60 dark:hover:text-opacity-100 `
             }`}
             onClick={() => setIsActive("cancelled")}
           >
@@ -108,15 +108,15 @@ function DashboardUser() {
           className={`laptop:block laptop:w-1/3 laptop:pr-8 flex-col bg-white dark:bg-darkTheme items-center gap-2 p-4 border border-gray-600`}
         >
           <div className="flex items-center gap-2 border-b border-gray-600 pb-2 relative">
-            <Link to={'edit-profile'} className="py-1 px-3 rounded-md dark:bg-blue-500 bg-lightOrange absolute right-0 top-0 flex items-center justify-center gap-1">Edit<CiMenuKebab className="text-black"/></Link>
-          {userState?.image?<img src={`${baseURL}${userState?.image}`} className="size-32 rounded-full object-cover"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
+            <Link to={'edit-profile'} className="py-1 px-3 rounded-md dark:bg-blue-600 bg-lightOrange absolute right-0 top-0 flex items-center justify-center gap-1">Edit<CiMenuKebab className="text-black"/></Link>
+          {userState?.image?<img alt="user-profile-picture" src={`${baseURL}${userState?.image}`} className="size-32 rounded-full object-cover"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
           <p className="">{user}</p>
           </div>
           <p className="text-center italic font-Poppins text-sm py-2 border-b border-b-gray-600">{userState?.description?userState.description:'This user not created description yet'}</p>
           <div className="flex gap-2 text-xl w-full justify-center py-2">
-            {userState?.facebook?<a href={userState.facebook} target="_blank"><FaFacebook className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
-            {userState?.twitter?<a href={userState?.twitter} target="_blank"><FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
-            {userState?.instagram?<a href={userState.instagram} target="_blank"><FaInstagram className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+            {userState?.facebook?<a aria-label='Facebook Profile" ' href={userState.facebook} target="_blank"><FaFacebook className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+            {userState?.twitter?<a aria-label='Twitter Profile" ' href={userState?.twitter} target="_blank"><FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
+            {userState?.instagram?<a aria-label='Instagram Profile" ' href={userState.instagram} target="_blank"><FaInstagram className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
           </div>
         </div>
         <div className={`phone:h-fit laptop:h-full border bg-white border-gray-600 dark:bg-darkTheme w-full laptop:w-3/4 laptop:max-w-[850px] laptop:mx-auto`}>

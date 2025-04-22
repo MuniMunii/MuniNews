@@ -1,5 +1,4 @@
 import { useParams,useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/context";
 import { useState } from "react";
 function ResetPassword() {
   const {token}=useParams()

@@ -1,5 +1,4 @@
-import Navbar from "../component/navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { useScreen } from "../context/context";
 import FooterComp from "../component/footer";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,14 +16,13 @@ import { motion } from "framer-motion";
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
 function NewsIndex() {
-  const [query, setQuery] = useState<number>(1);
   const [error, setError] = useState<string | boolean>();
   const { isWideScreen } = useScreen();
   const [imgError, setImgError] = useState<boolean>(false);
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const { value: muniNews, isLoading: isLoading } = useFetch<NewsKey[]>(
     `/news/get-news`,
-    (data) => data.news as NewsKey[],
+    (data) => data.news  as NewsKey[],
     "GET"
   );
   useEffect(() => {
@@ -88,9 +86,11 @@ function NewsIndex() {
           <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
             <Swiper
               modules={[Pagination, Autoplay, Navigation]}
+              lazyPreloadPrevNext={5}
               navigation={true}
               loop={true}
               pagination={{ dynamicBullets: true }}
+              speed={500}
               autoplay={{ delay: 4000, pauseOnMouseEnter: true }}
               className="mySwiper w-[90%] max-w-[800px] tablet:h-96 phone:h-72 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
             >
@@ -133,11 +133,16 @@ function NewsIndex() {
                         </div>
                       </div>
                       {!imgError && news.image_url ? (
+                        <div className="size-full absolute top-0 left-0 z-0">
                         <img
+                        loading="lazy"
+                        data-src={news.image_url}
                           src={`${news.image_url}`}
-                          className="object-fill absolute top-0 left-0 w-full h-full z-0 group-hover:scale-105 transition duration-200"
+                          alt={`img-${news.title}`}
+                          className="object-cover size-full z-0 group-hover:scale-105 transition duration-200"
                           onError={() => setError(true)}
                         />
+                        </div>
                       ) : (
                         <div className="w-full h-full bg-black flex justify-center items-center text-5xl absolute top-0 left-0">
                           <FaRegNewspaper />
@@ -276,11 +281,14 @@ function NewsIndex() {
                       </p>
                       
                     </div>
+                    <div className="w-24 h-12 ml-auto">
                     <img
+                    loading="lazy"
                       src={`${baseURL}${news.cover}`}
                       alt={`img-${news.name_news}`}
-                      className="w-24 h-12 ml-auto object-cover"
+                      className="size-full object-cover"
                     />
+                    </div>
                   </Link>
                   <div className="w-full text-left flex text-sm gap-2">
                         <Link
@@ -331,7 +339,6 @@ function NewsIndex() {
                     </Link>
                     <h1 className="font-semibold">General</h1>
                   </div>
-
                   <MuniNewsIndex tag="General" />
                 </div>
                 <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
@@ -344,7 +351,6 @@ function NewsIndex() {
                     </Link>
                     <h1 className="font-semibold">Business</h1>
                   </div>
-
                   <MuniNewsIndex tag="Business" />
                 </div>
                 <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">
@@ -385,7 +391,6 @@ function NewsIndex() {
                     </Link>
                     <h1 className="font-semibold">Sciences</h1>
                   </div>
-
                   <MuniNewsIndex tag="Sciences" />
                 </div>
                 <div className="flex flex-col tablet:w-64 phone:w-full gap-3 items-center">

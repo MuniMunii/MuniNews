@@ -1,9 +1,8 @@
 import useFetch from "../../hook/useFetch";
 import LoadingComp from "../loadingComp";
 function WeatherStatus(){
-    const baseURL = process.env.REACT_APP_BACKEND_URL;
     const { value: Weather, isLoading: isLoadingWeather } = useFetch(
-        `${baseURL}/other/weather-current`,
+        `/other/weather-current`,
         (data) => ({
           country: data.weatherData.map((data: any) => {
             return {

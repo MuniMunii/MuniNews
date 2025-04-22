@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/context";
 import { useState } from "react";
 function ForgotPassword() {
   const [error, setError] = useState<string>('');
