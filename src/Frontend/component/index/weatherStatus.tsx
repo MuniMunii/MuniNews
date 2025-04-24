@@ -40,7 +40,7 @@ function WeatherStatus(){
                   {country.cel}°
                 </p>
               </div>
-              <img src={country.condition} alt={country.condition} />
+              <img src={country.condition} width={64} height={64} alt={country.condition} />
             </div>
           ))}
         </div>

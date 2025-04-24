@@ -1,8 +1,8 @@
-import { useState, useEffect, lazy } from "react";
+import { useState, useEffect, lazy,useMemo } from "react";
 import { useScreen } from "../context/context";
 import FooterComp from "../component/footer";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from 'swiper/modules';
 import useFetch from "../hook/useFetch";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -15,6 +15,7 @@ import BannerNews from "../component/index/bannerNews";
 import { motion } from "framer-motion";
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
+import LazyImageIntersection from "../component/lazyImageIntersection";
 function NewsIndex() {
   const [error, setError] = useState<string | boolean>();
   const { isWideScreen } = useScreen();
@@ -76,6 +77,63 @@ function NewsIndex() {
         ))
     );
   }
+  const MemoizedSlide=useMemo(() => {
+    return (
+      newsData?.news?.map((news, index) => (
+        <SwiperSlide
+          key={`current-news-${news.article_id}-${index}`}
+          className="!w-full h-full bg-cover relative group"
+        >
+          <a
+            href={news.link}
+            className="cursor-pointer group"
+            target="_blank"
+          >
+            <div className="absolute w-full top-0 left-0 z-20 text-white font-Poppins">
+              <div className="relative w-full opacity-0 transition duration-500 group-hover:opacity-100">
+                <div className="bg-black/40 absolute inset-0 gradient-mask-b-60 w-full"></div>
+                <div className="relative w-full p-2">
+                  <p>
+                    {news.description
+                      ? news.description.trim().slice(0, 160) + "..."
+                      : news.title}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="absolute w-full bottom-0 right-0 z-20 text-white font-Poppins">
+              <div className="relative w-full">
+                <div className="bg-black/60 absolute inset-0 gradient-mask-t-60 w-full"></div>
+                <div className="relative w-full p-2 flex-col">
+                  <p>{news.title}</p>
+                  <p className="text-xs text-opacity-80">
+                    Source: {news.source_name}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {!imgError && news.image_url ? (
+              <>
+              <img
+              src={`${news.image_url}`}
+                // src={`${news.image_url}`}
+                loading="lazy"
+                alt={`img-${news.title}`}
+                className="swiper-lazy object-cover size-full top-0 left-0 z-0 group-hover:scale-105 transition duration-200"
+                onError={() => setError(true)}
+              />
+              <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
+              </>
+            ) : (
+              <div className="w-full h-full bg-black flex justify-center items-center text-5xl absolute top-0 left-0">
+                <FaRegNewspaper />
+              </div>
+            )}
+          </a>
+        </SwiperSlide>
+      ))
+    )
+  },[newsData?.news])
   return (
     <>
       <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
@@ -86,72 +144,21 @@ function NewsIndex() {
           <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
             <Swiper
               modules={[Pagination, Autoplay, Navigation]}
+              // lazy={true}
               lazyPreloadPrevNext={5}
+              lazyPreloaderClass="swiper-lazy-preloader"
               navigation={true}
               loop={true}
               pagination={{ dynamicBullets: true }}
               speed={500}
               autoplay={{ delay: 4000, pauseOnMouseEnter: true }}
-              className="mySwiper w-[90%] max-w-[800px] tablet:h-96 phone:h-72 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
+              className="mySwiper w-[90%] max-w-[900px] tablet:h-96 phone:h-72 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
             >
               {isLoadingPublicAPI ? (
                 <SwiperSlide className="!w-full h-full flex justify-center items-center">
                   <LoadingComp error={null} />
                 </SwiperSlide>
-              ) : (
-                newsData?.news?.map((news, index) => (
-                  <SwiperSlide
-                    key={`current-news-${news.article_id}-${index}`}
-                    className="!w-full h-full bg-cover relative group"
-                  >
-                    <a
-                      href={news.link}
-                      className="cursor-pointer group"
-                      target="_blank"
-                    >
-                      <div className="absolute w-full top-0 left-0 z-20 text-white font-Poppins">
-                        <div className="relative w-full opacity-0 transition duration-500 group-hover:opacity-100">
-                          <div className="bg-black/40 absolute inset-0 gradient-mask-b-60 w-full"></div>
-                          <div className="relative w-full p-2">
-                            <p>
-                              {news.description
-                                ? news.description.trim().slice(0, 160) + "..."
-                                : news.title}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="absolute w-full bottom-0 right-0 z-20 text-white font-Poppins">
-                        <div className="relative w-full">
-                          <div className="bg-black/60 absolute inset-0 gradient-mask-t-60 w-full"></div>
-                          <div className="relative w-full p-2 flex-col">
-                            <p>{news.title}</p>
-                            <p className="text-xs text-opacity-80">
-                              Source: {news.source_name}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      {!imgError && news.image_url ? (
-                        <div className="size-full absolute top-0 left-0 z-0">
-                        <img
-                        loading="lazy"
-                        data-src={news.image_url}
-                          src={`${news.image_url}`}
-                          alt={`img-${news.title}`}
-                          className="object-cover size-full z-0 group-hover:scale-105 transition duration-200"
-                          onError={() => setError(true)}
-                        />
-                        </div>
-                      ) : (
-                        <div className="w-full h-full bg-black flex justify-center items-center text-5xl absolute top-0 left-0">
-                          <FaRegNewspaper />
-                        </div>
-                      )}
-                    </a>
-                  </SwiperSlide>
-                ))
-              )}
+              ) : MemoizedSlide}
             </Swiper>
           </div>
           {/* side news */}
@@ -172,7 +179,7 @@ function NewsIndex() {
                   )
                   .slice(0, 5)
                   .map((news, index) => (
-                      <div       key={`recent-news-${news.news_id}-${index}`} className="w-full h-fit p-2 border-x border-gray-600">
+                      <div key={`recent-news-${news.news_id}-${index}`} className="w-full h-fit p-2 border-x border-gray-600">
                         <Link
                           to={`/read/${news.news_id}`}
                           className=" group "
@@ -268,29 +275,18 @@ function NewsIndex() {
                 .slice(0, 8)
                 .map((news, index) => (
                   <div key={`news-list-vertical-${news.news_id}`} className="w-full flex flex-col justify-between  p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca">
-                  <Link
-                    to={`/read/${news.news_id}`}
-                    className="group flex gap-7"
+                  <div
+                    className="group flex gap-7 phone:flex-col-reverse phone:justify-center tablet:flex-row tablet:items-center"
                   >
                     <div className="flex flex-col gap-1">
-                      <p className="text-xl group-hover:underline">
+                      <Link
+                    to={`/read/${news.news_id}`} className="text-xl group-hover:underline">
                         {news.name_news}
-                      </p>
+                      </Link>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {news.description}
                       </p>
-                      
-                    </div>
-                    <div className="w-24 h-12 ml-auto">
-                    <img
-                    loading="lazy"
-                      src={`${baseURL}${news.cover}`}
-                      alt={`img-${news.name_news}`}
-                      className="size-full object-cover"
-                    />
-                    </div>
-                  </Link>
-                  <div className="w-full text-left flex text-sm gap-2">
+                      <div className="w-full text-left flex text-sm gap-2">
                         <Link
                           to={`/user/${news.createdBy}`}
                           className="text-blue-600 hover:underline"
@@ -301,8 +297,21 @@ function NewsIndex() {
                           {news.category}
                         </p>
                       </div>
+                    </div>
+                    <LazyImageIntersection src={`${baseURL}${news.cover}`}
+                      alt={`img-${news.name_news}`}
+                      className="size-full tablet:max-w-36 tablet:max-h-24 object-cover"/>
+                    {/* <img
+                    loading="lazy"
+                      src={`${baseURL}${news.cover}`}
+                      alt={`img-${news.name_news}`}
+                      width="96"
+                      height="46"
+                      sizes="(max-width: 600px) 48px, (max-width: 1200px) 96px, 192px"
+                      className="size-full tablet:max-w-36 tablet:max-h-24 object-cover"
+                    /> */}
                   </div>
-
+                  </div>
                 ))
             )}
           </div>
@@ -323,7 +332,7 @@ function NewsIndex() {
           <div className="w-full flex flex-col gap-4 p-1 pb-3 font-Poppins">
             <p
               id="newstitle"
-              className="uppercase text-center font-Garramond text-6xl"
+              className="uppercase text-center font-Garramond text-6xl h-fit max-h-[120px]"
             >
               Only From MuniNews
             </p>
@@ -363,7 +372,6 @@ function NewsIndex() {
                     </Link>
                     <h1 className="font-semibold">Sports</h1>
                   </div>
-
                   <MuniNewsIndex tag="Sport" />
                 </div>
               </div>

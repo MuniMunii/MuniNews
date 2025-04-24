@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom"
+import LazyImageIntersection from "../lazyImageIntersection";
 function BannerNews({muniNews,baseURL}:{muniNews:NewsKey[]|undefined,baseURL:string}){
   if (!muniNews || muniNews.length === 0) return null;
     return (
         <div className="w-full h-fit  bg-lightOrange my-5 dark:bg-dark300 py-7 px-7 flex phone:flex-col tablet:flex-row justify-between">
-            <div className="tablet:w-[60%] phone:w-full max-h-[450px] relative">
-            <img
-          src={`${baseURL}${muniNews?.[0].cover}`}
-          className="w-full h-full"
-        />
-            </div>
+            <LazyImageIntersection alt={`${baseURL}${muniNews?.[0].cover}`} src={`${baseURL}${muniNews?.[0].cover}`} className="tablet:w-[60%] phone:w-full max-h-[450px] max-w-[300px]"/>
         <div className="tablet:w-2/5 phone:w-full flex flex-col justify-center items-start p-3 gap-3">
           <p className="tablet:text-3xl phone:text-xl uppercase font-Garramond">
             {muniNews?.[0].name_news}
