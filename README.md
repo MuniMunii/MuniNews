@@ -16,6 +16,9 @@ The platform is designed with a strong emphasis on UI/UX, making it incredibly u
 * Modal Component for interactive UI/UX
 * Fetch news with Queries
 * Display Current Weather
+#### Lighthouse Score (Avg score from all pages)
+* Dekstop : Performance (70±), Accessibility (95±), Best Practice (95±), SEO(95±)
+* Mobile : Performance (60±), Accessibility (95±), Best Practice (95±), SEO(95±)
 #### External Api
 * [Weather API](https://www.weatherapi.com/)
 * [Newsdata.io](https://newsdata.io/)
