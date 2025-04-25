@@ -3,8 +3,8 @@ import LazyImageIntersection from "../lazyImageIntersection";
 function BannerNews({muniNews,baseURL}:{muniNews:NewsKey[]|undefined,baseURL:string}){
   if (!muniNews || muniNews.length === 0) return null;
     return (
-        <div className="w-full h-fit  bg-lightOrange my-5 dark:bg-dark300 py-7 px-7 flex phone:flex-col tablet:flex-row justify-between">
-            <LazyImageIntersection alt={`${baseURL}${muniNews?.[0].cover}`} src={`${baseURL}${muniNews?.[0].cover}`} className="tablet:w-[60%] phone:w-full max-h-[450px] max-w-[300px]"/>
+        <div className="w-full h-fit  bg-lightOrange my-5 dark:bg-dark300 py-7 px-7 flex phone:flex-col tablet:flex-row justify-evenly">
+            <LazyImageIntersection lazy={false} alt={`${baseURL}${muniNews?.[0].cover}`} src={`${baseURL}${muniNews?.[0].cover}`} className="size-full max-h-[400px] max-w-[700px] rounded-md"/>
         <div className="tablet:w-2/5 phone:w-full flex flex-col justify-center items-start p-3 gap-3">
           <p className="tablet:text-3xl phone:text-xl uppercase font-Garramond">
             {muniNews?.[0].name_news}

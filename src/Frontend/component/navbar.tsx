@@ -117,7 +117,7 @@ function Navbar() {
         {/* Logo */}
         <Link
           to={"/"}
-          className="cursor-pointer laptop:text-4xl text-1xl h-fit  py-1 px-3 font-testLogo flex gap-2 select-none uppercase text-[#fffcf9]"
+          className="cursor-pointer laptop:text-4xl laptop:w-fit phone:text-1xl h-fit phone:w-36  py-1 px-3 font-testLogo flex gap-2 select-none uppercase text-[#fffcf9]"
         >
           Muni<span className="bg-[#dd395f] px-2">News</span>
         </Link>

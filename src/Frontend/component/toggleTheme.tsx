@@ -6,6 +6,7 @@ function ToggleThemeButton() {
     const isLight=theme==='light'
     return (
       <button
+      aria-label="Toggle theme"
         className={`toggle-container w-24 h-10 text-sm bg-white/50 dark:bg-pink-500/50  rounded-[50px] cursor-pointer flex p-2 items-center`}
         style={{
           justifyContent: isLight ? "flex-start" : "flex-end",

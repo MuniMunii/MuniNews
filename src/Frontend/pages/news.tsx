@@ -102,8 +102,8 @@ function NewsPage() {
           className="text-justify text leading-8 font-Poppins list-decimal"
         />
         <div className="w-full h-fit border-y border-y-gray-600 my-4 p-4 font-Poppins">
-        <div className="flex gap-3 items-center justify-between flex-wrap">
-        <div className="flex items-center gap-3">
+        <div className="flex gap-3 items-center justify-between">
+        <div className="flex items-center gap-3 tablet:flex-row phone:flex-col">
           {user?.image?<img src={`${baseURL}${user?.image}`} className="size-16 rounded-full object-cover"/>:<div className="size-16 bg-black rounded-full flex justify-center items-center"><IoPerson/></div>}
           <p className="text-left">Posted By: <span className="font-bold hover:underline"><Link to={`/user/${user?.nama_user}`}>{user?.nama_user}</Link></span> {user?.description?user?.description:'Check out other news from this user'}</p>
           </div>

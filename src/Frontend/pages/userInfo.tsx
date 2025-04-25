@@ -38,7 +38,7 @@ function UserInfo() {
     fetchUserInfo();
   }, [nama_user, page]);
   return (
-    <div className="w-[90%] h-full mx-auto  my-2 flex">
+    <div className="w-[90%] mx-auto  my-2 flex">
       <div className="tablet:w-2/3 phone:w-full h-full  flex flex-col">
         <div className="w-full h-fit border-b border-b-gray-600 flex laptop:flex-row phone:flex-col justify-start gap-3 p-3">
           {isLoading ? (
@@ -49,6 +49,7 @@ function UserInfo() {
           ) : userInfo?.image ? (
             <img
               src={`${baseURL}${userInfo?.image}`}
+              alt={`profile-${userInfo?.image}`}
               className="size-48 rounded-full my-auto object-cover"
             ></img>
           ) : (
@@ -82,7 +83,7 @@ function UserInfo() {
                 <p className="text-sm uppercase text-gray-800 dark:text-gray-500 font-bold">
                   {userInfo?.role}
                 </p>
-                <p className="italic">
+                <p className="italic min-h-8">
                   {userInfo?.description
                     ? userInfo.description
                     : "This user hasn't created description yet."}
@@ -90,17 +91,17 @@ function UserInfo() {
                 <div className="flex gap-2">
                   {userInfo?.facebook ? (
                     <a href={userInfo.facebook} target="_blank">
-                      <FaFacebook className="hover:text-gray-700 dark:hover:text-black transition" />
+                      <FaFacebook aria-label='facebook Profile' className="hover:text-gray-700 dark:hover:text-black transition" />
                     </a>
                   ) : null}
                   {userInfo?.twitter ? (
                     <a href={userInfo?.twitter} target="_blank">
-                      <FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition" />
+                      <FaXTwitter aria-label='Twitter Profile' className="hover:text-gray-700 dark:hover:text-black transition" />
                     </a>
                   ) : null}
                   {userInfo?.instagram ? (
                     <a href={userInfo.instagram} target="_blank">
-                      <FaInstagram className="hover:text-gray-700 dark:hover:text-black transition" />
+                      <FaInstagram aria-label='Instagram Profile' className="hover:text-gray-700 dark:hover:text-black transition" />
                     </a>
                   ) : null}
                 </div>
@@ -173,6 +174,7 @@ function UserInfo() {
                         {news.cover ? (
                           <img
                             src={`${baseURL}${news.cover}`}
+                            alt={`image-${news.cover}`}
                             className="w-32 h-24 object-cover rounded-md"
                           />
                         ) : (

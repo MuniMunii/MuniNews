@@ -195,7 +195,7 @@ function FormEditNews({
             <div className="relative w-full h-full">
               <img
                 src={`${baseURL}${coverValue}`}
-                className="w-full h-full bg-cover"
+                className="w-full h-full object-cover"
               />
               <label
                 htmlFor="change-img"
@@ -243,7 +243,7 @@ function FormEditNews({
             e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
             setIsSaving(true);
           }}
-          style={{ height: inputTitleRef.current?.scrollHeight }}
+          style={{ height: inputTitleRef.current?.scrollHeight||'fit-content' }}
           className={`w-full text-center resize-none outline-none rounded-lg px-7 py-3 italic bg-[#FFE9CE] dark:bg-gray-600/40`}
         />
         <label htmlFor="Content">Content</label>

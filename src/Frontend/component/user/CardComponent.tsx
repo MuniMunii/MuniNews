@@ -1,6 +1,7 @@
 import {  useUser } from "../../context/context";
 import { Link } from "react-router-dom";
 import { FaRegNewspaper } from "react-icons/fa";
+import LazyImageIntersection from "../lazyImageIntersection";
 function CardComponent({
   Tag,
   myNews,
@@ -12,11 +13,11 @@ function CardComponent({
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const ImgCover = ({ cover }: { cover: string }) => {
     return (
-      <img
-      loading="lazy"
+      <LazyImageIntersection
+      lazy={false}
         src={`${baseURL}${cover}`}
-        className="cover rounded-md w-full h-28 border border-gray-600"
-        alt="cover-news"
+        className="cover object-cover rounded-md w-full h-28 border border-gray-600"
+        alt={`cover-${cover}`}
       />
     );
   };

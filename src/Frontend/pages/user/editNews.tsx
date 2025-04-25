@@ -94,7 +94,7 @@ function EditNews() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <div className="tablet:w-4/5 max-w-full phone:w-3/5 min-w-0 h-full mx-auto my-3">
+      <div className="w-4/5 max-w-full min-w-0 h-full mx-auto my-3">
         <FormEditNews
           setModalValidation={setModalValidation}
           setValidation={setValidation}

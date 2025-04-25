@@ -18,6 +18,18 @@ function App() {
   const { theme } = useTheme();
   const isLight = theme === "light";
   const { user, isAuthenticated, role } = useUser();
+  useEffect(() => {
+    let timer:NodeJS.Timeout;
+    timer=setInterval(()=>{console.log('pagehide')},1000)
+    const handlePageHide = (event: PageTransitionEvent) => {
+      clearInterval(timer)
+    };
+    window.addEventListener("pagehide", handlePageHide);
+    return () => {
+      clearInterval(timer)
+      window.removeEventListener("pagehide", handlePageHide);
+    };
+  }, []);
   const ProtectedRoute = ({
     isAuthenticated,
   }: {

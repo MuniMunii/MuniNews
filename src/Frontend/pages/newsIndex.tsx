@@ -32,7 +32,7 @@ function NewsIndex() {
   const { value: newsData, isLoading: isLoadingPublicAPI } = useFetch(
     `/news/publicnews`,
     (data) => ({
-      news: data.results as PublicNews[] | undefined,
+      news: data.results.slice(0,5) as PublicNews[] | undefined,
     }),"GET"
   );
   function MuniNewsIndex({ tag }: { tag: Category }) {
@@ -139,17 +139,18 @@ function NewsIndex() {
       <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
         <SearchNews />
       </div>
-      <div className="w-full h-full mx-auto flex flex-col my-3 relative">
+      <div className="w-full  mx-auto flex flex-col my-3 relative">
         <div className="w-[90%] mx-auto h-fit border border-gray-600 rounded-md flex justify-between">
           <div className="w-full py-10 bg-gradient-to-t from-darkTheme to-violet-950">
+            {/* swiper has performance lcp issue that cant be fix */}
             <Swiper
               modules={[Pagination, Autoplay, Navigation]}
               // lazy={true}
               lazyPreloadPrevNext={5}
               lazyPreloaderClass="swiper-lazy-preloader"
               navigation={true}
-              loop={true}
-              pagination={{ dynamicBullets: true }}
+              loop={false}
+              // pagination={{ dynamicBullets: true }}
               speed={500}
               autoplay={{ delay: 4000, pauseOnMouseEnter: true }}
               className="mySwiper w-[90%] max-w-[900px] tablet:h-96 phone:h-72 rounded-md shadow-shadow_Dark dark:shadow-shadow_Light"
@@ -278,7 +279,7 @@ function NewsIndex() {
                   <div
                     className="group flex gap-7 phone:flex-col-reverse phone:justify-center tablet:flex-row tablet:items-center"
                   >
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 w-full min-h-0 ">
                       <Link
                     to={`/read/${news.news_id}`} className="text-xl group-hover:underline">
                         {news.name_news}
@@ -298,9 +299,11 @@ function NewsIndex() {
                         </p>
                       </div>
                     </div>
-                    <LazyImageIntersection src={`${baseURL}${news.cover}`}
+                    {/* <div className=" bg-gray-600"> */}
+                    <LazyImageIntersection lazy src={`${baseURL}${news.cover}`}
                       alt={`img-${news.name_news}`}
-                      className="size-full tablet:max-w-36 tablet:max-h-24 object-cover"/>
+                      className="size-full object-cover tablet:max-w-36 tablet:max-h-24 phone:h-52 rounded-md"/>
+                    {/* </div> */}
                     {/* <img
                     loading="lazy"
                       src={`${baseURL}${news.cover}`}
@@ -332,7 +335,7 @@ function NewsIndex() {
           <div className="w-full flex flex-col gap-4 p-1 pb-3 font-Poppins">
             <p
               id="newstitle"
-              className="uppercase text-center font-Garramond text-6xl h-fit max-h-[120px]"
+              className="uppercase text-center font-Garramond text-6xl"
             >
               Only From MuniNews
             </p>
