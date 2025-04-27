@@ -20,7 +20,7 @@ function App() {
   const { user, isAuthenticated, role } = useUser();
   useEffect(() => {
     let timer:NodeJS.Timeout;
-    timer=setInterval(()=>{console.log('pagehide')},1000)
+    timer=setInterval(()=>{console.log('HI')},1000)
     const handlePageHide = (event: PageTransitionEvent) => {
       clearInterval(timer)
     };

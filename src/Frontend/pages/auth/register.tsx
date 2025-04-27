@@ -3,6 +3,7 @@ import { useTheme } from "../../context/context";
 import useFetch from "../../hook/useFetch";
 import { redirect, useNavigate, Link } from "react-router-dom";
 import { verify } from "crypto";
+import { Helmet } from "react-helmet";
 function RegisterForm() {
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
@@ -73,6 +74,9 @@ function RegisterForm() {
   };
   return (
     <>
+    <Helmet>
+    <title>Register</title>
+</Helmet>
       <div
         className={`dotted-without-mask w-full h-full flex justify-center items-center border-t-darkTheme dark:border-gray-600 text-black border-t`}
       >

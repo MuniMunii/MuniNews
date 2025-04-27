@@ -12,9 +12,6 @@ function Navbar() {
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const navigate=useNavigate()
   useEffect(() => {
-    console.log(modalLogout);
-  }, [modalLogout]);
-  useEffect(() => {
     if (openNav || modalLogout) {
       document.body.style.overflow = "hidden";
     } else {

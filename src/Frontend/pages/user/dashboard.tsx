@@ -10,6 +10,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import {IoPerson}from"react-icons/io5" 
 import useFetch from "../../hook/useFetch";
+import { Helmet } from "react-helmet";
 function DashboardUser() {
   const [isActive, setIsActive] = useState<statusNews>('mynews');
   const [modalPopUp, setModalPopUp] = useState<boolean>(false);
@@ -32,16 +33,13 @@ function DashboardUser() {
     "GET"
   );
   useEffect(() => {
-    console.log(modalMakeNews);
+    // console.log(modalMakeNews);
     if (modalMakeNews) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
   }, [modalMakeNews]);
-  useEffect(() => {
-    console.log(isActive);
-  }, [isActive]);
   const NavDashboard = () => {
     return (
       <div className={`w-full h-fit flex py-2 text-white font-mono px-4 justify-between items-center flex-wrap gap-y-2 border-b border-b-gray-600 `}>
@@ -102,6 +100,9 @@ function DashboardUser() {
 
   return (
     <>
+    <Helmet>
+        <title>Dashboard</title>
+    </Helmet>
     <div className="diagonal-pattern">
       <div className="mx-auto w-[90%] max-w-[800px] laptop:h-screen phone:h-full flex flex-col laptop:flex-row-reverse laptop:w-full laptop:max-w-full overflow-hidden">
         <div

@@ -3,6 +3,7 @@ import { useTheme, useUser } from "../../context/context";
 import useFetch from "../../hook/useFetch";
 import { redirect, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 type errorParam = "Email Invalid";
 function LoginForm() {
   const {assignUser, user,assignIsAuthentication,assignRole}=useUser()
@@ -23,7 +24,7 @@ function LoginForm() {
     }
   }, [showPassword]);
   // useEffect untuk assign user ke context
-  useEffect(()=>{console.log('user Role',role)},[role])
+  // useEffect(()=>{console.log('user Role',role)},[role])
   useEffect(() => {
     if (isAuthenticated) {
       assignUser(loginAs);
@@ -65,7 +66,7 @@ function LoginForm() {
           setLoginAs(data.name);
           setIsAuthenticated(data.isAuth)
           setRole(data.role)
-          console.log(data)
+          // console.log(data)
           localStorage.setItem("user", data.name);
           navigate('/')
         } else {
@@ -84,19 +85,11 @@ function LoginForm() {
       }
     }
   };
-  const testFetchWithLogin=async ()=>{
-    try{
-      const response=await fetch(`${baseURL}/auth/user-token`,{
-        credentials:'include'
-      })
-      const data=await response.json()
-      console.log(data)
-    }catch(error){
-      console.log(error)
-    }
-  }
   return (
     <>
+    <Helmet>
+    <title>Login</title>
+</Helmet>
       <div
         className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t border-t-darkTheme dark:border-gray-600 `}
       >

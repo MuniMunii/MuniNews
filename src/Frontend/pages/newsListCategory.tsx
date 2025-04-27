@@ -6,6 +6,7 @@ import PageNotFound from "../component/404Page";
 import SkeletonIndexNews from "../component/SkeletonIndexNews";
 import FooterComp from "../component/footer";
 import LazyImageIntersection from "../component/lazyImageIntersection";
+import { Helmet } from "react-helmet";
 function IndexNewsListCategory() {
   const { category } = useParams();
   const [pages, setPages] = useState<number>(1);
@@ -53,6 +54,9 @@ function IndexNewsListCategory() {
   }
   return (
     <>
+    <Helmet>
+          <title>News | {category?.toLocaleUpperCase()}</title>
+    </Helmet>
       <div className="w-[90%] h-full my-3 mx-auto">
         {isLoading && !removeSkeleton ? (
           <SkeletonIndexNews />

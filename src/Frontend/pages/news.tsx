@@ -10,6 +10,7 @@ import { FaFacebook, FaInstagram} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { IoPerson } from "react-icons/io5";
 import { MdArrowOutward } from "react-icons/md";
+import { Helmet } from "react-helmet";
 function NewsPage() {
   const { news_id } = useParams();
   const [error, setIsError] = useState<boolean | string | null>(null);
@@ -56,6 +57,9 @@ function NewsPage() {
   }
   return (
     <>
+    <Helmet>
+          <title>News | {news?.name_news}</title>
+    </Helmet>
       <motion.div
         id="scroll-indicator"
         style={{ scaleX: scrollYProgress || 0, originX: 0 }}

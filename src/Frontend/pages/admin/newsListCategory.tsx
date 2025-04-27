@@ -6,6 +6,7 @@ import { FaUser } from "react-icons/fa"
 import useFetch from "../../hook/useFetch"
 import { useScreen } from "../../context/context"
 import LazyImageIntersection from "../../component/lazyImageIntersection"
+import { Helmet } from "react-helmet"
 function NewsListCategory(){
     const [useSearchParam,setSearchParam]=useSearchParams()
     const pages=parseInt(useSearchParam.get('pages')??'1')
@@ -28,6 +29,10 @@ if(!isWideScreen){
             </div></div>
 }
     return (
+        <>
+        <Helmet>
+    <title>{status?.toLocaleUpperCase()} | {`${pages}`}</title>
+</Helmet>
         <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
             <NavbarAdmin/>
             <div className={`w-full h-full p-5 flex flex-col rounded-bl-3xl rounded-tl-3xl border border-gray-600 bg-white dark:bg-darkTheme`}>
@@ -55,6 +60,7 @@ if(!isWideScreen){
                 </div>
             </div>
         </div>
+        </>
     )
 }
 export default NewsListCategory

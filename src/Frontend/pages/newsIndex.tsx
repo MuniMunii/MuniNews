@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import SearchNews from "../component/index/searchNews";
 import WeatherStatus from "../component/index/weatherStatus";
 import LazyImageIntersection from "../component/lazyImageIntersection";
+import { Helmet } from "react-helmet";
 function NewsIndex() {
   const [error, setError] = useState<string | boolean>();
   const { isWideScreen } = useScreen();
@@ -26,9 +27,6 @@ function NewsIndex() {
     (data) => data.news  as NewsKey[],
     "GET"
   );
-  useEffect(() => {
-    console.log(muniNews);
-  }, [muniNews]);
   const { value: newsData, isLoading: isLoadingPublicAPI } = useFetch(
     `/news/publicnews`,
     (data) => ({
@@ -136,6 +134,9 @@ function NewsIndex() {
   },[newsData?.news])
   return (
     <>
+    <Helmet>
+          <title>News | MuniNews</title>
+    </Helmet>
       <div className="w-72 h-12 flex justify-end items-center px-8 pt-3 ml-auto max-tablet:mx-auto relative">
         <SearchNews />
       </div>

@@ -4,10 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "../../context/context";
 import FormEditNews from "../../component/user/formEditNews";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 function EditNews() {
   const navigate=useNavigate()
   const { news_id } = useParams();
   const {user}=useUser()
+    const [titleValue, setTitleValue] = useState<string>("");
   const [loading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean | string>(false);
   const [modalDelete, setModalDelete] = useState<boolean>(false);
@@ -45,7 +47,9 @@ function EditNews() {
       }
     };
   return (
-    <>
+    <><Helmet>
+    <title>Edit | {titleValue?titleValue:'...'}</title>
+</Helmet>
       <AnimatePresence initial={false}>
         {modalDelete ? (
           <motion.div
@@ -96,6 +100,8 @@ function EditNews() {
       </AnimatePresence>
       <div className="w-4/5 max-w-full min-w-0 h-full mx-auto my-3">
         <FormEditNews
+        titleValue={titleValue}
+        setTitleValue={setTitleValue}
           setModalValidation={setModalValidation}
           setValidation={setValidation}
           news_id={news_id}

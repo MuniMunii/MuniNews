@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaRegNewspaper } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { HashLink } from "react-router-hash-link";
+import {Helmet}from "react-helmet"
 function UserInfo() {
   const [news, setNews] = useState<NewsKey[] | undefined>([]);
   const [page, setPage] = useState<number>(1);
@@ -38,6 +39,10 @@ function UserInfo() {
     fetchUserInfo();
   }, [nama_user, page]);
   return (
+    <>
+    <Helmet>
+      <title>Info | {nama_user}</title>
+    </Helmet>
     <div className="w-[90%] mx-auto  my-2 flex">
       <div className="tablet:w-2/3 phone:w-full h-full  flex flex-col">
         <div className="w-full h-fit border-b border-b-gray-600 flex laptop:flex-row phone:flex-col justify-start gap-3 p-3">
@@ -225,6 +230,7 @@ function UserInfo() {
         ) : null}
       </div>
     </div>
+    </>
   );
 }
 export default UserInfo;

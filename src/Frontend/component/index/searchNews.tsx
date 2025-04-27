@@ -53,9 +53,6 @@ function SearchNews() {
     }
   }, [searchNews]);
   useEffect(() => {
-    console.log(news);
-  }, [news]);
-  useEffect(() => {
     const handleCLickOutside = (e: MouseEvent) => {
       if (
         searchInputRef.current &&

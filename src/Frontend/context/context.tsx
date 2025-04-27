@@ -112,7 +112,7 @@ function UserProvider({ children }: { children: ReactNode }) {
   };
 
   const assignUser = (user: string) => {
-    console.log("Assigning user:", user);
+    // console.log("Assigning user:", user);
     setUser(user);
   };
 
@@ -143,10 +143,10 @@ function UserProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(data.isAuth);
         setRole(data.role);
         setUser(data.name);
-        console.log('user id', data.id);
-        console.log('fetch login', data.name);
-        console.log('fetch login', data.isAuth);
-        console.log('fetch login', data.role);
+        // console.log('user id', data.id);
+        // console.log('fetch login', data.name);
+        // console.log('fetch login', data.isAuth);
+        // console.log('fetch login', data.role);
       } else {
         setUser('');
       }

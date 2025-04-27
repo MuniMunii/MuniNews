@@ -13,6 +13,8 @@ interface FormInterface {
   setIsSaving: React.Dispatch<SetStateAction<boolean>>;
   setModalValidation: React.Dispatch<SetStateAction<boolean>>;
   setValidation: any;
+  titleValue: string;
+  setTitleValue: React.Dispatch<SetStateAction<string>>;
 }
 function FormEditNews({
   news_id,
@@ -23,6 +25,8 @@ function FormEditNews({
   setIsSaving,
   setModalValidation,
   setValidation,
+  titleValue,
+  setTitleValue
 }: FormInterface) {
   const [newsValue, setNewsValue] = useState<NewsKey | null>();
   const [originalValue, setOriginalValue] = useState({
@@ -30,7 +34,6 @@ function FormEditNews({
     description: "",
     content: "",
   });
-  const [titleValue, setTitleValue] = useState<string>("");
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [contentValue, setContentValue] = useState<string>("");
   const [coverValue, setCoverValue] = useState<string>("");
@@ -60,7 +63,6 @@ function FormEditNews({
       setIsError(data.messages);
     } catch (error) {
       setIsError(true);
-      console.log("error: ", error);
     } finally {
       setIsSaving(false);
     }
@@ -83,13 +85,13 @@ function FormEditNews({
       cancelDebounce();
     };
   }, [titleValue, descriptionValue, contentValue, contentValue]);
-  useEffect(() => {
-    console.log("titleValue: ", titleValue);
-    console.log("descriptionValue: ", descriptionValue);
-    console.log("contentValue: ", contentValue);
-    console.log("isSaving: ", isSaving);
-    console.log("cover Path: ", coverValue);
-  }, [titleValue, descriptionValue, contentValue, isSaving, coverValue]);
+  // useEffect(() => {
+  //   console.log("titleValue: ", titleValue);
+  //   console.log("descriptionValue: ", descriptionValue);
+  //   console.log("contentValue: ", contentValue);
+  //   console.log("isSaving: ", isSaving);
+  //   console.log("cover Path: ", coverValue);
+  // }, [titleValue, descriptionValue, contentValue, isSaving, coverValue]);
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -109,7 +111,6 @@ function FormEditNews({
           description: data.news.description,
           content: data.news.content,
         });
-        console.log(data);
       } catch (error) {
         console.log(error);
       } finally {

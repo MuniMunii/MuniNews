@@ -11,16 +11,12 @@ function AddNewsForm({
   setModalPopUp: React.Dispatch<React.SetStateAction<boolean>>
   setError: React.Dispatch<React.SetStateAction<any>>
 }) {
-
   const { user, isAuthenticated } = useUser();
   const [title, setTitle] = useState<String>("");
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const baseURL=process.env.REACT_APP_BACKEND_URL
   const navigate=useNavigate()
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
   function handleSelect(value: string) {
     setCategory(value);
   }
@@ -39,7 +35,6 @@ function AddNewsForm({
       return setError("Choose the category");
     }
     try {
-      console.log("try fetch add news");
       const response = await fetch(`${baseURL}/news/make-news`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

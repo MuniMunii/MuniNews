@@ -7,6 +7,7 @@ import LoadingComp from "../../component/loadingComp";
 import NewsRecentList from "../../component/admin/NewsRecentList";
 import UserList from "../../component/admin/UserList";
 import NavbarAdmin from "../../component/admin/navbar";
+import { Helmet } from "react-helmet";
 const DashboardAdmin=memo(()=>{
     const {isWideScreen}=useScreen()
     const { value: newsDataState, isLoading: isLoading } = useFetch<NewsKey[]|null>(
@@ -14,8 +15,7 @@ const DashboardAdmin=memo(()=>{
         (data) => data.news as NewsKey[]|null,
         "GET",
       );
-    console.log('component re render')
-    useEffect(()=>{console.log(newsDataState)},[newsDataState])
+    // useEffect(()=>{console.log(newsDataState)},[newsDataState])
     if(!isWideScreen){
         return <div className=" flex justify-center items-center h-full font-mono">
             <div className={`w-3/5 h-52 flex flex-col text-center justify-center items-center bg-slate-600/40 text-black dark:text-white rounded-lg`}>
@@ -25,6 +25,9 @@ const DashboardAdmin=memo(()=>{
     }
     return (
         <>
+        <Helmet>
+    <title>Dashboard</title>
+</Helmet>
         <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
             <NavbarAdmin/>
             <div className={`w-full h-full p-5 flex flex-col rounded-bl-3xl rounded-tl-3xl border border-gray-600 bg-white dark:bg-darkTheme`}>

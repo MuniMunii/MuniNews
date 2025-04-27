@@ -6,6 +6,7 @@ import DOMPurify from "dompurify";
 import { motion, AnimatePresence } from "framer-motion";
 import PageNotFound from "../../component/404Page";
 import useFetch from "../../hook/useFetch";
+import { Helmet } from "react-helmet";
 function ReviewNews() {
   type newsStatus = "Published" | "Error" | "Cancelled";
   const { news_id } = useParams();
@@ -31,9 +32,9 @@ function ReviewNews() {
     }, 3000);
     return () => clearTimeout(timer);
   }, [popUp]);
-  useEffect(() => {
-    console.log(cancelMessages);
-  }, [cancelMessages]);
+  // useEffect(() => {
+  //   console.log(cancelMessages);
+  // }, [cancelMessages]);
   useEffect(()=>{
     if(urlArticleRef.current){
       const links=urlArticleRef.current.querySelectorAll('A')
@@ -64,7 +65,7 @@ function ReviewNews() {
         setStatus("Error");
       }
       // Debugging
-      console.log(data.messages);
+      // console.log(data.messages);
     } catch (error) {
       console.log("error");
     }
@@ -86,7 +87,7 @@ function ReviewNews() {
         setStatus("Error");
       }
       // Debugging
-      console.log(data.messages);
+      // console.log(data.messages);
     } catch (error) {
       console.log("error");
     }
@@ -97,6 +98,9 @@ function ReviewNews() {
   }
   return (
     <>
+    <Helmet>
+    <title>Review | {news?.name_news?news.name_news:'...'}</title>
+</Helmet>
       <AnimatePresence initial={false}>
         {popUp ? (
           <motion.div

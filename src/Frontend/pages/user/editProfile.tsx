@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import "../../style/animation.css"
 import useFetch from "../../hook/useFetch";
+import { Helmet } from "react-helmet";
 function EditProfile() {
   // const [userState, setUserState] = useState<Userkey>();
   const [nameState, setNameState] = useState<string|undefined>("");
@@ -103,6 +104,9 @@ function EditProfile() {
   }
   return (
     <>
+    <Helmet>
+              <title>Edit | {user}</title>
+        </Helmet>
       <AnimatePresence initial={false}>
         {popUpMessage ? (
           <motion.div

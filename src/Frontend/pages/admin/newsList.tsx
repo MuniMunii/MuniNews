@@ -5,6 +5,7 @@ import NewsCard from "../../component/admin/newsCard";
 import LoadingComp from "../../component/loadingComp";
 import { Link } from "react-router-dom";
 import { useScreen } from "../../context/context";
+import { Helmet } from "react-helmet";
 function NewsList() {
   const {isWideScreen}=useScreen()
     const { value: news, isLoading: isLoading } = useFetch<NewsKey[]|null>(
@@ -21,6 +22,9 @@ function NewsList() {
   }
   return (
     <>
+    <Helmet>
+    <title>News List</title>
+</Helmet>
       <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
         <NavbarAdmin />
         <div

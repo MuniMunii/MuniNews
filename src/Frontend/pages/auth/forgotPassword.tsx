@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 function ForgotPassword() {
   const [error, setError] = useState<string>('');
   const [emailUser, setEmailUser] = useState<string>("");
@@ -29,6 +30,10 @@ function ForgotPassword() {
     setEmailUser(value);
   }
   return (
+    <>
+    <Helmet>
+    <title>Forgot Password</title>
+</Helmet>
     <div
       className={`dotted-without-mask w-full h-full flex justify-center items-center text-black border-t border-t-darkTheme dark:border-gray-600 `}
     >
@@ -70,6 +75,7 @@ function ForgotPassword() {
         </form>
       </div>
     </div>
+    </>
   );
 }
 export default ForgotPassword;
