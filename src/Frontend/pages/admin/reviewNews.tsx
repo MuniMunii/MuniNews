@@ -163,9 +163,11 @@ function ReviewNews() {
             <FaRegNewspaper />
           </div>
         )}
-        <p className="italic tablet:w-1/2 w-3/4 mx-auto text-center my-3">
+        <div className="italic tablet:w-1/2 w-3/4 mx-auto text-center my-3 break-words">
+        <p className="">
           {news?.description}
         </p>
+        </div>
         <article
         ref={urlArticleRef}
           dangerouslySetInnerHTML={{ __html: sanitizeContent }}

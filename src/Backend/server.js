@@ -12,8 +12,10 @@ const path=require('path')
 const cookieparser=require('cookie-parser')
 const port = 5000;
 const compression=require('compression')
+// port localhost 3001 buat build serve port/Port 3001 for build serve port
 app.use(cors({origin:['http://localhost:3000', 'http://localhost:3001'],credentials:true}));
 app.use(express.json({ limit: "50mb" }));
+// compression buat api yang lebih besar dari 1mb
 app.use(compression({threshold:1024}))
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieparser())
@@ -22,12 +24,12 @@ app.use(express.urlencoded({ extended: true }));
 sequelize
   .authenticate()
   .then(console.log("connected with sequelize"))
-  .catch((err) => console.log("error cannot connected with sequelize"));
+  .catch((err) => console.log("error cannot connected with sequelize",err.toString()));
 sequelize
-// sync forced here/disini
+// sync alter here/disini
   .sync()
   .then(console.log("sync with sequelize"))
-  .catch((err) => console.log("error cannot sync with sequelize"));
+  .catch((err) => console.log("error cannot sync with sequelize",err.toString()));
 app.use(`/auth`, authRoute);
 app.use(`/news`, newsRoute);
 app.use('/other',otherRoute);

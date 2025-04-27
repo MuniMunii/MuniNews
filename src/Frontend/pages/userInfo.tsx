@@ -83,7 +83,7 @@ function UserInfo() {
                 <p className="text-sm uppercase text-gray-800 dark:text-gray-500 font-bold">
                   {userInfo?.role}
                 </p>
-                <p className="italic min-h-8">
+                <p className="italic min-h-8 break-words">
                   {userInfo?.description
                     ? userInfo.description
                     : "This user hasn't created description yet."}
@@ -169,7 +169,7 @@ function UserInfo() {
                       <Link
                         to={`/read/${news.news_id}`}
                         key={`${news.name_news}-${news.news_id}`}
-                        className="border-b border-b-gray-600 flex justify-between gap-2 p-3 group"
+                        className="border-b border-b-gray-600 flex justify-start gap-2 p-3 group"
                       >
                         {news.cover ? (
                           <img
@@ -182,7 +182,7 @@ function UserInfo() {
                             <FaRegNewspaper />
                           </div>
                         )}
-                        <div className="flex flex-col">
+                        <div className="flex flex-col break-words"style={{overflowWrap:'anywhere'}}>
                           <p className="group-hover:underline">
                             {news.name_news}
                           </p>

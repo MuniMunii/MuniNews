@@ -164,7 +164,7 @@ function NewsIndex() {
           </div>
           {/* side news */}
           {isWideScreen && (
-            <div className="w-1/3 h-full border-l border-gray-600 bg-gradient-to-t from-darkTheme to-oceanBlue text-white flex flex-col p-2 gap-1 justify-evenly items-center font-Garramond">
+            <div className="w-1/3 h-full border-l border-gray-600 bg-gradient-to-t from-darkTheme to-oceanBlue text-white flex flex-col p-2 gap-1 justify-start items-center font-Garramond">
               <h1 className="uppercase tracking-widest border-b border-hotOrange dark:border-pastelTosca">
                 Recent News
               </h1>
@@ -277,14 +277,14 @@ function NewsIndex() {
                 .map((news, index) => (
                   <div key={`news-list-vertical-${news.news_id}`} className="w-full flex flex-col justify-between  p-2 group items-center border-b-2 border-b-hotOrange dark:border-b-pastelTosca">
                   <div
-                    className="group flex gap-7 phone:flex-col-reverse phone:justify-center tablet:flex-row tablet:items-center"
+                    className="group  flex gap-7 w-full phone:flex-col-reverse phone:justify-center tablet:flex-row tablet:items-center tablet:justify-between"
                   >
-                    <div className="flex flex-col gap-1 w-full min-h-0 ">
+                    <div className="flex flex-col  gap-1 w-full tablet:max-w-[70%] break-words hyphens-auto text-ellipsis  min-h-0 ">
                       <Link
                     to={`/read/${news.news_id}`} className="text-xl group-hover:underline">
                         {news.name_news}
                       </Link>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 break-all hyphens-auto">
                         {news.description}
                       </p>
                       <div className="w-full text-left flex text-sm gap-2">
@@ -299,11 +299,9 @@ function NewsIndex() {
                         </p>
                       </div>
                     </div>
-                    {/* <div className=" bg-gray-600"> */}
                     <LazyImageIntersection lazy src={`${baseURL}${news.cover}`}
                       alt={`img-${news.name_news}`}
-                      className="size-full object-cover tablet:max-w-36 tablet:max-h-24 phone:h-52 rounded-md"/>
-                    {/* </div> */}
+                      className="size-full object-cover bg-gray-600 tablet:max-w-36 tablet:max-h-24 phone:h-52 rounded-md"/>
                     {/* <img
                     loading="lazy"
                       src={`${baseURL}${news.cover}`}

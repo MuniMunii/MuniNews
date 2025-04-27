@@ -112,7 +112,7 @@ function DashboardUser() {
           {userState?.image?<img alt="user-profile-picture" src={`${baseURL}${userState?.image}`} className="size-32 rounded-full object-cover"></img>:<div className="bg-black size-32 rounded-full flex justify-center items-center"><IoPerson/></div>}
           <p className="">{user}</p>
           </div>
-          <p className="text-center italic font-Poppins text-sm py-2 border-b border-b-gray-600">{userState?.description?userState.description:'This user not created description yet'}</p>
+          <p className="text-center italic font-Poppins text-sm py-2 border-b border-b-gray-600 break-words"style={{overflowWrap:"anywhere"}}>{userState?.description?userState.description:'This user not created description yet'}</p>
           <div className="flex gap-2 text-xl w-full justify-center py-2">
             {userState?.facebook?<a aria-label='Facebook Profile" ' href={userState.facebook} target="_blank"><FaFacebook className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}
             {userState?.twitter?<a aria-label='Twitter Profile" ' href={userState?.twitter} target="_blank"><FaXTwitter className="hover:text-gray-700 dark:hover:text-black transition"/></a>:null}

@@ -4,11 +4,14 @@ import LoadingComp from "../../component/loadingComp"
 import { Link } from "react-router-dom"
 import { FaUser } from "react-icons/fa"
 import useFetch from "../../hook/useFetch"
+import { useScreen } from "../../context/context"
+import LazyImageIntersection from "../../component/lazyImageIntersection"
 function NewsListCategory(){
     const [useSearchParam,setSearchParam]=useSearchParams()
     const pages=parseInt(useSearchParam.get('pages')??'1')
     const {status}=useParams()
     const baseURL=process.env.REACT_APP_BACKEND_URL
+      const {isWideScreen}=useScreen()
     const { value: newsList, isLoading: isLoading } = useFetch<NewsKey[]|null>(
         `/news/query-news/${status}?pages=${pages}`,
         (data) => data.news as NewsKey[]|null,
@@ -16,6 +19,13 @@ function NewsListCategory(){
       );
 function handlePageChange(newPages:any){
     setSearchParam({pages:newPages})
+}
+if(!isWideScreen){
+    return <div className=" flex justify-center items-center h-full font-mono">
+        <div className={`w-3/5 h-52 flex flex-col text-center justify-center items-center bg-slate-600/40 text-black dark:text-white rounded-lg`}>
+        <p>pls access this with Tablet or larger devices</p>
+        <p>{`( >_< '')`}</p>
+            </div></div>
 }
     return (
         <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">
@@ -25,8 +35,8 @@ function handlePageChange(newPages:any){
                     {newsList?.length===0 && <p>There are currently no {status==='inreview'?'News to Review':'News to Publish'}</p>}
                 {isLoading?<LoadingComp error={null}/>:newsList?.map((news,index)=>(
                     <Link to={`/review-news/${news.news_id}`} key={news.news_id} className="w-10/12 h-126 rounded-lg group border border-gray-600 py-3 px-4 flex justify-between items-center gap-4">
-                        <div className="w-1/5">
-                        <img src={`${baseURL}${news.cover}`} className="size-full"></img>
+                        <div className="w-1/5 max-w-52 max-h-30">
+                        <LazyImageIntersection lazy alt={`${baseURL}${news.cover}`} src={`${baseURL}${news.cover}`} className="size-full object-cover"/>
                         </div>
                         <div className="w-full border-r border-r-gray-600 flex flex-col">
                         <p className="group-hover:underline">{news.name_news}</p>

@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 import PageNotFound from "../component/404Page";
 import SkeletonIndexNews from "../component/SkeletonIndexNews";
 import FooterComp from "../component/footer";
-import useFetch from "../hook/useFetch";
+import LazyImageIntersection from "../component/lazyImageIntersection";
 function IndexNewsListCategory() {
   const { category } = useParams();
   const [pages, setPages] = useState<number>(1);
+  const [news, setNews] = useState<NewsKey[]>([]);
   const [removeSkeleton, setRemoveSkeleton] = useState<boolean>(false);
-  //   note fix ini nanti
-  const TemporalNews: any[] = [];
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const baseURL = process.env.REACT_APP_BACKEND_URL;
   const categoryList = [
     "Tech",
@@ -23,20 +23,27 @@ function IndexNewsListCategory() {
   ];
   const startNews = 4;
   const endIndex = pages * 5;
-  const { value: news, isLoading: isLoading } = useFetch<NewsKey[]>(
-    `/news/query-news-category/${
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch(
+          `${baseURL}/news/query-news-category/${
             category
               ? category?.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())
               : ""
           }/${pages}`,
-    (data) => data.news as NewsKey[],
-    "GET"
-  );
-  useEffect(() => {
-    TemporalNews.push(news);
-    console.log(pages);
-    console.log(TemporalNews);
-  }, [news, pages]);
+          { method: "get", credentials: "include" }
+        );
+        const data = await response.json();
+        setNews((prev) => [...prev, ...data.news]);
+      } catch (error) {
+        console.log("error fethching data");
+      } finally {
+        setRemoveSkeleton(true); setIsLoading(false);
+      }
+    };
+    fetchNews();
+  }, [pages, category, pages]);
   if (
     !categoryList
       .map((cat) => cat.toLowerCase())
@@ -62,17 +69,20 @@ function IndexNewsListCategory() {
                   to={`/read/${news?.[0].news_id}`}
                   className="w-full h-full mx-auto border-b border-b-hotOrange dark:border-b-pastelTosca py-2 group"
                 >
-                  <div className="w-full overflow-hidden rounded-md">
-                  <img
-                  alt={`main-news-${news?.[0].name_news}`}
-                    src={`${baseURL}${news?.[0].cover}`}
-                    className="w-full group-hover:scale-105 transition-all duration-300"
-                  />
+                  <div className="w-full h-96 overflow-hidden rounded-md">
+                    <LazyImageIntersection 
+                    lazy={false}
+                      alt={`main-news-${news?.[0].name_news}`}
+                      src={`${baseURL}${news?.[0].cover}`}
+                      className="w-full group-hover:scale-105 transition-all duration-300"
+                    />
                   </div>
                   <h3 className="font-Garramond text-4xl group-hover:underline">
                     {news?.[0].name_news}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">{news?.[0].description}</p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {news?.[0].description}
+                  </p>
                 </Link>
               </div>
               <div
@@ -94,31 +104,39 @@ function IndexNewsListCategory() {
                       )} Days Ago`
                     : "Today";
                   return (
-                    <div key={`odd-${newsItem.name_news}-${index}`} className="border-b border-b-hotOrange dark:border-b-pastelTosca flex flex-col py-2">
-                    <Link
-                      to={`/read/${newsItem.news_id}`}
-                      className=" group flex tablet:flex-row phone:flex-col gap-2"
+                    <div
+                      key={`odd-${newsItem.name_news}-${index}`}
+                      className="border-b border-b-hotOrange dark:border-b-pastelTosca flex flex-col py-2"
                     >
-                      <img
-                        loading="lazy"
-                      alt={newsItem.name_news}
-                        src={`${baseURL}${newsItem.cover}`}
-                        className="w-32 h-24 self-center rounded-md"
-                      ></img>
-                      <div>
-                        <p className="text-2xl font-Garramond uppercase group-hover:underline">
-                          {newsItem.name_news}
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-400">{newsItem.description}</p>
+                      <Link
+                        to={`/read/${newsItem.news_id}`}
+                        className=" group flex tablet:flex-row phone:flex-col gap-2"
+                      >
+                        <img
+                          loading="lazy"
+                          alt={newsItem.name_news}
+                          src={`${baseURL}${newsItem.cover}`}
+                          className="w-32 h-24 self-center rounded-md"
+                        ></img>
+                        <div>
+                          <p className="text-2xl font-Garramond uppercase group-hover:underline">
+                            {newsItem.name_news}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400">
+                            {newsItem.description}
+                          </p>
+                        </div>
+                      </Link>
+                      <div className="flex gap-2 items-center text-sm">
+                        <Link
+                          to={`/user/${newsItem.createdBy}`}
+                          className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline"
+                        >
+                          {newsItem.createdBy}
+                        </Link>
+                        <p>{Time}</p>
                       </div>
-                    </Link>
-                    <div className="flex gap-2 items-center text-sm">
-                          <Link to={`/user/${newsItem.createdBy}`} className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline">
-                            {newsItem.createdBy}
-                          </Link>
-                          <p>{Time}</p>
-                        </div>
-                        </div>
+                    </div>
                   );
                 })}
               </div>
@@ -139,31 +157,39 @@ function IndexNewsListCategory() {
                       )} Days Ago`
                     : "Today";
                   return (
-                    <div key={`even-${newsItem.name_news}-${index}`} className="border-b border-b-hotOrange dark:border-b-pastelTosca flex flex-col py-2">
-                    <Link
-                      to={`/read/${newsItem.news_id}`}
-                      className=" group flex tablet:flex-row phone:flex-col gap-2"
+                    <div
+                      key={`even-${newsItem.name_news}-${index}`}
+                      className="border-b border-b-hotOrange dark:border-b-pastelTosca flex flex-col py-2"
                     >
-                      <img
-                      loading="lazy"
-                      alt={`${newsItem.name_news}`}
-                        src={`${baseURL}${newsItem.cover}`}
-                        className="w-32 h-24 self-center rounded-md"
-                      ></img>
-                      <div>
-                        <p className="text-2xl font-Garramond uppercase group-hover:underline">
-                          {newsItem.name_news}
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-400 max-w-2xl">{newsItem.description}</p>
+                      <Link
+                        to={`/read/${newsItem.news_id}`}
+                        className=" group flex tablet:flex-row phone:flex-col gap-2"
+                      >
+                        <img
+                          loading="lazy"
+                          alt={`${newsItem.name_news}`}
+                          src={`${baseURL}${newsItem.cover}`}
+                          className="w-32 h-24 self-center rounded-md"
+                        ></img>
+                        <div>
+                          <p className="text-2xl font-Garramond uppercase group-hover:underline">
+                            {newsItem.name_news}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 max-w-2xl">
+                            {newsItem.description}
+                          </p>
+                        </div>
+                      </Link>
+                      <div className="flex gap-2 items-center text-sm w-fit tablet:ml-[136px] phone:ml-0">
+                        <Link
+                          to={`/user/${newsItem.createdBy}`}
+                          className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline"
+                        >
+                          {newsItem.createdBy}
+                        </Link>
+                        <p>{Time}</p>
                       </div>
-                    </Link>
-                    <div className="flex gap-2 items-center text-sm w-fit tablet:ml-[136px] phone:ml-0">
-                          <Link to={`/user/${newsItem.createdBy}`} className="pr-2 border-r border-r-gray-600 text-blue-600 hover:underline">
-                            {newsItem.createdBy}
-                          </Link>
-                          <p>{Time}</p>
-                        </div>
-                        </div>
+                    </div>
                   );
                 })}
               {(news || []).length % 5 !== 0 ? (

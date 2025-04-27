@@ -36,12 +36,12 @@ function CardComponent({
           <ImgCover cover={news.cover} />
         )}
         <p
-          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `}
+          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `}style={{overflowWrap:'anywhere'}}
         >
           {news.name_news}
         </p>
         <p
-          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 dark:bg-[#121e41]`}
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 dark:bg-[#121e41] break-words`}style={{overflowWrap:'anywhere'}}
         >
           {news.description}
         </p>
@@ -88,12 +88,12 @@ function CardComponent({
           <ImgCover cover={news.cover} />
         )}
         <p
-          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `}
+          className={`text-center break-words border border-gray-600 rounded-sm dark:bg-[#121e41] `} style={{overflowWrap:'anywhere'}}
         >
           {news.name_news}
         </p>
         <p
-          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 `}
+          className={`text-justify tracking-tight text-base border border-gray-600 rounded-sm p-2 break-words`} style={{overflowWrap:'anywhere'}}
         >
           {news.description}
         </p>

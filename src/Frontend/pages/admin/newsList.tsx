@@ -4,12 +4,21 @@ import '../../style/animation.css'
 import NewsCard from "../../component/admin/newsCard";
 import LoadingComp from "../../component/loadingComp";
 import { Link } from "react-router-dom";
+import { useScreen } from "../../context/context";
 function NewsList() {
+  const {isWideScreen}=useScreen()
     const { value: news, isLoading: isLoading } = useFetch<NewsKey[]|null>(
       `/news/get-news`,
       (data) => data.news as NewsKey[]|null,
       "GET"
     );
+    if(!isWideScreen){
+      return <div className=" flex justify-center items-center h-full font-mono">
+          <div className={`w-3/5 h-52 flex flex-col text-center justify-center items-center bg-slate-600/40 text-black dark:text-white rounded-lg`}>
+          <p>pls access this with Tablet or larger devices</p>
+          <p>{`( >_< '')`}</p>
+              </div></div>
+  }
   return (
     <>
       <div className="diagonal-pattern w-full h-full min-h-screen flex gap-7 font-Poppins">

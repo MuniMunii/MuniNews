@@ -14,11 +14,11 @@ function WeatherStatus(){
         }),"GET"
       );
     return isLoadingWeather ? (
-        <div className="w-1/4 ml-auto flex justify-center border-l border-l-gray-600">
+        <div className="w-1/4 h-[830px] ml-auto flex justify-center border-l border-l-gray-600 border-b-gray-600">
           <LoadingComp error={null} />
         </div>
       ) : (
-        <div className="w-1/4 h-full border-l border-l-gray-600 ml-auto flex flex-col justify-start gap-4 p-3 font-Poppins">
+        <div className="w-1/4 border-l border-b h-[830px] border-l-gray-600 border-b-gray-600 ml-auto flex flex-col justify-start gap-4 p-3 font-Poppins">
           <p className="text-center text-blue-700 text-2xl font-semibold font-Poppins tracking-widest uppercase border-b-2 border-b-hotOrange dark:border-b-pastelTosca dark:text-white">
             Weather
           </p>

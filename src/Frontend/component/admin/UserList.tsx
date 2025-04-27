@@ -10,7 +10,7 @@ function UserList (){
         "GET"
       );
     return isLoading?<LoadingComp error={error}/>:userList?.map((user,index)=>(
-        <Link to={`/user/${user.nama_user}`} key={user.id} className={`w-full  h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
+        <Link to={`/user/${user.nama_user}`} key={user.id} className={`w-full break-words h-fit p-2 bg-gradient-to-t border border-gray-600 break-all dark:from-violet-950 dark:to-sky-950 flex justify-between items-center rounded-md`}>
             <p>{user.nama_user}</p>
             {user.isAuth?<div className="size-2 rounded-full bg-green-600"></div>:<div className="size-2 rounded-full bg-red-600"></div>}
         </Link>
