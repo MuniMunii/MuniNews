@@ -201,13 +201,11 @@ router.post("/reset-password/:token", async (req, res) => {
   if (newPassword !== verifyPassword) {
     return res.status(403).json({ messages: "Password not match" });
   }
-  console.log('before:',user.password)
   await user.update({
     password: await bcrypt.hash(newPassword, 10),
     resetToken: null,
     resetTokenExpiry: null,
   });
-  console.log('after:',user.password)
   res.status(200).json({ messages: "Password changed successfully ,Redirect to Login" });
 });
 module.exports = router;
