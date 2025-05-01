@@ -103,7 +103,7 @@ npm start
 * If page empty you need to make a news and user first (I only provide dummy news for my company)
 * If you encounter error when starting the program its mostly because different Node version
 ## Component Diagram
-![Component Diagram](assets/componentdiagram.svg)
+![Component Diagram](assets/componentdiagram.jpg)
 ## Authors
 Contributors names and contact info
 * ex. Ramzi Akbar Ramadhan
